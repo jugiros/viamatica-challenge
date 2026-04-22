@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="seed-categories" author="oms-dev" context="seed">
+        <insert tableName="categories">
+            <column name="nombre" value="Electrónicos"/>
+            <column name="descripcion" value="Productos electrónicos y gadgets"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="nombre" value="Ropa"/>
+            <column name="descripcion" value="Ropa y accesorios"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="nombre" value="Hogar"/>
+            <column name="descripcion" value="Artículos para el hogar"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+        <insert tableName="categories">
+            <column name="nombre" value="Deportes"/>
+            <column name="descripcion" value="Equipamiento deportivo"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="seed-admin-user" author="oms-dev" context="seed">
+        <insert tableName="users">
+            <column name="nombre" value="Administrador"/>
+            <column name="email" value="admin@viamatica.com"/>
+            <column name="password_hash" value="$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH"/>
+            <column name="rol" value="ADMIN"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="seed-test-user" author="oms-dev" context="seed">
+        <insert tableName="users">
+            <column name="nombre" value="Usuario Prueba"/>
+            <column name="email" value="usuario@test.com"/>
+            <column name="password_hash" value="$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH"/>
+            <column name="rol" value="USER"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

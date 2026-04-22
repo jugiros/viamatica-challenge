@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="create-payments-table" author="oms-dev" context="base">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="payments"/>
+            </not>
+        </preConditions>
+        <createTable tableName="payments">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="order_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="monto" type="DECIMAL(12,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metodo" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="estado" type="VARCHAR(20)" defaultValue="PENDIENTE">
+                <constraints nullable="false"/>
+            </column>
+            <column name="transaction_id" type="VARCHAR(255)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-payments-foreign-key" author="oms-dev" context="base">
+        <addForeignKeyConstraint
+                baseTableName="payments"
+                baseColumnNames="order_id"
+                referencedTableName="orders"
+                referencedColumnNames="id"
+                constraintName="fk_payments_order"
+                onDelete="RESTRICT"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="add-payments-indexes" author="oms-dev" context="base">
+        <createIndex tableName="payments" indexName="idx_payments_order">
+            <column name="order_id"/>
+        </createIndex>
+        <createIndex tableName="payments" indexName="idx_payments_estado">
+            <column name="estado"/>
+        </createIndex>
+        <createIndex tableName="payments" indexName="idx_payments_transaction_id">
+            <column name="transaction_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-payments-constraints" author="oms-dev" context="base">
+        <sql>
+            ALTER TABLE payments
+            ADD CONSTRAINT ck_payments_monto CHECK (monto > 0)
+        </sql>
+        <sql>
+            ALTER TABLE payments
+            ADD CONSTRAINT ck_payments_metodo
+            CHECK (metodo IN ('CREDIT_CARD', 'DEBIT_CARD', 'PAYPAL', 'BANK_TRANSFER'))
+        </sql>
+        <sql>
+            ALTER TABLE payments
+            ADD CONSTRAINT ck_payments_estado
+            CHECK (estado IN ('PENDIENTE', 'COMPLETADO', 'FALLIDO', 'REEMBOLSADO'))
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

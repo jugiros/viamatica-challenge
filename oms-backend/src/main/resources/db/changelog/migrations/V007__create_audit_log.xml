@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="create-audit-log-table" author="oms-dev" context="base">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="audit_log"/>
+            </not>
+        </preConditions>
+        <createTable tableName="audit_log">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="user_id" type="BIGINT"/>
+            <column name="accion" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entidad" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="entidad_id" type="BIGINT"/>
+            <column name="datos_anteriores" type="TEXT"/>
+            <column name="datos_nuevos" type="TEXT"/>
+            <column name="ip_address" type="VARCHAR(45)"/>
+            <column name="user_agent" type="VARCHAR(500)"/>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-audit-log-foreign-key" author="oms-dev" context="base">
+        <addForeignKeyConstraint
+                baseTableName="audit_log"
+                baseColumnNames="user_id"
+                referencedTableName="users"
+                referencedColumnNames="id"
+                constraintName="fk_audit_log_user"
+                onDelete="SET NULL"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="add-audit-log-indexes" author="oms-dev" context="base">
+        <createIndex tableName="audit_log" indexName="idx_audit_log_user">
+            <column name="user_id"/>
+        </createIndex>
+        <createIndex tableName="audit_log" indexName="idx_audit_log_accion">
+            <column name="accion"/>
+        </createIndex>
+        <createIndex tableName="audit_log" indexName="idx_audit_log_entidad">
+            <column name="entidad"/>
+        </createIndex>
+        <createIndex tableName="audit_log" indexName="idx_audit_log_created_at">
+            <column name="created_at"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

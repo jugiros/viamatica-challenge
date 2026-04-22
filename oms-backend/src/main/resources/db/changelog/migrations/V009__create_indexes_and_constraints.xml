@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="set-database-engine-and-charset" author="oms-dev" context="base">
+        <sql>
+            ALTER DATABASE oms_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-composite-indexes" author="oms-dev" context="base">
+        <createIndex tableName="orders" indexName="idx_orders_user_estado">
+            <column name="user_id"/>
+            <column name="estado"/>
+        </createIndex>
+        <createIndex tableName="products" indexName="idx_products_categoria_activo">
+            <column name="categoria_id"/>
+            <column name="activo"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>

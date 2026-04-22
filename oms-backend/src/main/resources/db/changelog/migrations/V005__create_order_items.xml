@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
+
+    <changeSet id="create-order-items-table" author="oms-dev" context="base">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="order_items"/>
+            </not>
+        </preConditions>
+        <createTable tableName="order_items">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="order_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="product_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cantidad" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="precio_unitario" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subtotal" type="DECIMAL(10,2)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="add-order-items-foreign-keys" author="oms-dev" context="base">
+        <addForeignKeyConstraint
+                baseTableName="order_items"
+                baseColumnNames="order_id"
+                referencedTableName="orders"
+                referencedColumnNames="id"
+                constraintName="fk_order_items_order"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+        <addForeignKeyConstraint
+                baseTableName="order_items"
+                baseColumnNames="product_id"
+                referencedTableName="products"
+                referencedColumnNames="id"
+                constraintName="fk_order_items_product"
+                onDelete="RESTRICT"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="add-order-items-indexes" author="oms-dev" context="base">
+        <createIndex tableName="order_items" indexName="idx_order_items_order">
+            <column name="order_id"/>
+        </createIndex>
+        <createIndex tableName="order_items" indexName="idx_order_items_product">
+            <column name="product_id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-order-items-constraints" author="oms-dev" context="base">
+        <sql>
+            ALTER TABLE order_items
+            ADD CONSTRAINT ck_order_items_cantidad CHECK (cantidad > 0)
+        </sql>
+        <sql>
+            ALTER TABLE order_items
+            ADD CONSTRAINT ck_order_items_precio_unitario CHECK (precio_unitario >= 0)
+        </sql>
+        <sql>
+            ALTER TABLE order_items
+            ADD CONSTRAINT ck_order_items_subtotal CHECK (subtotal >= 0)
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
