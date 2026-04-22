@@ -2,6 +2,10 @@ spring:
   application:
     name: orders-management-system
 
+  threads:
+    virtual:
+      enabled: true
+
   datasource:
     url: jdbc:mysql://localhost:3306/oms_db?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true
     username: root

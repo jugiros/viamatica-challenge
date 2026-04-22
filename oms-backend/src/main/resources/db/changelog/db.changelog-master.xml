@@ -5,15 +5,15 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <include file="migrations/V001__create_categories.xml"/>
-    <include file="migrations/V002__create_users.xml"/>
-    <include file="migrations/V003__create_products.xml"/>
-    <include file="migrations/V004__create_orders.xml"/>
-    <include file="migrations/V005__create_order_items.xml"/>
-    <include file="migrations/V006__create_payments.xml"/>
-    <include file="migrations/V007__create_audit_log.xml"/>
-    <include file="migrations/V008__create_notifications.xml"/>
-    <include file="migrations/V009__create_indexes_and_constraints.xml"/>
-    <include file="seeds/V010__seed_initial_data.xml"/>
+    <include file="classpath:db/changelog/migrations/V001__create_categories.xml"/>
+    <include file="classpath:db/changelog/migrations/V002__create_users.xml"/>
+    <include file="classpath:db/changelog/migrations/V003__create_products.xml"/>
+    <include file="classpath:db/changelog/migrations/V004__create_orders.xml"/>
+    <include file="classpath:db/changelog/migrations/V005__create_order_items.xml"/>
+    <include file="classpath:db/changelog/migrations/V006__create_payments.xml"/>
+    <include file="classpath:db/changelog/migrations/V007__create_audit_log.xml"/>
+    <include file="classpath:db/changelog/migrations/V008__create_notifications.xml"/>
+    <include file="classpath:db/changelog/migrations/V009__create_indexes_and_constraints.xml"/>
+    <include file="classpath:db/changelog/seeds/V010__seed_initial_data.xml"/>
 
 </databaseChangeLog>
