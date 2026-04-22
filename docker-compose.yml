@@ -1,0 +1,41 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: oms-mysql
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: oms_db
+      MYSQL_USER: oms_user
+      MYSQL_PASSWORD: oms_pass
+    volumes:
+      - oms-mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+    networks:
+      - oms-network
+
+  phpmyadmin:
+    image: phpmyadmin:latest
+    container_name: oms-phpmyadmin
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mysql
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - oms-network
+
+volumes:
+  oms-mysql-data:
+
+networks:
+  oms-network:
+    driver: bridge
