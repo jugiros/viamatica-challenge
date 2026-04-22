@@ -27,7 +27,7 @@
             <column name="precio_unitario" type="DECIMAL(10,2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="subtotal" type="DECIMAL(10,2)">
+            <column name="subtotal" type="DECIMAL(12,2)" computed="true">
                 <constraints nullable="false"/>
             </column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
@@ -64,18 +64,25 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="add-order-items-computed-column" author="oms-dev" context="base">
+        <sql>
+            ALTER TABLE order_items
+            MODIFY COLUMN subtotal DECIMAL(12,2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED
+        </sql>
+    </changeSet>
+
+    <changeSet id="add-order-items-unique-constraint" author="oms-dev" context="base">
+        <addUniqueConstraint tableName="order_items" columnNames="order_id,product_id" constraintName="uk_order_product"/>
+    </changeSet>
+
     <changeSet id="add-order-items-constraints" author="oms-dev" context="base">
         <sql>
             ALTER TABLE order_items
-            ADD CONSTRAINT ck_order_items_cantidad CHECK (cantidad > 0)
+            ADD CONSTRAINT ck_items_cantidad CHECK (cantidad > 0)
         </sql>
         <sql>
             ALTER TABLE order_items
-            ADD CONSTRAINT ck_order_items_precio_unitario CHECK (precio_unitario >= 0)
-        </sql>
-        <sql>
-            ALTER TABLE order_items
-            ADD CONSTRAINT ck_order_items_subtotal CHECK (subtotal >= 0)
+            ADD CONSTRAINT ck_items_precio CHECK (precio_unitario > 0)
         </sql>
     </changeSet>
 

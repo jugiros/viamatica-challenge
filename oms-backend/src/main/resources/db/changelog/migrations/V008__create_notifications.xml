@@ -18,18 +18,17 @@
             <column name="user_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
+            <column name="order_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
             <column name="tipo" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="titulo" type="VARCHAR(200)">
+            <column name="estado" type="VARCHAR(20)" defaultValue="PENDIENTE">
                 <constraints nullable="false"/>
             </column>
-            <column name="mensaje" type="TEXT">
-                <constraints nullable="false"/>
-            </column>
-            <column name="leida" type="TINYINT(1)" defaultValueNumeric="0">
-                <constraints nullable="false"/>
-            </column>
+            <column name="mensaje" type="TEXT"/>
+            <column name="fecha_envio" type="TIMESTAMP"/>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
@@ -42,21 +41,42 @@
                 baseColumnNames="user_id"
                 referencedTableName="users"
                 referencedColumnNames="id"
-                constraintName="fk_notifications_user"
+                constraintName="fk_notif_user"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="add-notifications-order-foreign-key" author="oms-dev" context="base">
+        <addForeignKeyConstraint
+                baseTableName="notifications"
+                baseColumnNames="order_id"
+                referencedTableName="orders"
+                referencedColumnNames="id"
+                constraintName="fk_notif_order"
                 onDelete="CASCADE"
                 onUpdate="CASCADE"/>
     </changeSet>
 
     <changeSet id="add-notifications-indexes" author="oms-dev" context="base">
-        <createIndex tableName="notifications" indexName="idx_notifications_user">
+        <createIndex tableName="notifications" indexName="idx_notif_user">
             <column name="user_id"/>
         </createIndex>
-        <createIndex tableName="notifications" indexName="idx_notifications_leida">
-            <column name="leida"/>
+        <createIndex tableName="notifications" indexName="idx_notif_order">
+            <column name="order_id"/>
         </createIndex>
-        <createIndex tableName="notifications" indexName="idx_notifications_created_at">
-            <column name="created_at"/>
-        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-notifications-constraints" author="oms-dev" context="base">
+        <sql>
+            ALTER TABLE notifications
+            ADD CONSTRAINT ck_notif_tipo
+            CHECK (tipo IN ('CONFIRMACION', 'PAGO', 'ENVIO', 'CANCELACION'))
+        </sql>
+        <sql>
+            ALTER TABLE notifications
+            ADD CONSTRAINT ck_notif_estado
+            CHECK (estado IN ('PENDIENTE', 'ENVIADA', 'FALLIDA'))
+        </sql>
     </changeSet>
 
 </databaseChangeLog>

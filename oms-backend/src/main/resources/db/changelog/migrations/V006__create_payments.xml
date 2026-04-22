@@ -21,17 +21,14 @@
             <column name="monto" type="DECIMAL(12,2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="metodo" type="VARCHAR(50)">
+            <column name="metodo_pago" type="VARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="estado" type="VARCHAR(20)" defaultValue="PENDIENTE">
+            <column name="estado_pago" type="VARCHAR(20)" defaultValue="PENDIENTE">
                 <constraints nullable="false"/>
             </column>
-            <column name="transaction_id" type="VARCHAR(255)"/>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
-                <constraints nullable="false"/>
-            </column>
-            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+            <column name="referencia_externa" type="VARCHAR(255)"/>
+            <column name="fecha_pago" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
         </createTable>
@@ -49,15 +46,13 @@
     </changeSet>
 
     <changeSet id="add-payments-indexes" author="oms-dev" context="base">
-        <createIndex tableName="payments" indexName="idx_payments_order">
-            <column name="order_id"/>
-        </createIndex>
         <createIndex tableName="payments" indexName="idx_payments_estado">
-            <column name="estado"/>
+            <column name="estado_pago"/>
         </createIndex>
-        <createIndex tableName="payments" indexName="idx_payments_transaction_id">
-            <column name="transaction_id"/>
-        </createIndex>
+    </changeSet>
+
+    <changeSet id="add-payments-unique-constraint" author="oms-dev" context="base">
+        <addUniqueConstraint tableName="payments" columnNames="order_id" constraintName="uk_payments_order"/>
     </changeSet>
 
     <changeSet id="add-payments-constraints" author="oms-dev" context="base">
@@ -67,13 +62,13 @@
         </sql>
         <sql>
             ALTER TABLE payments
-            ADD CONSTRAINT ck_payments_metodo
-            CHECK (metodo IN ('CREDIT_CARD', 'DEBIT_CARD', 'PAYPAL', 'BANK_TRANSFER'))
+            ADD CONSTRAINT ck_payments_metodo_pago
+            CHECK (metodo_pago IN ('TARJETA_CREDITO', 'TARJETA_DEBITO', 'TRANSFERENCIA', 'EFECTIVO'))
         </sql>
         <sql>
             ALTER TABLE payments
-            ADD CONSTRAINT ck_payments_estado
-            CHECK (estado IN ('PENDIENTE', 'COMPLETADO', 'FALLIDO', 'REEMBOLSADO'))
+            ADD CONSTRAINT ck_payments_estado_pago
+            CHECK (estado_pago IN ('PENDIENTE', 'COMPLETADO', 'FALLIDO', 'REEMBOLSADO'))
         </sql>
     </changeSet>
 

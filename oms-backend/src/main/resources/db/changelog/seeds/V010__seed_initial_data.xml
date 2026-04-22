@@ -5,9 +5,9 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="seed-categories" author="oms-dev" context="seed">
+    <changeSet id="seed-categories" author="oms-dev" context="dev,test">
         <insert tableName="categories">
-            <column name="nombre" value="Electrónicos"/>
+            <column name="nombre" value="Electrónica"/>
             <column name="descripcion" value="Productos electrónicos y gadgets"/>
             <column name="activo" valueNumeric="1"/>
         </insert>
@@ -17,33 +17,71 @@
             <column name="activo" valueNumeric="1"/>
         </insert>
         <insert tableName="categories">
-            <column name="nombre" value="Hogar"/>
-            <column name="descripcion" value="Artículos para el hogar"/>
-            <column name="activo" valueNumeric="1"/>
-        </insert>
-        <insert tableName="categories">
-            <column name="nombre" value="Deportes"/>
-            <column name="descripcion" value="Equipamiento deportivo"/>
+            <column name="nombre" value="Alimentos"/>
+            <column name="descripcion" value="Productos alimenticios"/>
             <column name="activo" valueNumeric="1"/>
         </insert>
     </changeSet>
 
-    <changeSet id="seed-admin-user" author="oms-dev" context="seed">
+    <changeSet id="seed-admin-user" author="oms-dev" context="dev,test">
         <insert tableName="users">
             <column name="nombre" value="Administrador"/>
-            <column name="email" value="admin@viamatica.com"/>
+            <column name="email" value="admin@oms.com"/>
             <column name="password_hash" value="$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH"/>
             <column name="rol" value="ADMIN"/>
             <column name="activo" valueNumeric="1"/>
         </insert>
     </changeSet>
 
-    <changeSet id="seed-test-user" author="oms-dev" context="seed">
+    <changeSet id="seed-test-user" author="oms-dev" context="dev,test">
         <insert tableName="users">
             <column name="nombre" value="Usuario Prueba"/>
-            <column name="email" value="usuario@test.com"/>
+            <column name="email" value="user@oms.com"/>
             <column name="password_hash" value="$2a$10$N.zmdr9k7uOCQb376NoUnuTJ8iAt6Z5EHsM8lE9lBOsl7iAt6Z5EH"/>
             <column name="rol" value="USER"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="seed-products" author="oms-dev" context="dev,test">
+        <insert tableName="products">
+            <column name="nombre" value="Laptop HP Pavilion"/>
+            <column name="descripcion" value="Laptop 15.6 inch Intel i5 8GB RAM 512GB SSD"/>
+            <column name="precio" valueNumeric="799.99"/>
+            <column name="stock" valueNumeric="10"/>
+            <column name="category_id" valueNumeric="1"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+        <insert tableName="products">
+            <column name="nombre" value="Camiseta Nike"/>
+            <column name="descripcion" value="Camiseta deportiva 100% algodón"/>
+            <column name="precio" valueNumeric="29.99"/>
+            <column name="stock" valueNumeric="50"/>
+            <column name="category_id" valueNumeric="2"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+        <insert tableName="products">
+            <column name="nombre" value="Smartphone Samsung Galaxy"/>
+            <column name="descripcion" value="Smartphone 6.5 inch 128GB"/>
+            <column name="precio" valueNumeric="599.99"/>
+            <column name="stock" valueNumeric="15"/>
+            <column name="category_id" valueNumeric="1"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+        <insert tableName="products">
+            <column name="nombre" value="Pantalón Levi's"/>
+            <column name="descripcion" value="Pantalón vaquero slim fit"/>
+            <column name="precio" valueNumeric="59.99"/>
+            <column name="stock" valueNumeric="30"/>
+            <column name="category_id" valueNumeric="2"/>
+            <column name="activo" valueNumeric="1"/>
+        </insert>
+        <insert tableName="products">
+            <column name="nombre" value="Arroz Integral 1kg"/>
+            <column name="descripcion" value="Arroz integral orgánico"/>
+            <column name="precio" valueNumeric="4.99"/>
+            <column name="stock" valueNumeric="100"/>
+            <column name="category_id" valueNumeric="3"/>
             <column name="activo" valueNumeric="1"/>
         </insert>
     </changeSet>

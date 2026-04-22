@@ -16,9 +16,17 @@
             <column name="user_id"/>
             <column name="estado"/>
         </createIndex>
-        <createIndex tableName="products" indexName="idx_products_categoria_activo">
-            <column name="categoria_id"/>
+        <createIndex tableName="orders" indexName="idx_orders_user_fecha">
+            <column name="user_id"/>
+            <column name="fecha_orden"/>
+        </createIndex>
+        <createIndex tableName="products" indexName="idx_products_category_activo">
+            <column name="category_id"/>
             <column name="activo"/>
+        </createIndex>
+        <createIndex tableName="audit_log" indexName="idx_audit_tabla_entidad">
+            <column name="tabla_afectada"/>
+            <column name="entidad_id"/>
         </createIndex>
     </changeSet>
 
