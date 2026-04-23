@@ -86,6 +86,25 @@ Navegar al directorio `oms-backend` y ejecutar:
 .\mvnw test -Dtest=AuthControllerTest
 ```
 
+## Verificar Cobertura de Código con Jacoco
+
+El proyecto está configurado con Jacoco para verificar la cobertura de código con un mínimo del 80%.
+
+```bash
+# Ejecutar tests y generar reporte de cobertura
+.\mvnw clean verify
+
+# Ejecutar con perfil de test explícito
+.\mvnw clean verify "-Dspring.profiles.active=test"
+```
+
+El reporte HTML se genera en: `target/site/jacoco/index.html`
+
+**Configuración de Jacoco:**
+- Cobertura mínima: 80% (INSTRUCTION)
+- Exclusiones: infrastructure, Application classes, Config classes, DTOs, entities
+- El build fallará si la cobertura es menor al 80%
+
 ## Notas
 
 - El token JWT expira después de 1 hora
