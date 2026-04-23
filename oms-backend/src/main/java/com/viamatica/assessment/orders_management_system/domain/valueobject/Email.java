@@ -2,10 +2,6 @@ package com.viamatica.assessment.orders_management_system.domain.valueobject;
 
 import java.util.regex.Pattern;
 
-/**
- * Value Object representing a validated email address.
- * Uses Java 21 record with compact constructor for validation.
- */
 public record Email(String value) {
 
     private static final Pattern EMAIL_PATTERN =
@@ -20,11 +16,6 @@ public record Email(String value) {
         }
     }
 
-    /**
-     * Creates an Email instance from a string.
-     * @param email the email string
-     * @return Email instance
-     */
     public static Email of(String email) {
         return new Email(email);
     }

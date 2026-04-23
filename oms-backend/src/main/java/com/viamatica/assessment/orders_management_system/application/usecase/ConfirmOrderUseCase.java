@@ -15,11 +15,6 @@ import com.viamatica.assessment.orders_management_system.domain.order.PendingSta
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Use case for confirming an order.
- * Validates PENDIENTE → CONFIRMADA transition with sealed OrderStatus.
- * Verifies and decrements stock with Optimistic Locking.
- */
 @Service
 @RequiredArgsConstructor
 public class ConfirmOrderUseCase {

@@ -12,10 +12,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-/**
- * Domain entity representing an order in the system.
- * Pure POJO without any framework annotations.
- */
 @Data
 public class OrderDomain {
 

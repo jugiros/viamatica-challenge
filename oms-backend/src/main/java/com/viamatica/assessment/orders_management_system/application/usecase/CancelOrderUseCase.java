@@ -12,11 +12,6 @@ import com.viamatica.assessment.orders_management_system.domain.port.ProductRepo
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-/**
- * Use case for cancelling an order.
- * Validates valid transition with sealed OrderStatus.
- * Releases stock if order was CONFIRMADA.
- */
 @Service
 @RequiredArgsConstructor
 public class CancelOrderUseCase {

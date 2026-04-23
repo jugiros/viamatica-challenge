@@ -11,9 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * Spring Data JPA repository for AuditLogEntity.
- */
 @Repository
 public interface AuditLogJpaRepository extends JpaRepository<AuditLogEntity, Long> {
 

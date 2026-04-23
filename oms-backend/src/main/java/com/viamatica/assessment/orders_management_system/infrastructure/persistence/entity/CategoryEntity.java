@@ -8,10 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 
-/**
- * JPA Entity for Category table.
- * Represents product categories.
- */
 @Entity
 @Table(name = "categories")
 @Data

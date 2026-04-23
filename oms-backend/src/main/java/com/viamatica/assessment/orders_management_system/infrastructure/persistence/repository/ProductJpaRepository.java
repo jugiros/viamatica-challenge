@@ -11,9 +11,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Spring Data JPA repository for ProductEntity.
- */
 @Repository
 public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long> {
 

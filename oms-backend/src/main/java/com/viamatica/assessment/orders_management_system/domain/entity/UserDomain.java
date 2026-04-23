@@ -5,10 +5,6 @@ import com.viamatica.assessment.orders_management_system.domain.valueobject.Emai
 import lombok.Data;
 import java.time.LocalDateTime;
 
-/**
- * Domain entity representing a user in the system.
- * Pure POJO without any framework annotations.
- */
 @Data
 public class UserDomain {
 

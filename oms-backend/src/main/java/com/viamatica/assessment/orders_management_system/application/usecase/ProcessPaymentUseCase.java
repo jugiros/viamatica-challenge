@@ -18,11 +18,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-/**
- * Use case for processing a payment for an order.
- * Validates CONFIRMADA state, checks amount, detects duplicate payments.
- * Transitions to PAGADA and sends notification.
- */
 @Service
 @RequiredArgsConstructor
 public class ProcessPaymentUseCase {

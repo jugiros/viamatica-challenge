@@ -11,9 +11,6 @@ import org.mapstruct.Named;
 
 import java.math.BigDecimal;
 
-/**
- * MapStruct mapper for converting between PaymentEntity and PaymentDomain.
- */
 @Mapper(componentModel = "spring")
 public interface PaymentMapper {
 

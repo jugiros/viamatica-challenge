@@ -8,10 +8,6 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
-/**
- * JPA Entity for User table.
- * Maps to database table and converts to/from UserDomain.
- */
 @Entity
 @Table(name = "users")
 @Data

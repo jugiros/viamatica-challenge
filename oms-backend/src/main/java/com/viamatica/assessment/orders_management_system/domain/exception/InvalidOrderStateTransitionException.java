@@ -2,9 +2,6 @@ package com.viamatica.assessment.orders_management_system.domain.exception;
 
 import lombok.Getter;
 
-/**
- * Exception thrown when attempting to transition an order to an invalid state.
- */
 @Getter
 public class InvalidOrderStateTransitionException extends DomainException {
 

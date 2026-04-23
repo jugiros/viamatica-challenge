@@ -4,9 +4,6 @@ import com.viamatica.assessment.orders_management_system.domain.port.Notificatio
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/**
- * Implementation of NotificationPort for sending notifications.
- */
 @Service
 @Slf4j
 public class NotificationPortImpl implements NotificationPort {

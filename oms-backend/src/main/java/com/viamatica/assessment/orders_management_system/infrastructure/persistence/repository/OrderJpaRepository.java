@@ -12,9 +12,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Spring Data JPA repository for OrderEntity.
- */
 @Repository
 public interface OrderJpaRepository extends JpaRepository<OrderEntity, Long> {
 

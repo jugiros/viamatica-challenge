@@ -5,9 +5,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
-/**
- * JPA Entity for OrderItem table.
- */
 @Entity
 @Table(name = "order_items")
 @Data

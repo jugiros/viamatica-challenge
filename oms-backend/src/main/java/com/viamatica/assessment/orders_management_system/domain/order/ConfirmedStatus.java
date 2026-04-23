@@ -1,9 +1,5 @@
 package com.viamatica.assessment.orders_management_system.domain.order;
 
-/**
- * Represents an order that has been confirmed but not yet paid.
- * Can transition to PAGADA or CANCELADA.
- */
 public final record ConfirmedStatus() implements OrderStatus {
 
     @Override

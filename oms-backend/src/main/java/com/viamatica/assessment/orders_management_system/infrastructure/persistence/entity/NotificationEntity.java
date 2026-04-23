@@ -7,10 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-/**
- * JPA Entity for Notification table.
- * Stores notifications sent to users.
- */
 @Entity
 @Table(name = "notifications", indexes = {
     @Index(name = "idx_notification_user_id", columnList = "user_id"),

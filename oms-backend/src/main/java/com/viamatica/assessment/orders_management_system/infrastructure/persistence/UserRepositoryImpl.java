@@ -13,9 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-/**
- * Implementation of UserRepository port using JPA.
- */
 @Repository
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {

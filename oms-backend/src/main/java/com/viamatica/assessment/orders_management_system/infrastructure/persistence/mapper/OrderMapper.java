@@ -15,9 +15,6 @@ import org.mapstruct.Named;
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * MapStruct mapper for converting between OrderEntity and OrderDomain.
- */
 @Mapper(componentModel = "spring", uses = {OrderItemMapper.class})
 public interface OrderMapper {
 

@@ -10,10 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-/**
- * Use case for registering a new user.
- * Validates email uniqueness, hashes password with BCrypt, and generates audit log.
- */
 @Service
 @RequiredArgsConstructor
 public class RegisterUserUseCase {

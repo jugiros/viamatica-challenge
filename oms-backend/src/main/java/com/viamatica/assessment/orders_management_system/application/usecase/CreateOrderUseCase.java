@@ -19,11 +19,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Use case for creating a new order.
- * Validates user active, products exist with stock, calculates total automatically.
- * Initial state is PENDIENTE.
- */
 @Service
 @RequiredArgsConstructor
 public class CreateOrderUseCase {

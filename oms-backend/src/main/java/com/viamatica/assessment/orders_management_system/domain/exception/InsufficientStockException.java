@@ -1,8 +1,5 @@
 package com.viamatica.assessment.orders_management_system.domain.exception;
 
-/**
- * Exception thrown when attempting to order more items than available in stock.
- */
 public class InsufficientStockException extends DomainException {
 
     private final Long productId;

@@ -1,9 +1,5 @@
 package com.viamatica.assessment.orders_management_system.domain.valueobject;
 
-/**
- * Value Object representing a validated product name.
- * Ensures the name is not empty and does not exceed 200 characters.
- */
 public record ProductName(String value) {
 
     private static final int MAX_LENGTH = 200;
@@ -21,19 +17,10 @@ public record ProductName(String value) {
         }
     }
 
-    /**
-     * Creates a ProductName instance from a string.
-     * @param name the product name
-     * @return ProductName instance
-     */
     public static ProductName of(String name) {
         return new ProductName(name);
     }
 
-    /**
-     * Returns the trimmed value of the product name.
-     * @return trimmed product name
-     */
     public String trimmed() {
         return value.trim();
     }

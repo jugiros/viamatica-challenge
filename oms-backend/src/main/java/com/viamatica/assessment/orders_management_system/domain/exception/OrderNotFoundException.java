@@ -2,9 +2,6 @@ package com.viamatica.assessment.orders_management_system.domain.exception;
 
 import lombok.Getter;
 
-/**
- * Exception thrown when a requested order cannot be found.
- */
 @Getter
 public class OrderNotFoundException extends DomainException {
 

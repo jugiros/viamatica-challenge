@@ -10,10 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 
-/**
- * Use case for creating a new product.
- * Validates ProductName, Money, stock >= 0, and category exists.
- */
 @Service
 @RequiredArgsConstructor
 public class CreateProductUseCase {

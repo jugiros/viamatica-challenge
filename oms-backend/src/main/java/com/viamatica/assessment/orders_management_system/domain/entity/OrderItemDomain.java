@@ -3,10 +3,6 @@ package com.viamatica.assessment.orders_management_system.domain.entity;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
 import lombok.Data;
 
-/**
- * Domain entity representing an item within an order.
- * Pure POJO without any framework annotations.
- */
 @Data
 public class OrderItemDomain {
 

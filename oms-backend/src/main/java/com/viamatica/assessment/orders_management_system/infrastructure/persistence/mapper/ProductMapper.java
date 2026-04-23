@@ -10,9 +10,6 @@ import org.mapstruct.Named;
 
 import java.math.BigDecimal;
 
-/**
- * MapStruct mapper for converting between ProductEntity and ProductDomain.
- */
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 

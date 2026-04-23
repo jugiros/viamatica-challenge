@@ -6,10 +6,6 @@ import com.viamatica.assessment.orders_management_system.domain.valueobject.Mone
 import lombok.Data;
 import java.time.LocalDateTime;
 
-/**
- * Domain entity representing a payment for an order.
- * Pure POJO without any framework annotations.
- */
 @Data
 public class PaymentDomain {
 

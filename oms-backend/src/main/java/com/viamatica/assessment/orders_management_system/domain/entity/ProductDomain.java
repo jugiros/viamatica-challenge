@@ -5,10 +5,6 @@ import com.viamatica.assessment.orders_management_system.domain.valueobject.Prod
 import lombok.Data;
 import java.time.LocalDateTime;
 
-/**
- * Domain entity representing a product in the catalog.
- * Pure POJO without any framework annotations.
- */
 @Data
 public class ProductDomain {
 

@@ -19,10 +19,6 @@ import java.util.Date;
 import java.util.UUID;
 import javax.crypto.SecretKey;
 
-/**
- * Use case for user authentication.
- * Validates credentials, generates JWT + RefreshToken, and logs audit event.
- */
 @Service
 public class AuthenticateUserUseCase {
 

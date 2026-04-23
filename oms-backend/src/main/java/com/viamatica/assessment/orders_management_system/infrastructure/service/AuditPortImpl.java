@@ -6,9 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
-/**
- * Implementation of AuditPort for logging audit events.
- */
 @Service
 @Slf4j
 public class AuditPortImpl implements AuditPort {

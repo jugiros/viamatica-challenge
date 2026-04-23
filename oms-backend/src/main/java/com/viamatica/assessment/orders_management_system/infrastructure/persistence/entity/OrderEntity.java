@@ -11,9 +11,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * JPA Entity for Order table.
- */
 @Entity
 @Table(name = "orders")
 @Data

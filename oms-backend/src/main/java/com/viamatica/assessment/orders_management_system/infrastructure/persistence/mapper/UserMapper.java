@@ -8,9 +8,6 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-/**
- * MapStruct mapper for converting between UserEntity and UserDomain.
- */
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 

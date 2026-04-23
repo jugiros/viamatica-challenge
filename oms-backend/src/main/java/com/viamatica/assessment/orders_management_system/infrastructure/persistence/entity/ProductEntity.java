@@ -8,9 +8,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * JPA Entity for Product table.
- */
 @Entity
 @Table(name = "products")
 @Data

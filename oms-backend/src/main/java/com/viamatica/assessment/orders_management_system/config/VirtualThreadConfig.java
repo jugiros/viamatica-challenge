@@ -6,10 +6,6 @@ import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomi
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/**
- * Configuration for Virtual Threads in Tomcat.
- * Enables virtual threads for handling HTTP requests.
- */
 @Configuration
 public class VirtualThreadConfig {
 

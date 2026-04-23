@@ -7,10 +7,6 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-/**
- * JPA Entity for Audit Log table.
- * Tracks all changes to entities for audit purposes.
- */
 @Entity
 @Table(name = "audit_logs", indexes = {
     @Index(name = "idx_audit_user_id", columnList = "user_id"),
