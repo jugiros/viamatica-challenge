@@ -27,6 +27,8 @@ mvn clean install
 mvn spring-boot:run
 ```
 
+**Nota importante:** Si al levantar el backend obtienes un error `NoClassDefFoundError: OrderItemEntity` o similar, ejecuta `mvn clean compile` para regenerar las clases de MapStruct antes de iniciar la aplicación.
+
 El backend iniciará en `http://localhost:8080`
 
 ## Probar APIs con Swagger UI
