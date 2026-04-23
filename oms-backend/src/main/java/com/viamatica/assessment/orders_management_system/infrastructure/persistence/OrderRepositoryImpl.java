@@ -2,16 +2,18 @@ package com.viamatica.assessment.orders_management_system.infrastructure.persist
 
 import com.viamatica.assessment.orders_management_system.domain.entity.OrderDomain;
 import com.viamatica.assessment.orders_management_system.domain.entity.OrderItemDomain;
+import com.viamatica.assessment.orders_management_system.domain.exception.OrderNotFoundException;
+import com.viamatica.assessment.orders_management_system.domain.port.OrderRepository;
+import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
 import com.viamatica.assessment.orders_management_system.domain.order.CancelledStatus;
 import com.viamatica.assessment.orders_management_system.domain.order.ConfirmedStatus;
 import com.viamatica.assessment.orders_management_system.domain.order.OrderStatus;
 import com.viamatica.assessment.orders_management_system.domain.order.PaidStatus;
 import com.viamatica.assessment.orders_management_system.domain.order.PendingStatus;
 import com.viamatica.assessment.orders_management_system.domain.order.ShippedStatus;
-import com.viamatica.assessment.orders_management_system.domain.port.OrderRepository;
-import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
 import com.viamatica.assessment.orders_management_system.infrastructure.persistence.entity.OrderEntity;
 import com.viamatica.assessment.orders_management_system.infrastructure.persistence.entity.OrderItemEntity;
+import com.viamatica.assessment.orders_management_system.infrastructure.persistence.entity.OrderStatusEntity;
 import com.viamatica.assessment.orders_management_system.infrastructure.persistence.repository.OrderJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -103,20 +105,30 @@ public class OrderRepositoryImpl implements OrderRepository {
                 .build();
 
         // Set status using the transitionTo method
-        OrderStatus status = convertStringToStatus(entity.getStatus());
+        OrderStatus status = convertStatusEntityToStatus(entity.getStatus());
         domain.transitionTo(status);
 
         return domain;
     }
 
-    private OrderStatus convertStringToStatus(String status) {
-        return switch (status) {
-            case "PENDIENTE" -> new PendingStatus();
-            case "CONFIRMADA" -> new ConfirmedStatus();
-            case "PAGADA" -> new PaidStatus();
-            case "ENVIADA" -> new ShippedStatus();
-            case "CANCELADA" -> new CancelledStatus();
-            default -> throw new IllegalArgumentException("Unknown status: " + status);
+    private OrderStatus convertStatusEntityToStatus(OrderStatusEntity statusEntity) {
+        return switch (statusEntity) {
+            case PENDIENTE -> new PendingStatus();
+            case CONFIRMADA -> new ConfirmedStatus();
+            case PAGADA -> new PaidStatus();
+            case ENVIADA -> new ShippedStatus();
+            case CANCELADA -> new CancelledStatus();
+        };
+    }
+
+    private OrderStatusEntity convertStatusToStatusEntity(OrderStatus status) {
+        return switch (status.name()) {
+            case "PENDIENTE" -> OrderStatusEntity.PENDIENTE;
+            case "CONFIRMADA" -> OrderStatusEntity.CONFIRMADA;
+            case "PAGADA" -> OrderStatusEntity.PAGADA;
+            case "ENVIADA" -> OrderStatusEntity.ENVIADA;
+            case "CANCELADA" -> OrderStatusEntity.CANCELADA;
+            default -> throw new IllegalArgumentException("Unknown status: " + status.name());
         };
     }
 
@@ -137,7 +149,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         entity.setOrderNumber(domain.getOrderNumber());
         entity.setUserId(domain.getUserId());
         entity.setTotal(domain.getTotal().amount());
-        entity.setStatus(convertStatusToString(domain.getStatus()));
+        entity.setStatus(convertStatusToStatusEntity(domain.getStatus()));
         entity.setOrderDate(domain.getOrderDate());
         entity.setUpdatedAt(domain.getUpdatedAt());
         entity.setDeletedAt(domain.getDeletedAt());

@@ -1,22 +1,22 @@
 package com.viamatica.assessment.orders_management_system.infrastructure.persistence.entity;
 
-import com.viamatica.assessment.orders_management_system.domain.model.UserRole;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import java.time.LocalDateTime;
 
 /**
- * JPA Entity for User table.
- * Maps to database table and converts to/from UserDomain.
+ * JPA Entity for Category table.
+ * Represents product categories.
  */
 @Entity
-@Table(name = "users")
+@Table(name = "categories")
 @Data
 @NoArgsConstructor
-public class UserEntity {
+public class CategoryEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,24 +25,11 @@ public class UserEntity {
     @Column(nullable = false, length = 200)
     private String name;
 
-    @Column(nullable = false, unique = true, length = 255)
-    private String email;
-
-    @Column(nullable = false)
-    private String passwordHash;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private UserRole role;
+    @Column(length = 1000)
+    private String description;
 
     @Column(nullable = false)
     private Boolean active;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @Version
-    private Long version;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp
@@ -51,4 +38,10 @@ public class UserEntity {
     @Column(name = "updated_at")
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+
+    @Version
+    private Long version;
 }

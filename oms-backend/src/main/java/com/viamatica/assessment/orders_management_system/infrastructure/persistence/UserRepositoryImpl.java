@@ -40,14 +40,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(readOnly = true)
     public Optional<UserDomain> findByEmail(Email email) {
-        return jpaRepository.findByEmail(email.value())
+        return jpaRepository.findByEmailAndDeletedAtIsNull(email.value())
                 .map(this::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsByEmail(Email email) {
-        return jpaRepository.existsByEmail(email.value());
+        return jpaRepository.existsByEmailAndDeletedAtIsNull(email.value());
     }
 
     @Override

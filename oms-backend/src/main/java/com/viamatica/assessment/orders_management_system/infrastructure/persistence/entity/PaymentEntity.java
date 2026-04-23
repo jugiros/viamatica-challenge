@@ -5,6 +5,8 @@ import com.viamatica.assessment.orders_management_system.domain.model.PaymentSta
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -38,28 +40,17 @@ public class PaymentEntity {
     @Column(name = "external_reference", length = 255)
     private String externalReference;
 
-    @Column(name = "payment_date", nullable = false)
-    private LocalDateTime paymentDate;
-
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
-
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
 
-    @Column(nullable = false)
+    @Version
     private Long version;
 
-    @PrePersist
-    protected void onCreate() {
-        paymentDate = LocalDateTime.now();
-        updatedAt = LocalDateTime.now();
-        version = 0L;
-    }
+    @Column(name = "payment_date", nullable = false)
+    @CreationTimestamp
+    private LocalDateTime paymentDate;
 
-    @PreUpdate
-    protected void onUpdate() {
-        updatedAt = LocalDateTime.now();
-        version++;
-    }
+    @Column(name = "updated_at")
+    @UpdateTimestamp
+    private LocalDateTime updatedAt;
 }
