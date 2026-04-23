@@ -480,14 +480,13 @@ class OrderServiceTest {
                 .unitPrice(Money.of(new BigDecimal("10.00")))
                 .build();
 
-        OrderDomain pendingOrder = OrderDomain.builder()
+        // Return a fresh copy each time to simulate different transactions reading the same initial state
+        when(orderRepository.findById(1L)).thenAnswer(invocation -> Optional.of(OrderDomain.builder()
                 .id(1L)
                 .userId(1L)
                 .total(Money.of(new BigDecimal("20.00")))
                 .items(List.of(item))
-                .build();
-
-        when(orderRepository.findById(1L)).thenReturn(Optional.of(pendingOrder));
+                .build()));
         when(productRepository.findById(1L)).thenReturn(Optional.of(product1));
 
         // First call succeeds
