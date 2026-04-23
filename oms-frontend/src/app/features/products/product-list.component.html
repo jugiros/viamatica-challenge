@@ -1,0 +1,32 @@
+<div class="container mx-auto px-4 py-8">
+  <h1 class="text-3xl font-bold mb-6">Productos</h1>
+  
+  @if (isLoading()) {
+    <div class="flex justify-center items-center h-64">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  }
+  
+  @if (errorMessage()) {
+    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+      {{ errorMessage() }}
+    </div>
+  }
+  
+  @if (products().length === 0 && !isLoading()) {
+    <div class="text-center py-8 text-gray-500">
+      No hay productos disponibles
+    </div>
+  }
+  
+  @for (product of products(); track product.id) {
+    <div class="bg-white shadow-md rounded-lg p-6 mb-4 hover:shadow-lg transition-shadow">
+      <h2 class="text-xl font-semibold mb-2">{{ product.name }}</h2>
+      <p class="text-gray-600 mb-4">{{ product.description }}</p>
+      <div class="flex justify-between items-center">
+        <span class="text-2xl font-bold text-blue-600">{{ product.price | currencyLocale }}</span>
+        <span class="text-sm text-gray-500">Stock: {{ product.stock }}</span>
+      </div>
+    </div>
+  }
+</div>
