@@ -79,12 +79,14 @@ El backend iniciará en `http://localhost:8080`
 Navegar al directorio `oms-backend` y ejecutar:
 
 ```bash
-# Ejecutar todos los tests
-.\mvnw test
+# Ejecutar todos los tests (recomendado: usar clean para regenerar clases MapStruct)
+.\mvnw clean test
 
 # Ejecutar tests específicos de seguridad
-.\mvnw test -Dtest=AuthControllerTest
+.\mvnw clean test -Dtest=AuthControllerTest
 ```
+
+**Nota:** Se recomienda usar `clean test` en lugar de `test` para evitar errores de `NoClassDefFoundError` con clases generadas por MapStruct (mappers).
 
 ## Verificar Cobertura de Código con Jacoco
 
