@@ -9,9 +9,7 @@ import java.util.Optional;
 @Repository
 public interface PaymentJpaRepository extends JpaRepository<PaymentEntity, Long> {
 
-    Optional<PaymentEntity> findByIdAndDeletedAtIsNull(Long id);
+    Optional<PaymentEntity> findByOrderId(Long orderId);
 
-    Optional<PaymentEntity> findByOrderIdAndDeletedAtIsNull(Long orderId);
-
-    boolean existsByOrderIdAndDeletedAtIsNull(Long orderId);
+    boolean existsByOrderId(Long orderId);
 }

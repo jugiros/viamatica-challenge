@@ -10,15 +10,12 @@ public class ProductDomain {
 
     private Long id;
     private ProductName name;
-    private String description;
     private Money price;
     private int stock;
     private Long categoryId;
     private boolean active;
-    private long version;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
 
     private ProductDomain() {
     }
@@ -26,15 +23,12 @@ public class ProductDomain {
     private ProductDomain(Builder builder) {
         this.id = builder.id;
         this.name = builder.name;
-        this.description = builder.description;
         this.price = builder.price;
         this.stock = builder.stock;
         this.categoryId = builder.categoryId;
         this.active = builder.active;
-        this.version = builder.version;
         this.createdAt = builder.createdAt;
         this.updatedAt = builder.updatedAt;
-        this.deletedAt = builder.deletedAt;
     }
 
     public static Builder builder() {
@@ -61,7 +55,6 @@ public class ProductDomain {
                     "Insufficient stock. Available: " + stock + ", Requested: " + quantity);
         }
         this.stock -= quantity;
-        this.version++;
     }
 
     /**
@@ -70,23 +63,6 @@ public class ProductDomain {
      */
     public void incrementStock(int quantity) {
         this.stock += quantity;
-        this.version++;
-    }
-
-    /**
-     * Soft deletes this product by setting the deletedAt timestamp.
-     */
-    public void softDelete() {
-        this.deletedAt = LocalDateTime.now();
-        this.active = false;
-    }
-
-    /**
-     * Restores a soft-deleted product by clearing the deletedAt timestamp.
-     */
-    public void restore() {
-        this.deletedAt = null;
-        this.active = true;
     }
 
     /**
@@ -102,15 +78,12 @@ public class ProductDomain {
     public static class Builder {
         private Long id;
         private ProductName name;
-        private String description;
         private Money price;
         private int stock = 0;
         private Long categoryId;
         private boolean active = true;
-        private long version = 0;
         private LocalDateTime createdAt = LocalDateTime.now();
         private LocalDateTime updatedAt = LocalDateTime.now();
-        private LocalDateTime deletedAt;
 
         public Builder id(Long id) {
             this.id = id;
@@ -119,11 +92,6 @@ public class ProductDomain {
 
         public Builder name(ProductName name) {
             this.name = name;
-            return this;
-        }
-
-        public Builder description(String description) {
-            this.description = description;
             return this;
         }
 
@@ -147,11 +115,6 @@ public class ProductDomain {
             return this;
         }
 
-        public Builder version(long version) {
-            this.version = version;
-            return this;
-        }
-
         public Builder createdAt(LocalDateTime createdAt) {
             this.createdAt = createdAt;
             return this;
@@ -159,11 +122,6 @@ public class ProductDomain {
 
         public Builder updatedAt(LocalDateTime updatedAt) {
             this.updatedAt = updatedAt;
-            return this;
-        }
-
-        public Builder deletedAt(LocalDateTime deletedAt) {
-            this.deletedAt = deletedAt;
             return this;
         }
 

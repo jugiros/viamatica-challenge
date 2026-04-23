@@ -19,8 +19,6 @@ public interface PaymentMapper {
     PaymentDomain toDomain(PaymentEntity entity);
 
     @Mapping(target = "amount", qualifiedByName = "moneyToBigDecimal")
-    @Mapping(target = "deletedAt", ignore = true)
-    @Mapping(target = "version", ignore = true)
     PaymentEntity toEntity(PaymentDomain domain);
 
     @Named("bigDecimalToMoney")

@@ -6,11 +6,6 @@
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
     <changeSet id="create-products-table" author="oms-dev" context="base">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <tableExists tableName="products"/>
-            </not>
-        </preConditions>
         <createTable tableName="products">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -18,7 +13,6 @@
             <column name="nombre" type="VARCHAR(200)">
                 <constraints nullable="false"/>
             </column>
-            <column name="descripcion" type="TEXT"/>
             <column name="precio" type="DECIMAL(10,2)">
                 <constraints nullable="false"/>
             </column>
@@ -31,16 +25,12 @@
             <column name="activo" type="TINYINT(1)" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
-            <column name="version" type="BIGINT" defaultValueNumeric="0">
-                <constraints nullable="false"/>
-            </column>
             <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
             <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="deleted_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
@@ -53,29 +43,6 @@
                 constraintName="fk_products_categoria"
                 onDelete="RESTRICT"
                 onUpdate="CASCADE"/>
-    </changeSet>
-
-    <changeSet id="add-products-indexes" author="oms-dev" context="base">
-        <createIndex tableName="products" indexName="idx_products_category">
-            <column name="category_id"/>
-        </createIndex>
-        <createIndex tableName="products" indexName="idx_products_activo">
-            <column name="activo"/>
-        </createIndex>
-        <createIndex tableName="products" indexName="idx_products_precio">
-            <column name="precio"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="add-products-constraints" author="oms-dev" context="base">
-        <sql>
-            ALTER TABLE products
-            ADD CONSTRAINT ck_products_precio CHECK (precio > 0)
-        </sql>
-        <sql>
-            ALTER TABLE products
-            ADD CONSTRAINT ck_products_stock CHECK (stock >= 0)
-        </sql>
     </changeSet>
 
 </databaseChangeLog>

@@ -22,7 +22,6 @@ public class UpdateProductUseCase {
     public record Command(
             Long id,
             String name,
-            String description,
             BigDecimal price,
             Integer stock,
             Long categoryId,
@@ -38,15 +37,12 @@ public class UpdateProductUseCase {
         ProductDomain updatedProduct = ProductDomain.builder()
                 .id(product.getId())
                 .name(command.name != null ? ProductName.of(command.name) : product.getName())
-                .description(command.description != null ? command.description : product.getDescription())
                 .price(command.price != null ? Money.of(command.price) : product.getPrice())
                 .stock(command.stock != null ? command.stock : product.getStock())
                 .categoryId(command.categoryId != null ? command.categoryId : product.getCategoryId())
                 .active(command.active != null ? command.active : product.isActive())
-                .version(product.getVersion())
                 .createdAt(product.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
-                .deletedAt(product.getDeletedAt())
                 .build();
 
         ProductDomain savedProduct = productRepository.save(updatedProduct);

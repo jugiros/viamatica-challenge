@@ -21,34 +21,25 @@ public class OrderEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 50)
-    private String orderNumber;
-
     @Column(name = "user_id", nullable = false)
     private Long userId;
 
-    @Column(nullable = false, precision = 19, scale = 2)
+    @Column(nullable = false, precision = 12, scale = 2)
     private BigDecimal total;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
+    @Column(name = "estado", nullable = false, length = 20)
     private OrderStatusEntity status;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @Version
-    private Long version;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     @BatchSize(size = 20)
     private List<OrderItemEntity> items = new ArrayList<>();
 
-    @Column(name = "order_date", nullable = false)
+    @Column(name = "fecha_orden", nullable = false)
     @CreationTimestamp
     private LocalDateTime orderDate;
 
-    @Column(name = "updated_at")
+    @Column(name = "fecha_actualizacion", nullable = false)
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 }

@@ -16,7 +16,6 @@ public class UserDomain {
     private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
-    private LocalDateTime deletedAt;
 
     private UserDomain() {
     }
@@ -30,7 +29,6 @@ public class UserDomain {
         this.active = builder.active;
         this.createdAt = builder.createdAt;
         this.updatedAt = builder.updatedAt;
-        this.deletedAt = builder.deletedAt;
     }
 
     public static Builder builder() {
@@ -46,18 +44,16 @@ public class UserDomain {
     }
 
     /**
-     * Soft deletes this user by setting the deletedAt timestamp.
+     * Deactivates this user.
      */
-    public void softDelete() {
-        this.deletedAt = LocalDateTime.now();
+    public void deactivate() {
         this.active = false;
     }
 
     /**
-     * Restores a soft-deleted user by clearing the deletedAt timestamp.
+     * Activates this user.
      */
-    public void restore() {
-        this.deletedAt = null;
+    public void activate() {
         this.active = true;
     }
 
@@ -80,7 +76,6 @@ public class UserDomain {
         private boolean active = true;
         private LocalDateTime createdAt = LocalDateTime.now();
         private LocalDateTime updatedAt = LocalDateTime.now();
-        private LocalDateTime deletedAt;
 
         public Builder id(Long id) {
             this.id = id;
@@ -119,11 +114,6 @@ public class UserDomain {
 
         public Builder updatedAt(LocalDateTime updatedAt) {
             this.updatedAt = updatedAt;
-            return this;
-        }
-
-        public Builder deletedAt(LocalDateTime deletedAt) {
-            this.deletedAt = deletedAt;
             return this;
         }
 

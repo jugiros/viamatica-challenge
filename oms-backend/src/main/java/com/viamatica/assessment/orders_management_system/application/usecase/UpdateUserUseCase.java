@@ -28,6 +28,10 @@ public class UpdateUserUseCase {
         UserDomain user = userRepository.findById(command.id)
                 .orElseThrow(() -> new UserNotFoundException(command.id));
 
+        if (!user.isActive()) {
+            throw new IllegalArgumentException("Cannot update inactive user");
+        }
+
         String previousValues = "{\"id\":" + user.getId() + ",\"name\":\"" + user.getName() + "\",\"role\":\"" + user.getRole() + "\",\"active\":" + user.isActive() + "}";
 
         UserDomain updatedUser = UserDomain.builder()
@@ -39,7 +43,6 @@ public class UpdateUserUseCase {
                 .active(command.active != null ? command.active : user.isActive())
                 .createdAt(user.getCreatedAt())
                 .updatedAt(LocalDateTime.now())
-                .deletedAt(user.getDeletedAt())
                 .build();
 
         UserDomain savedUser = userRepository.save(updatedUser);

@@ -86,7 +86,7 @@ public class UserController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         UserDomain user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        user.softDelete();
+        user.deactivate();
         userRepository.save(user);
         return ResponseEntity.noContent().build();
     }

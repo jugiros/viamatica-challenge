@@ -8,28 +8,44 @@ public record Money(BigDecimal amount) {
     private static final int SCALE = 2;
     private static final RoundingMode ROUNDING = RoundingMode.HALF_UP;
 
+    public static final Money ZERO = new Money(BigDecimal.ZERO);
+
     public Money {
         if (amount == null) {
-            throw new IllegalArgumentException("Amount cannot be null");
+            throw new IllegalArgumentException("Price cannot be null");
         }
-        if (amount.compareTo(BigDecimal.ZERO) <= 0) {
-            throw new IllegalArgumentException("Amount must be greater than zero");
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price must not be negative");
         }
         if (amount.scale() > SCALE) {
-            throw new IllegalArgumentException("Amount cannot have more than 2 decimal places");
+            throw new IllegalArgumentException("Price cannot have more than 2 decimal places");
         }
     }
 
     public static Money of(BigDecimal amount) {
+        if (amount == null) {
+            throw new IllegalArgumentException("Price cannot be null");
+        }
+        if (amount.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price must not be negative");
+        }
         return new Money(amount.setScale(SCALE, ROUNDING));
     }
 
     public static Money of(double amount) {
-        return new Money(BigDecimal.valueOf(amount).setScale(SCALE, ROUNDING));
+        BigDecimal value = BigDecimal.valueOf(amount);
+        if (value.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price must not be negative");
+        }
+        return new Money(value.setScale(SCALE, ROUNDING));
     }
 
     public static Money of(String amount) {
-        return new Money(new BigDecimal(amount).setScale(SCALE, ROUNDING));
+        BigDecimal value = new BigDecimal(amount);
+        if (value.compareTo(BigDecimal.ZERO) < 0) {
+            throw new IllegalArgumentException("Price must not be negative");
+        }
+        return new Money(value.setScale(SCALE, ROUNDING));
     }
 
     public Money add(Money other) {

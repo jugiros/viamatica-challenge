@@ -72,7 +72,6 @@ public class ProductController {
     public ResponseEntity<ProductResponse> create(@Valid @RequestBody CreateProductRequest request) {
         CreateProductUseCase.Command command = new CreateProductUseCase.Command(
                 request.name(),
-                request.description(),
                 request.price(),
                 request.stock(),
                 request.categoryId()
@@ -91,7 +90,6 @@ public class ProductController {
         UpdateProductUseCase.Command command = new UpdateProductUseCase.Command(
                 id,
                 request.name(),
-                request.description(),
                 request.price(),
                 request.stock(),
                 request.categoryId(),
@@ -108,7 +106,7 @@ public class ProductController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ProductDomain product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
-        product.softDelete();
+        product.setActive(false);
         productRepository.save(product);
         return ResponseEntity.noContent().build();
     }
@@ -117,7 +115,6 @@ public class ProductController {
         return new ProductResponse(
                 product.getId(),
                 product.getName().value(),
-                product.getDescription(),
                 product.getPrice().amount(),
                 product.getStock(),
                 product.getCategoryId(),

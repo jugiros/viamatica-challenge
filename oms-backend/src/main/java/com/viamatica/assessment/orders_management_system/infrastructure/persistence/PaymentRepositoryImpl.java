@@ -30,31 +30,27 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     @Override
     @Transactional(readOnly = true)
     public Optional<PaymentDomain> findById(Long id) {
-        return jpaRepository.findByIdAndDeletedAtIsNull(id)
+        return jpaRepository.findById(id)
                 .map(this::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<PaymentDomain> findByOrderId(Long orderId) {
-        return jpaRepository.findByOrderIdAndDeletedAtIsNull(orderId)
+        return jpaRepository.findByOrderId(orderId)
                 .map(this::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsByOrderId(Long orderId) {
-        return jpaRepository.existsByOrderIdAndDeletedAtIsNull(orderId);
+        return jpaRepository.existsByOrderId(orderId);
     }
 
     @Override
     @Transactional
     public void deleteById(Long id) {
-        PaymentEntity entity = jpaRepository.findById(id).orElse(null);
-        if (entity != null) {
-            entity.setDeletedAt(java.time.LocalDateTime.now());
-            jpaRepository.save(entity);
-        }
+        jpaRepository.deleteById(id);
     }
 
     private PaymentDomain toDomain(PaymentEntity entity) {
@@ -66,7 +62,6 @@ public class PaymentRepositoryImpl implements PaymentRepository {
                 .status(entity.getStatus())
                 .externalReference(entity.getExternalReference())
                 .paymentDate(entity.getPaymentDate())
-                .updatedAt(entity.getUpdatedAt())
                 .build();
     }
 
@@ -81,7 +76,6 @@ public class PaymentRepositoryImpl implements PaymentRepository {
         entity.setStatus(domain.getStatus());
         entity.setExternalReference(domain.getExternalReference());
         entity.setPaymentDate(domain.getPaymentDate());
-        entity.setUpdatedAt(domain.getUpdatedAt());
         return entity;
     }
 }

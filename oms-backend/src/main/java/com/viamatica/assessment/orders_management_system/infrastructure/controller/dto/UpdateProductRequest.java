@@ -9,8 +9,6 @@ import java.math.BigDecimal;
 public record UpdateProductRequest(
         @Size(min = 3, max = 200)
         String name,
-        @Size(max = 1000)
-        String description,
         @DecimalMin("0.01")
         BigDecimal price,
         @Min(0)

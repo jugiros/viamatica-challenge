@@ -19,7 +19,6 @@ public class CreateProductUseCase {
 
     public record Command(
             String name,
-            String description,
             BigDecimal price,
             int stock,
             Long categoryId
@@ -39,7 +38,6 @@ public class CreateProductUseCase {
 
         ProductDomain product = ProductDomain.builder()
                 .name(productName)
-                .description(command.description)
                 .price(price)
                 .stock(command.stock)
                 .categoryId(command.categoryId)

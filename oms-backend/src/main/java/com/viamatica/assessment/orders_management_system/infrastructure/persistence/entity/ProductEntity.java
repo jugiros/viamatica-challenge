@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -18,13 +19,10 @@ public class ProductEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 200)
+    @Column(name = "nombre", nullable = false, length = 200)
     private String name;
 
-    @Column(length = 1000)
-    private String description;
-
-    @Column(nullable = false, precision = 19, scale = 2)
+    @Column(name = "precio", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
     @Column(nullable = false)
@@ -33,14 +31,8 @@ public class ProductEntity {
     @Column(name = "category_id")
     private Long categoryId;
 
-    @Column(nullable = false)
-    private Boolean active;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @Version
-    private Long version;
+    @Column(name = "activo", nullable = false)
+    private Boolean active = true;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

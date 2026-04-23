@@ -31,14 +31,14 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     @Transactional(readOnly = true)
     public Optional<ProductDomain> findById(Long id) {
-        return jpaRepository.findByIdAndDeletedAtIsNull(id)
+        return jpaRepository.findById(id)
                 .map(this::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<ProductDomain> findAllActive() {
-        return jpaRepository.findByActiveTrueAndDeletedAtIsNull().stream()
+        return jpaRepository.findByActiveTrue().stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -48,7 +48,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     public List<ProductDomain> findByCategoryId(Long categoryId) {
         return jpaRepository.findAll().stream()
                 .filter(entity -> entity.getCategoryId() != null && entity.getCategoryId().equals(categoryId))
-                .filter(entity -> entity.getDeletedAt() == null)
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -59,7 +58,6 @@ public class ProductRepositoryImpl implements ProductRepository {
         return jpaRepository.findAll().stream()
                 .filter(entity -> entity.getCategoryId() != null && entity.getCategoryId().equals(categoryId))
                 .filter(entity -> entity.getActive() != null && entity.getActive())
-                .filter(entity -> entity.getDeletedAt() == null)
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -68,7 +66,6 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Transactional(readOnly = true)
     public List<ProductDomain> findAll() {
         return jpaRepository.findAll().stream()
-                .filter(entity -> entity.getDeletedAt() == null)
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -78,7 +75,7 @@ public class ProductRepositoryImpl implements ProductRepository {
     public void deleteById(Long id) {
         ProductEntity entity = jpaRepository.findById(id).orElse(null);
         if (entity != null) {
-            entity.setDeletedAt(java.time.LocalDateTime.now());
+            entity.setActive(false);
             jpaRepository.save(entity);
         }
     }
@@ -86,21 +83,19 @@ public class ProductRepositoryImpl implements ProductRepository {
     @Override
     @Transactional(readOnly = true)
     public boolean existsById(Long id) {
-        return jpaRepository.findByIdAndDeletedAtIsNull(id).isPresent();
+        return jpaRepository.findById(id).isPresent();
     }
 
     private ProductDomain toDomain(ProductEntity entity) {
         return ProductDomain.builder()
                 .id(entity.getId())
                 .name(ProductName.of(entity.getName()))
-                .description(entity.getDescription())
                 .price(Money.of(entity.getPrice()))
                 .stock(entity.getStock())
                 .categoryId(entity.getCategoryId())
                 .active(entity.getActive())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
-                .deletedAt(entity.getDeletedAt())
                 .build();
     }
 
@@ -110,14 +105,12 @@ public class ProductRepositoryImpl implements ProductRepository {
             entity.setId(domain.getId());
         }
         entity.setName(domain.getName().value());
-        entity.setDescription(domain.getDescription());
         entity.setPrice(domain.getPrice().amount());
         entity.setStock(domain.getStock());
         entity.setCategoryId(domain.getCategoryId());
         entity.setActive(domain.isActive());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setUpdatedAt(domain.getUpdatedAt());
-        entity.setDeletedAt(domain.getDeletedAt());
         return entity;
     }
 }

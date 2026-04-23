@@ -12,8 +12,6 @@ public record CreateProductRequest(
         @NotBlank
         @Size(min = 3, max = 200)
         String name,
-        @Size(max = 1000)
-        String description,
         @NotNull
         @DecimalMin("0.01")
         BigDecimal price,

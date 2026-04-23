@@ -2,6 +2,7 @@ package com.viamatica.assessment.orders_management_system.application.usecase;
 
 import com.viamatica.assessment.orders_management_system.domain.entity.UserDomain;
 import com.viamatica.assessment.orders_management_system.domain.exception.EmailAlreadyExistsException;
+import com.viamatica.assessment.orders_management_system.domain.exception.InvalidPasswordException;
 import com.viamatica.assessment.orders_management_system.domain.model.UserRole;
 import com.viamatica.assessment.orders_management_system.domain.port.AuditPort;
 import com.viamatica.assessment.orders_management_system.domain.port.UserRepository;
@@ -32,6 +33,9 @@ public class RegisterUserUseCase {
             throw new EmailAlreadyExistsException(email);
         }
 
+        // Validate password before hashing
+        validatePassword(command.password);
+
         String passwordHash = passwordEncoder.encode(command.password);
 
         UserDomain user = UserDomain.builder()
@@ -54,5 +58,17 @@ public class RegisterUserUseCase {
         );
 
         return savedUser;
+    }
+
+    private void validatePassword(String password) {
+        if (password == null || password.length() < 8) {
+            throw new InvalidPasswordException("Password must be at least 8 characters long");
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            throw new InvalidPasswordException("Password must contain at least one uppercase letter");
+        }
+        if (!password.matches(".*[0-9].*")) {
+            throw new InvalidPasswordException("Password must contain at least one number");
+        }
     }
 }

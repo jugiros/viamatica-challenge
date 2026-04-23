@@ -98,25 +98,21 @@ public class OrderItemDomain {
             return this;
         }
 
-        public Builder subtotal(Money subtotal) {
             this.subtotal = subtotal;
             return this;
         }
 
         public OrderItemDomain build() {
-            if (orderId == null) {
-                throw new IllegalArgumentException("Order ID cannot be null");
-            }
             if (productId == null) {
                 throw new IllegalArgumentException("Product ID cannot be null");
             }
             if (quantity <= 0) {
-                throw new IllegalArgumentException("Quantity must be greater than zero");
+                throw new IllegalArgumentException("Quantity must be positive");
             }
             if (unitPrice == null) {
                 throw new IllegalArgumentException("Unit price cannot be null");
             }
             return new OrderItemDomain(this);
-        }
+{{ ... }}
     }
 }

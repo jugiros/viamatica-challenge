@@ -40,21 +40,20 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     @Transactional(readOnly = true)
     public Optional<OrderDomain> findById(Long id) {
-        return jpaRepository.findByIdAndDeletedAtIsNull(id)
+        return jpaRepository.findById(id)
                 .map(this::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<OrderDomain> findByOrderNumber(String orderNumber) {
-        return jpaRepository.findByOrderNumberAndDeletedAtIsNull(orderNumber)
-                .map(this::toDomain);
+        return Optional.empty();
     }
 
     @Override
     @Transactional(readOnly = true)
     public List<OrderDomain> findByUserId(Long userId) {
-        return jpaRepository.findByUserIdAndDeletedAtIsNull(userId).stream()
+        return jpaRepository.findByUserId(userId).stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -63,7 +62,6 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Transactional(readOnly = true)
     public List<OrderDomain> findAll() {
         return jpaRepository.findAll().stream()
-                .filter(entity -> entity.getDeletedAt() == null)
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -71,17 +69,13 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     @Transactional
     public void deleteById(Long id) {
-        OrderEntity entity = jpaRepository.findById(id).orElse(null);
-        if (entity != null) {
-            entity.setDeletedAt(java.time.LocalDateTime.now());
-            jpaRepository.save(entity);
-        }
+        jpaRepository.deleteById(id);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsById(Long id) {
-        return jpaRepository.findByIdAndDeletedAtIsNull(id).isPresent();
+        return jpaRepository.existsById(id);
     }
 
     private OrderDomain toDomain(OrderEntity entity) {
@@ -91,14 +85,11 @@ public class OrderRepositoryImpl implements OrderRepository {
 
         OrderDomain domain = OrderDomain.builder()
                 .id(entity.getId())
-                .orderNumber(entity.getOrderNumber())
                 .userId(entity.getUserId())
                 .total(Money.of(entity.getTotal()))
                 .items(items)
                 .orderDate(entity.getOrderDate())
                 .updatedAt(entity.getUpdatedAt())
-                .deletedAt(entity.getDeletedAt())
-                .version(entity.getVersion())
                 .build();
 
         // Set status using the transitionTo method
@@ -143,14 +134,11 @@ public class OrderRepositoryImpl implements OrderRepository {
         if (domain.getId() != null) {
             entity.setId(domain.getId());
         }
-        entity.setOrderNumber(domain.getOrderNumber());
         entity.setUserId(domain.getUserId());
         entity.setTotal(domain.getTotal().amount());
         entity.setStatus(convertStatusToStatusEntity(domain.getStatus()));
         entity.setOrderDate(domain.getOrderDate());
         entity.setUpdatedAt(domain.getUpdatedAt());
-        entity.setDeletedAt(domain.getDeletedAt());
-        entity.setVersion(domain.getVersion());
 
         List<OrderItemEntity> itemEntities = domain.getItems().stream()
                 .map(this::toOrderItemEntity)

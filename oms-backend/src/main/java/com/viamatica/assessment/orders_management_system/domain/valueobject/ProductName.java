@@ -6,14 +6,14 @@ public record ProductName(String value) {
 
     public ProductName {
         if (value == null || value.isBlank()) {
-            throw new IllegalArgumentException("Product name cannot be null or blank");
+            throw new IllegalArgumentException("Product Name cannot be null or blank");
         }
         if (value.trim().isEmpty()) {
-            throw new IllegalArgumentException("Product name cannot be empty");
+            throw new IllegalArgumentException("Product Name cannot be empty");
         }
         if (value.length() > MAX_LENGTH) {
             throw new IllegalArgumentException(
-                    "Product name cannot exceed " + MAX_LENGTH + " characters");
+                    "Product Name cannot exceed " + MAX_LENGTH + " characters");
         }
     }
 

@@ -37,14 +37,14 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(readOnly = true)
     public Optional<UserDomain> findByEmail(Email email) {
-        return jpaRepository.findByEmailAndDeletedAtIsNull(email.value())
+        return jpaRepository.findByEmail(email.value())
                 .map(this::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
     public boolean existsByEmail(Email email) {
-        return jpaRepository.existsByEmailAndDeletedAtIsNull(email.value());
+        return jpaRepository.existsByEmail(email.value());
     }
 
     @Override
@@ -52,7 +52,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void deleteById(Long id) {
         UserEntity entity = jpaRepository.findById(id).orElse(null);
         if (entity != null) {
-            entity.setDeletedAt(java.time.LocalDateTime.now());
+            entity.setActive(false);
             jpaRepository.save(entity);
         }
     }
@@ -60,7 +60,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     @Transactional(readOnly = true)
     public List<UserDomain> findAllActive() {
-        return jpaRepository.findByActiveTrueAndDeletedAtIsNull().stream()
+        return jpaRepository.findByActiveTrue().stream()
                 .map(this::toDomain)
                 .collect(Collectors.toList());
     }
@@ -75,7 +75,6 @@ public class UserRepositoryImpl implements UserRepository {
                 .active(entity.getActive())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
-                .deletedAt(entity.getDeletedAt())
                 .build();
     }
 
@@ -91,7 +90,6 @@ public class UserRepositoryImpl implements UserRepository {
         entity.setActive(domain.isActive());
         entity.setCreatedAt(domain.getCreatedAt());
         entity.setUpdatedAt(domain.getUpdatedAt());
-        entity.setDeletedAt(domain.getDeletedAt());
         return entity;
     }
 }

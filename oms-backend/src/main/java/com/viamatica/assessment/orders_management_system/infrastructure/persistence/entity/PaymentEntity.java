@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -24,30 +23,20 @@ public class PaymentEntity {
     private Long orderId;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
+    @Column(name = "metodo_pago", nullable = false, length = 50)
     private PaymentMethod method;
 
-    @Column(nullable = false, precision = 19, scale = 2)
-    private BigDecimal amount;
-
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 50)
+    @Column(name = "estado_pago", nullable = false, length = 20)
     private PaymentStatus status;
 
-    @Column(name = "external_reference", length = 255)
+    @Column(name = "monto", nullable = false, precision = 12, scale = 2)
+    private BigDecimal amount;
+
+    @Column(name = "referencia_externa", length = 255)
     private String externalReference;
 
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @Version
-    private Long version;
-
-    @Column(name = "payment_date", nullable = false)
+    @Column(name = "fecha_pago", nullable = false)
     @CreationTimestamp
     private LocalDateTime paymentDate;
-
-    @Column(name = "updated_at")
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
 }

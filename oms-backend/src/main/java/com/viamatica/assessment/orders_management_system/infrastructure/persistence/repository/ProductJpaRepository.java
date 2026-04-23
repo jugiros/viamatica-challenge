@@ -14,13 +14,11 @@ import java.util.Optional;
 @Repository
 public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long> {
 
-    Optional<ProductEntity> findByIdAndDeletedAtIsNull(Long id);
-
-    List<ProductEntity> findByActiveTrueAndDeletedAtIsNull();
+    List<ProductEntity> findByActiveTrue();
 
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
-    Optional<ProductEntity> findByIdAndDeletedAtIsNullAndActiveTrue(Long id);
+    Optional<ProductEntity> findByIdAndActiveTrue(Long id);
 
-    @Query("SELECT p FROM ProductEntity p WHERE p.id = :id AND p.deletedAt IS NULL")
+    @Query("SELECT p FROM ProductEntity p WHERE p.id = :id")
     Optional<ProductEntity> findByIdWithCategory(@Param("id") Long id);
 }

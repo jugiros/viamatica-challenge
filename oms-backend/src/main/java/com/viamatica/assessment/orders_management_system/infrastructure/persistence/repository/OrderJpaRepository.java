@@ -15,17 +15,17 @@ import java.util.Optional;
 @Repository
 public interface OrderJpaRepository extends JpaRepository<OrderEntity, Long> {
 
-    Optional<OrderEntity> findByIdAndDeletedAtIsNull(Long id);
+    Optional<OrderEntity> findById(Long id);
 
-    List<OrderEntity> findByUserIdAndDeletedAtIsNull(Long userId);
+    List<OrderEntity> findByUserId(Long userId);
 
-    Page<OrderEntity> findByUserIdAndDeletedAtIsNull(Long userId, Pageable pageable);
+    Page<OrderEntity> findByUserId(Long userId, Pageable pageable);
 
-    Optional<OrderEntity> findByOrderNumberAndDeletedAtIsNull(String orderNumber);
+    Optional<OrderEntity> findByOrderNumber(String orderNumber);
 
-    Optional<OrderEntity> findByIdAndUserIdAndDeletedAtIsNull(Long id, Long userId);
+    Optional<OrderEntity> findByIdAndUserId(Long id, Long userId);
 
-    @Query("SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.deletedAt IS NULL AND o.status = :status AND o.orderDate BETWEEN :dateFrom AND :dateTo")
+    @Query("SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.status = :status AND o.orderDate BETWEEN :dateFrom AND :dateTo")
     Page<OrderEntity> findByUserIdAndStatusAndDateRange(
             @Param("userId") Long userId,
             @Param("status") String status,

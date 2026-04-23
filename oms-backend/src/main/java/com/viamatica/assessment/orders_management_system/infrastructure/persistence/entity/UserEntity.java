@@ -18,7 +18,7 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 200)
+    @Column(name = "nombre", nullable = false, length = 200)
     private String name;
 
     @Column(nullable = false, unique = true, length = 255)
@@ -28,17 +28,11 @@ public class UserEntity {
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(name = "rol", nullable = false, length = 20)
     private UserRole role;
 
-    @Column(nullable = false)
-    private Boolean active;
-
-    @Column(name = "deleted_at")
-    private LocalDateTime deletedAt;
-
-    @Version
-    private Long version;
+    @Column(name = "activo", nullable = false)
+    private Boolean active = true;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     @CreationTimestamp

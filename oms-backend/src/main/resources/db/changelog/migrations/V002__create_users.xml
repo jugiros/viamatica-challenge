@@ -5,10 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="create-users-table-v2" author="oms-dev" context="base">
-        <sql>
-            DROP TABLE IF EXISTS users
-        </sql>
+    <changeSet id="create-users-table" author="oms-dev" context="base">
         <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -34,29 +31,11 @@
             <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
                 <constraints nullable="false"/>
             </column>
-            <column name="deleted_at" type="TIMESTAMP"/>
         </createTable>
     </changeSet>
 
     <changeSet id="add-users-unique-constraint" author="oms-dev" context="base">
         <addUniqueConstraint tableName="users" columnNames="email" constraintName="uk_users_email"/>
-    </changeSet>
-
-    <changeSet id="add-users-indexes" author="oms-dev" context="base">
-        <createIndex tableName="users" indexName="idx_users_rol">
-            <column name="rol"/>
-        </createIndex>
-        <createIndex tableName="users" indexName="idx_users_activo">
-            <column name="activo"/>
-        </createIndex>
-    </changeSet>
-
-    <changeSet id="add-users-constraints" author="oms-dev" context="base">
-        <sql>
-            ALTER TABLE users
-            ADD CONSTRAINT ck_users_email
-            CHECK (email REGEXP '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$')
-        </sql>
     </changeSet>
 
 </databaseChangeLog>
