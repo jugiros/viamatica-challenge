@@ -1,86 +1,75 @@
 # OMS - Order Management System
 
-Sistema de Gestión de Órdenes desarrollado bajo estándares de ingeniería de software avanzada, utilizando **Arquitectura Hexagonal** y un stack moderno basado en **Java 21** y **Angular 19**.
+## Requisitos Previos
 
-## 🚀 Stack Tecnológico
+- Java 21 JDK
+- Maven 3.9+
+- MySQL 8.0 (XAMPP o Docker)
 
-- **Backend:** Java 21 LTS, Spring Boot 3.x, Spring Security 6.x (JWT).
-- **Frontend:** Angular 19 (Standalone components, Signals, OnPush).
-- **Base de Datos:** MySQL 8.0 con **Liquibase** para control de versiones del esquema.
-- **Infraestructura:** Docker & Docker Compose.
-- **Calidad:** JUnit 5, Mockito, Jasmine/Karma (57 casos de prueba integrados).
+## Configuración de Base de Datos
 
-## 🛠️ Requisitos Previos
+### Opción 1: XAMPP
+1. Iniciar MySQL desde XAMPP Control Panel
+2. Acceder a http://localhost/phpmyadmin
+3. Crear base de datos `oms_db` con cotejamiento `utf8mb4_general_ci`
 
-- **Docker Desktop** (con soporte para WSL 2 en Windows).
-- **Java 21 JDK**.
-- **Node.js 20+** y Angular CLI.
-- **Git** (Configurado para Conventional Commits).
-
-## ⚙️ Configuración del Entorno (Local)
-
-### 1. Infraestructura de Datos
-Desde la raíz del proyecto, levanta la base de datos y herramientas de gestión:
-
-## 🛠️ Configuración de Infraestructura (Docker)
-
-**IMPORTANTE:** Antes de ejecutar el Backend o el Frontend, es obligatorio levantar los servicios de base de datos.
-
-### 1. Requisitos previos
-* Tener instalado **Docker Desktop**.
-* Asegurarse de que el motor de Docker esté iniciado (Icono de la ballena en verde).
-
-### 2. Levantar Base de Datos y Gestión
-Ejecuta el siguiente comando en la raíz del proyecto:
-
+### Opción 2: Docker
 ```bash
 docker-compose up -d
+```
 
-## 🛠️ Configuración del Entorno de Base de Datos (Alternativa XAMPP)
+## Levantar Backend
 
-### Pasos para validación:
-1. **Iniciar MySQL**: Abrir el Panel de Control de XAMPP y presionar `Start` en el módulo MySQL.
-2. **Acceso Administrativo**: Ir a [http://localhost/phpmyadmin](http://localhost/phpmyadmin).
-3. **Creación de Esquema**: 
-   - Crear una base de datos llamada `oms_db`.
-   - Cotejamiento recomendado: `utf8mb4_general_ci`.
-4. **Validación de Conexión**:
-   - Host: `localhost`
-   - Puerto: `3306`
-   - Usuario: `root` (por defecto en XAMPP)
-   - Contraseña: ` ` (vacío por defecto)
+1. Navegar al directorio `oms-backend`
+2. Ejecutar:
+```bash
+mvn clean install
+mvn spring-boot:run
+```
 
-   ## ⚙️ Configuración del Entorno (Local)
+El backend iniciará en `http://localhost:8080`
 
-El sistema está diseñado para ser agnóstico a la infraestructura de base de datos. Para este entorno de desarrollo, se ha priorizado el uso de **XAMPP** para garantizar la estabilidad del motor MySQL.
+## Probar APIs con Swagger UI
 
-### 1. Infraestructura de Datos (XAMPP)
+1. Acceder a Swagger UI: `http://localhost:8080/swagger-ui.html`
 
-1. **Servicios**: Iniciar **Apache** y **MySQL** desde el XAMPP Control Panel (ejecutar como Administrador).
-2. **Base de Datos**: 
-   - Acceder a [http://localhost/phpmyadmin](http://localhost/phpmyadmin).
-   - Crear el esquema `oms_db` utilizando el cotejamiento `utf8mb4_general_ci`.
-3. **Validación de Puerto**: Asegurarse de que el puerto `3306` esté libre de procesos previos (Docker u otras instancias de MySQL).
+2. Registrar un usuario:
+   - Expandir `POST /api/v1/auth/register`
+   - Ejecutar con:
+     ```json
+     {
+       "name": "Admin User",
+       "email": "admin@example.com",
+       "password": "password123",
+       "role": "ADMIN"
+     }
+     ```
 
-### 2. Gestión de Persistencia con Liquibase
+3. Iniciar sesión para obtener token:
+   - Expandir `POST /api/v1/auth/login`
+   - Ejecutar con:
+     ```json
+     {
+       "email": "admin@example.com",
+       "password": "password123"
+     }
+     ```
+   - Copiar el `accessToken` de la respuesta
 
-Este proyecto utiliza **Liquibase** para el control de versiones del esquema, eliminando la necesidad de scripts manuales de SQL.
+4. Autorizar en Swagger:
+   - Clic en botón "Authorize" (ícono de candillo 🔒)
+   - Ingresar: `Bearer <accessToken>`
+   - Clic en "Authorize" y "Close"
 
-- **Migración Automática**: Al ejecutar el Backend, Liquibase detectará el esquema y aplicará los *changesets* definidos en `src/main/resources/db/changelog/`.
-- **Trazabilidad**: El historial de cambios se registra en la tabla técnica `DATABASECHANGELOG`.
-- **Estructura de Cambios**:
-  - `001-initial-schema.xml`: Define la base del sistema (Tablas de seguridad y auditoría).
+5. Probar endpoints protegidos:
+   - Authentication: login, register, refresh token
+   - User Management (ADMIN): CRUD de usuarios
+   - Product Management: CRUD de productos (GET público, POST/PUT/DELETE ADMIN)
+   - Order Management: CRUD de órdenes con autenticación
+   - Audit Logs (ADMIN): Consulta de logs de auditoría
 
-## 🏗️ Guía de Ejecución (Backend)
+## Notas
 
-### Requisitos Técnicos
-- **Java SDK**: 21 (Amazon Corretto recomendado).
-- **Maven**: 3.9+.
-
-### Pasos para iniciar:
-1. Clonar el repositorio.
-2. Actualizar el archivo `src/main/resources/application.yml` con tus credenciales locales de MySQL si difieren de las estándar (root/sin contraseña).
-3. Ejecutar el comando:
-   ```bash
-   mvn clean install
-   mvn spring-boot:run
+- El token JWT expira después de 1 hora
+- Use `POST /api/v1/auth/refresh` para renovar el token
+- Liquibase aplicará las migraciones automáticamente al iniciar el backend
