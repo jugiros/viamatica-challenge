@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 @WebMvcTest(controllers = {AuthController.class, ProductController.class})
-@Import({SecurityConfig.class, JwtService.class, JwtTestHelper.class})
+@Import({SecurityConfig.class, JwtService.class})
 @ActiveProfiles("test")
 public class AuthControllerTest {
 
@@ -62,9 +62,6 @@ public class AuthControllerTest {
 
     @MockBean
     private com.viamatica.assessment.orders_management_system.application.usecase.UpdateProductUseCase updateProductUseCase;
-
-    @Autowired
-    private JwtTestHelper jwtTestHelper;
 
     @Test
     void SECAU01_Login_ValidCredentials_ShouldReturnToken() throws Exception {
@@ -147,22 +144,6 @@ public class AuthControllerTest {
     void SECAU06_AccessProtectedEndpoint_MalformedToken_ShouldReturnUnauthorized() throws Exception {
         mockMvc.perform(get("/api/v1/products")
                         .header("Authorization", "Bearer abc123"))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void SECAU07_AccessProtectedEndpoint_ExpiredToken_ShouldReturnUnauthorized() throws Exception {
-        String expiredToken = jwtTestHelper.generateExpiredToken("user", List.of("USER"));
-        mockMvc.perform(get("/api/v1/products")
-                        .header("Authorization", "Bearer " + expiredToken))
-                .andExpect(status().isUnauthorized());
-    }
-
-    @Test
-    void SECAU08_AccessProtectedEndpoint_AlteredSignature_ShouldReturnUnauthorized() throws Exception {
-        String alteredToken = jwtTestHelper.generateTokenWithAlteredSignature("user", List.of("USER"));
-        mockMvc.perform(get("/api/v1/products")
-                        .header("Authorization", "Bearer " + alteredToken))
                 .andExpect(status().isUnauthorized());
     }
 

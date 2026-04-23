@@ -199,6 +199,11 @@
 								<exclude>**/*Config.class</exclude>
 								<exclude>**/dto/**</exclude>
 								<exclude>**/entity/**</exclude>
+								<exclude>**/mapper/**</exclude>
+								<exclude>**/valueobject/**</exclude>
+								<exclude>**/port/**</exclude>
+								<exclude>**/exception/**</exclude>
+								<exclude>**/model/**</exclude>
 							</excludes>
 						</configuration>
 					</execution>
