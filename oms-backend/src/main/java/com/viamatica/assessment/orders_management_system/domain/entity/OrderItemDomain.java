@@ -29,42 +29,25 @@ public class OrderItemDomain {
         return new Builder();
     }
 
-    /**
-     * Calculates the subtotal for this order item.
-     * @param quantity the quantity
-     * @param unitPrice the unit price
-     * @return the subtotal
-     */
     private static Money calculateSubtotal(int quantity, Money unitPrice) {
+        if (unitPrice == null) return Money.ZERO;
         return unitPrice.multiply(quantity);
     }
 
-    /**
-     * Override setQuantity to recalculate subtotal
-     */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
         recalculateSubtotal();
     }
 
-    /**
-     * Override setUnitPrice to recalculate subtotal
-     */
     public void setUnitPrice(Money unitPrice) {
         this.unitPrice = unitPrice;
         recalculateSubtotal();
     }
 
-    /**
-     * Recalculates the subtotal based on current quantity and unit price.
-     */
     private void recalculateSubtotal() {
         this.subtotal = calculateSubtotal(this.quantity, this.unitPrice);
     }
 
-    /**
-     * Builder pattern for OrderItemDomain.
-     */
     public static class Builder {
         private Long id;
         private Long orderId;
@@ -98,6 +81,7 @@ public class OrderItemDomain {
             return this;
         }
 
+        public Builder subtotal(Money subtotal) {
             this.subtotal = subtotal;
             return this;
         }
@@ -113,6 +97,6 @@ public class OrderItemDomain {
                 throw new IllegalArgumentException("Unit price cannot be null");
             }
             return new OrderItemDomain(this);
-{{ ... }}
+        }
     }
 }

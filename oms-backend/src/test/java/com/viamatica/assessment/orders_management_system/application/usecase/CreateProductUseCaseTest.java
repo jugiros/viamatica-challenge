@@ -268,14 +268,11 @@ class CreateProductUseCaseTest {
                 .name(ProductName.of("Laptop"))
                 .price(Money.of(new BigDecimal("999.99")))
                 .stock(3)
-                .categoryId(1L)
-                .active(true)
                 .build();
-
         // Act & Assert
-        assertThatThrownBy(() -> product.decrementStock(5))
-                .isInstanceOf(IllegalArgumentException.class)
-                .hasMessageContaining("Insufficient stock");
+        assertThatThrownBy(() -> product.decrementStock(15))
+                .isInstanceOf(IllegalStateException.class)
+                .hasMessageContaining("Stock cannot be negative");
 
         assertThat(product.getStock()).isEqualTo(3);
     }

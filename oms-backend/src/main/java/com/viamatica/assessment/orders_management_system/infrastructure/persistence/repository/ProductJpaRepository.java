@@ -14,6 +14,8 @@ import java.util.Optional;
 @Repository
 public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long> {
 
+    Optional<ProductEntity> findByName(String name);
+
     List<ProductEntity> findByActiveTrue();
 
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)

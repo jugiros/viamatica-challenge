@@ -2,15 +2,9 @@ package com.viamatica.assessment.orders_management_system.infrastructure.persist
 
 import com.viamatica.assessment.orders_management_system.domain.entity.OrderDomain;
 import com.viamatica.assessment.orders_management_system.domain.entity.OrderItemDomain;
-import com.viamatica.assessment.orders_management_system.domain.exception.OrderNotFoundException;
 import com.viamatica.assessment.orders_management_system.domain.port.OrderRepository;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
-import com.viamatica.assessment.orders_management_system.domain.order.CancelledStatus;
-import com.viamatica.assessment.orders_management_system.domain.order.ConfirmedStatus;
-import com.viamatica.assessment.orders_management_system.domain.order.OrderStatus;
-import com.viamatica.assessment.orders_management_system.domain.order.PaidStatus;
-import com.viamatica.assessment.orders_management_system.domain.order.PendingStatus;
-import com.viamatica.assessment.orders_management_system.domain.order.ShippedStatus;
+import com.viamatica.assessment.orders_management_system.domain.order.*;
 import com.viamatica.assessment.orders_management_system.infrastructure.persistence.entity.OrderEntity;
 import com.viamatica.assessment.orders_management_system.infrastructure.persistence.entity.OrderItemEntity;
 import com.viamatica.assessment.orders_management_system.infrastructure.persistence.entity.OrderStatusEntity;
@@ -40,14 +34,13 @@ public class OrderRepositoryImpl implements OrderRepository {
     @Override
     @Transactional(readOnly = true)
     public Optional<OrderDomain> findById(Long id) {
-        return jpaRepository.findById(id)
-                .map(this::toDomain);
+        return jpaRepository.findById(id).map(this::toDomain);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Optional<OrderDomain> findByOrderNumber(String orderNumber) {
-        return Optional.empty();
+        return jpaRepository.findByOrderNumber(orderNumber).map(this::toDomain);
     }
 
     @Override
@@ -83,20 +76,53 @@ public class OrderRepositoryImpl implements OrderRepository {
                 .map(this::toOrderItemDomain)
                 .collect(Collectors.toList());
 
-        OrderDomain domain = OrderDomain.builder()
+        return OrderDomain.builder()
                 .id(entity.getId())
+                .orderNumber(entity.getOrderNumber())
                 .userId(entity.getUserId())
                 .total(Money.of(entity.getTotal()))
+                .status(convertStatusEntityToStatus(entity.getStatus()))
                 .items(items)
-                .orderDate(entity.getOrderDate())
+                .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
                 .build();
+    }
 
-        // Set status using the transitionTo method
-        OrderStatus status = convertStatusEntityToStatus(entity.getStatus());
-        domain.transitionTo(status);
+    private OrderEntity toEntity(OrderDomain domain) {
+        OrderEntity entity = new OrderEntity();
+        entity.setId(domain.getId());
+        entity.setOrderNumber(domain.getOrderNumber());
+        entity.setUserId(domain.getUserId());
+        entity.setTotal(domain.getTotal().amount());
+        entity.setStatus(convertStatusToStatusEntity(domain.getStatus()));
+        entity.setCreatedAt(domain.getCreatedAt());
+        entity.setUpdatedAt(domain.getUpdatedAt());
 
-        return domain;
+        List<OrderItemEntity> itemEntities = domain.getItems().stream()
+                .map(this::toOrderItemEntity)
+                .collect(Collectors.toList());
+        entity.setItems(itemEntities);
+
+        return entity;
+    }
+
+    private OrderItemDomain toOrderItemDomain(OrderItemEntity entity) {
+        return OrderItemDomain.builder()
+                .id(entity.getId())
+                .productId(entity.getProductId())
+                .quantity(entity.getQuantity())
+                .unitPrice(Money.of(entity.getUnitPrice()))
+                .build();
+    }
+
+    private OrderItemEntity toOrderItemEntity(OrderItemDomain domain) {
+        OrderItemEntity entity = new OrderItemEntity();
+        entity.setId(domain.getId());
+        entity.setProductId(domain.getProductId());
+        entity.setQuantity(domain.getQuantity());
+        entity.setUnitPrice(domain.getUnitPrice().amount());
+        entity.setSubtotal(domain.getSubtotal().amount());
+        return entity;
     }
 
     private OrderStatus convertStatusEntityToStatus(OrderStatusEntity statusEntity) {
@@ -110,62 +136,16 @@ public class OrderRepositoryImpl implements OrderRepository {
     }
 
     private OrderStatusEntity convertStatusToStatusEntity(OrderStatus status) {
+        if (status == null) {
+            return null;
+        }
         return switch (status.name()) {
-            case "PENDIENTE" -> OrderStatusEntity.PENDIENTE;
-            case "CONFIRMADA" -> OrderStatusEntity.CONFIRMADA;
-            case "PAGADA" -> OrderStatusEntity.PAGADA;
-            case "ENVIADA" -> OrderStatusEntity.ENVIADA;
-            case "CANCELADA" -> OrderStatusEntity.CANCELADA;
+            case "PENDING" -> OrderStatusEntity.PENDIENTE;
+            case "CONFIRMED" -> OrderStatusEntity.CONFIRMADA;
+            case "PAID" -> OrderStatusEntity.PAGADA;
+            case "SHIPPED" -> OrderStatusEntity.ENVIADA;
+            case "CANCELLED" -> OrderStatusEntity.CANCELADA;
             default -> throw new IllegalArgumentException("Unknown status: " + status.name());
         };
-    }
-
-    private OrderItemDomain toOrderItemDomain(OrderItemEntity entity) {
-        return OrderItemDomain.builder()
-                .id(entity.getId())
-                .productId(entity.getProductId())
-                .quantity(entity.getQuantity())
-                .unitPrice(Money.of(entity.getUnitPrice()))
-                .build();
-    }
-
-    private OrderEntity toEntity(OrderDomain domain) {
-        OrderEntity entity = new OrderEntity();
-        if (domain.getId() != null) {
-            entity.setId(domain.getId());
-        }
-        entity.setUserId(domain.getUserId());
-        entity.setTotal(domain.getTotal().amount());
-        entity.setStatus(convertStatusToStatusEntity(domain.getStatus()));
-        entity.setOrderDate(domain.getOrderDate());
-        entity.setUpdatedAt(domain.getUpdatedAt());
-
-        List<OrderItemEntity> itemEntities = domain.getItems().stream()
-                .map(this::toOrderItemEntity)
-                .collect(Collectors.toList());
-        entity.setItems(itemEntities);
-
-        return entity;
-    }
-
-    private String convertStatusToString(OrderStatus status) {
-        if (status instanceof PendingStatus) return "PENDIENTE";
-        if (status instanceof ConfirmedStatus) return "CONFIRMADA";
-        if (status instanceof PaidStatus) return "PAGADA";
-        if (status instanceof ShippedStatus) return "ENVIADA";
-        if (status instanceof CancelledStatus) return "CANCELADA";
-        throw new IllegalArgumentException("Unknown status: " + status.getClass().getSimpleName());
-    }
-
-    private OrderItemEntity toOrderItemEntity(OrderItemDomain domain) {
-        OrderItemEntity entity = new OrderItemEntity();
-        if (domain.getId() != null) {
-            entity.setId(domain.getId());
-        }
-        entity.setProductId(domain.getProductId());
-        entity.setQuantity(domain.getQuantity());
-        entity.setUnitPrice(domain.getUnitPrice().amount());
-        entity.setSubtotal(domain.getSubtotal().amount());
-        return entity;
     }
 }

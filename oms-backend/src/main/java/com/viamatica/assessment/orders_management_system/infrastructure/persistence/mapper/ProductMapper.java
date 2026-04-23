@@ -13,31 +13,27 @@ import java.math.BigDecimal;
 @Mapper(componentModel = "spring")
 public interface ProductMapper {
 
-    @Mapping(target = "name", qualifiedByName = "stringToProductName")
-    @Mapping(target = "price", qualifiedByName = "bigDecimalToMoney")
+    @Mapping(source = "name", target = "name", qualifiedByName = "stringToProductName")
+    @Mapping(source = "price", target = "price", qualifiedByName = "bigDecimalToMoney")
     ProductDomain toDomain(ProductEntity entity);
 
-    @Mapping(target = "name", qualifiedByName = "productNameToString")
-    @Mapping(target = "price", qualifiedByName = "moneyToBigDecimal")
+    @Mapping(source = "name.value", target = "name")
+    @Mapping(source = "price.amount", target = "price")
     ProductEntity toEntity(ProductDomain domain);
 
     @Named("stringToProductName")
     default ProductName stringToProductName(String name) {
-        return name != null ? new ProductName(name) : null;
-    }
-
-    @Named("productNameToString")
-    default String productNameToString(ProductName name) {
-        return name != null ? name.value() : null;
+        if (name == null) {
+            return null;
+        }
+        return ProductName.of(name);
     }
 
     @Named("bigDecimalToMoney")
     default Money bigDecimalToMoney(BigDecimal price) {
-        return price != null ? Money.of(price) : null;
-    }
-
-    @Named("moneyToBigDecimal")
-    default BigDecimal moneyToBigDecimal(Money money) {
-        return money != null ? money.amount() : null;
+        if (price == null) {
+            return null;
+        }
+        return Money.of(price);
     }
 }

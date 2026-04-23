@@ -41,15 +41,15 @@ public class GetOrdersByUserUseCase {
 
         if (query.dateFrom != null) {
             orders = orders.stream()
-                    .filter(order -> order.getOrderDate().isAfter(query.dateFrom) ||
-                                   order.getOrderDate().isEqual(query.dateFrom))
+                    .filter(order -> order.getCreatedAt().isAfter(query.dateFrom) ||
+                                   order.getCreatedAt().isEqual(query.dateFrom))
                     .toList();
         }
 
         if (query.dateTo != null) {
             orders = orders.stream()
-                    .filter(order -> order.getOrderDate().isBefore(query.dateTo) ||
-                                   order.getOrderDate().isEqual(query.dateTo))
+                    .filter(order -> order.getCreatedAt().isBefore(query.dateTo) ||
+                                   order.getCreatedAt().isEqual(query.dateTo))
                     .toList();
         }
 

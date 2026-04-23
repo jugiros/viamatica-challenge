@@ -8,5 +8,5 @@ public record OrderItemRequest(
         Long productId,
         @NotNull
         @Min(1)
-        Integer cantidad
+        Integer quantity
 ) {}

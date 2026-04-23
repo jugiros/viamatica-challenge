@@ -71,6 +71,11 @@ public class ProductRepositoryImpl implements ProductRepository {
     }
 
     @Override
+    public Optional<ProductDomain> findByName(ProductName name) {
+        return jpaRepository.findByName(name.value()).map(this::toDomain);
+    }
+
+    @Override
     @Transactional
     public void deleteById(Long id) {
         ProductEntity entity = jpaRepository.findById(id).orElse(null);

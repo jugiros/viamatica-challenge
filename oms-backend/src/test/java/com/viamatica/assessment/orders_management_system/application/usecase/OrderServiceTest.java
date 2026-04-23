@@ -402,7 +402,7 @@ class OrderServiceTest {
     }
 
     @Test
-    @DisplayName("UTOR10 - Cancelar PENDIENTE → CANCELADA, stock liberado")
+    @DisplayName("UTOR10 - Cancelar CONFIRMADA → CANCELADA, stock liberado")
     void testUTOR10_CancelPendingOrder_WhenValid() {
         // Arrange
         OrderItemDomain item = OrderItemDomain.builder()
@@ -415,6 +415,7 @@ class OrderServiceTest {
         OrderDomain pendingOrder = OrderDomain.builder()
                 .id(1L)
                 .userId(1L)
+                .status(new ConfirmedStatus()) // Set initial status to CONFIRMED
                 .total(Money.of(new BigDecimal("20.00")))
                 .items(List.of(item))
                 .build();

@@ -25,8 +25,9 @@ public class CreateProductUseCase {
     ) {}
 
     public ProductDomain execute(Command command) {
-        ProductName productName = ProductName.of(command.name);
-        Money price = Money.of(command.price);
+        if (command.price == null || command.price.signum() == 0) {
+            throw new IllegalArgumentException("Price cannot be null or zero.");
+        }
 
         if (command.stock < 0) {
             throw new IllegalArgumentException("Stock cannot be negative");
@@ -36,9 +37,14 @@ public class CreateProductUseCase {
             throw new IllegalArgumentException("Category ID cannot be null");
         }
 
+        ProductName productName = ProductName.of(command.name);
+        if (productRepository.findByName(productName).isPresent()) {
+            throw new com.viamatica.assessment.orders_management_system.domain.exception.DomainException("Product with name '" + command.name + "' already exists.");
+        }
+
         ProductDomain product = ProductDomain.builder()
                 .name(productName)
-                .price(price)
+                .price(Money.of(command.price))
                 .stock(command.stock)
                 .categoryId(command.categoryId)
                 .active(true)
@@ -52,7 +58,7 @@ public class CreateProductUseCase {
                 "INSERT",
                 savedProduct.getId(),
                 null,
-                "{\"id\":" + savedProduct.getId() + ",\"name\":\"" + productName.value() + "\"}"
+                "{\"id\":" + savedProduct.getId() + ",\"name\":\"" + savedProduct.getName().value() + "\"}"
         );
 
         return savedProduct;
