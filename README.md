@@ -33,7 +33,13 @@ El backend iniciará en `http://localhost:8080`
 
 1. Acceder a Swagger UI: `http://localhost:8080/swagger-ui.html`
 
-2. Registrar un usuario:
+2. **Opción A: Usar usuarios de seeds (dev/test)**
+   - Liquibase crea automáticamente los siguientes usuarios:
+     - **admin@oms.com** (rol: ADMIN)
+     - **user@oms.com** (rol: USER)
+   - Iniciar sesión con estos usuarios para obtener token
+
+3. **Opción B: Registrar un nuevo usuario**
    - Expandir `POST /api/v1/auth/register`
    - Ejecutar con:
      ```json
@@ -45,7 +51,7 @@ El backend iniciará en `http://localhost:8080`
      }
      ```
 
-3. Iniciar sesión para obtener token:
+4. Iniciar sesión para obtener token:
    - Expandir `POST /api/v1/auth/login`
    - Ejecutar con:
      ```json
@@ -67,6 +73,18 @@ El backend iniciará en `http://localhost:8080`
    - Product Management: CRUD de productos (GET público, POST/PUT/DELETE ADMIN)
    - Order Management: CRUD de órdenes con autenticación
    - Audit Logs (ADMIN): Consulta de logs de auditoría
+
+## Ejecutar Tests
+
+Navegar al directorio `oms-backend` y ejecutar:
+
+```bash
+# Ejecutar todos los tests
+.\mvnw test
+
+# Ejecutar tests específicos de seguridad
+.\mvnw test -Dtest=AuthControllerTest
+```
 
 ## Notas
 
