@@ -21,6 +21,6 @@ public interface ProductJpaRepository extends JpaRepository<ProductEntity, Long>
     @Lock(LockModeType.OPTIMISTIC_FORCE_INCREMENT)
     Optional<ProductEntity> findByIdAndDeletedAtIsNullAndActiveTrue(Long id);
 
-    @Query("SELECT p FROM ProductEntity p LEFT JOIN FETCH p.category WHERE p.id = :id AND p.deletedAt IS NULL")
+    @Query("SELECT p FROM ProductEntity p WHERE p.id = :id AND p.deletedAt IS NULL")
     Optional<ProductEntity> findByIdWithCategory(@Param("id") Long id);
 }
