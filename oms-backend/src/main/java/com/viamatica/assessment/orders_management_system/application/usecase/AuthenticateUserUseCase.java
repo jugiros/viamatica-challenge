@@ -14,10 +14,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
-import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
+import javax.crypto.SecretKey;
 
 /**
  * Use case for user authentication.
@@ -29,7 +29,7 @@ public class AuthenticateUserUseCase {
     private final UserRepository userRepository;
     private final AuditPort auditPort;
     private final BCryptPasswordEncoder passwordEncoder;
-    private final Key jwtKey;
+    private final SecretKey jwtKey;
     private final long jwtExpiration;
     private final long refreshExpiration;
 

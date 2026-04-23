@@ -2,10 +2,10 @@ package com.viamatica.assessment.orders_management_system.application.usecase;
 
 import com.viamatica.assessment.orders_management_system.domain.entity.OrderDomain;
 import com.viamatica.assessment.orders_management_system.domain.entity.PaymentDomain;
-import com.viamatica.assessment.orders_management_system.domain.entity.PaymentMethod;
 import com.viamatica.assessment.orders_management_system.domain.exception.DuplicatePaymentException;
 import com.viamatica.assessment.orders_management_system.domain.exception.InvalidOrderStateTransitionException;
 import com.viamatica.assessment.orders_management_system.domain.exception.OrderNotFoundException;
+import com.viamatica.assessment.orders_management_system.domain.model.PaymentMethod;
 import com.viamatica.assessment.orders_management_system.domain.port.AuditPort;
 import com.viamatica.assessment.orders_management_system.domain.port.NotificationPort;
 import com.viamatica.assessment.orders_management_system.domain.port.OrderRepository;
@@ -13,6 +13,7 @@ import com.viamatica.assessment.orders_management_system.domain.port.PaymentRepo
 import com.viamatica.assessment.orders_management_system.domain.order.ConfirmedStatus;
 import com.viamatica.assessment.orders_management_system.domain.order.PaidStatus;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -23,23 +24,13 @@ import java.math.BigDecimal;
  * Transitions to PAGADA and sends notification.
  */
 @Service
+@RequiredArgsConstructor
 public class ProcessPaymentUseCase {
 
     private final OrderRepository orderRepository;
     private final PaymentRepository paymentRepository;
     private final AuditPort auditPort;
     private final NotificationPort notificationPort;
-
-    public ProcessPaymentUseCase(
-            OrderRepository orderRepository,
-            PaymentRepository paymentRepository,
-            AuditPort auditPort,
-            NotificationPort notificationPort) {
-        this.orderRepository = orderRepository;
-        this.paymentRepository = paymentRepository;
-        this.auditPort = auditPort;
-        this.notificationPort = notificationPort;
-    }
 
     public record Command(
             Long orderId,

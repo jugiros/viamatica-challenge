@@ -1,8 +1,11 @@
 package com.viamatica.assessment.orders_management_system.domain.exception;
 
+import lombok.Getter;
+
 /**
  * Exception thrown when a requested product cannot be found.
  */
+@Getter
 public class ProductNotFoundException extends DomainException {
 
     private final Long productId;
@@ -12,7 +15,4 @@ public class ProductNotFoundException extends DomainException {
         this.productId = productId;
     }
 
-    public Long getProductId() {
-        return productId;
-    }
 }

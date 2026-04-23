@@ -6,6 +6,7 @@ import com.viamatica.assessment.orders_management_system.domain.model.UserRole;
 import com.viamatica.assessment.orders_management_system.domain.port.AuditPort;
 import com.viamatica.assessment.orders_management_system.domain.port.UserRepository;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Email;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,17 +15,12 @@ import org.springframework.stereotype.Service;
  * Validates email uniqueness, hashes password with BCrypt, and generates audit log.
  */
 @Service
+@RequiredArgsConstructor
 public class RegisterUserUseCase {
 
     private final UserRepository userRepository;
     private final AuditPort auditPort;
-    private final BCryptPasswordEncoder passwordEncoder;
-
-    public RegisterUserUseCase(UserRepository userRepository, AuditPort auditPort) {
-        this.userRepository = userRepository;
-        this.auditPort = auditPort;
-        this.passwordEncoder = new BCryptPasswordEncoder();
-    }
+    private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public record Command(
             String name,

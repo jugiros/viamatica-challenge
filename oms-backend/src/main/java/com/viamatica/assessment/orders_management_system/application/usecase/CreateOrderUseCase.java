@@ -12,6 +12,7 @@ import com.viamatica.assessment.orders_management_system.domain.port.OrderReposi
 import com.viamatica.assessment.orders_management_system.domain.port.ProductRepository;
 import com.viamatica.assessment.orders_management_system.domain.port.UserRepository;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -24,23 +25,13 @@ import java.util.List;
  * Initial state is PENDIENTE.
  */
 @Service
+@RequiredArgsConstructor
 public class CreateOrderUseCase {
 
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final AuditPort auditPort;
-
-    public CreateOrderUseCase(
-            UserRepository userRepository,
-            ProductRepository productRepository,
-            OrderRepository orderRepository,
-            AuditPort auditPort) {
-        this.userRepository = userRepository;
-        this.productRepository = productRepository;
-        this.orderRepository = orderRepository;
-        this.auditPort = auditPort;
-    }
 
     public record OrderItemCommand(
             Long productId,

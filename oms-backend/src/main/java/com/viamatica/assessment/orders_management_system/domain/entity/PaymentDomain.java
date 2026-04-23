@@ -3,13 +3,14 @@ package com.viamatica.assessment.orders_management_system.domain.entity;
 import com.viamatica.assessment.orders_management_system.domain.model.PaymentMethod;
 import com.viamatica.assessment.orders_management_system.domain.model.PaymentStatus;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
+import lombok.Data;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Domain entity representing a payment for an order.
  * Pure POJO without any framework annotations.
  */
+@Data
 public class PaymentDomain {
 
     private Long id;
@@ -39,80 +40,6 @@ public class PaymentDomain {
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public PaymentMethod getMethod() {
-        return method;
-    }
-
-    public PaymentStatus getStatus() {
-        return status;
-    }
-
-    public Money getAmount() {
-        return amount;
-    }
-
-    public String getExternalReference() {
-        return externalReference;
-    }
-
-    public LocalDateTime getPaymentDate() {
-        return paymentDate;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public void setMethod(PaymentMethod method) {
-        this.method = method;
-    }
-
-    public void setStatus(PaymentStatus status) {
-        this.status = status;
-    }
-
-    public void setAmount(Money amount) {
-        this.amount = amount;
-    }
-
-    public void setExternalReference(String externalReference) {
-        this.externalReference = externalReference;
-    }
-
-    public void setPaymentDate(LocalDateTime paymentDate) {
-        this.paymentDate = paymentDate;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
     }
 
     /**
@@ -164,30 +91,6 @@ public class PaymentDomain {
      */
     public void touch() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PaymentDomain that = (PaymentDomain) o;
-        return Objects.equals(id, that.id) && Objects.equals(orderId, that.orderId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, orderId);
-    }
-
-    @Override
-    public String toString() {
-        return "PaymentDomain{" +
-                "id=" + id +
-                ", orderId=" + orderId +
-                ", method=" + method +
-                ", status=" + status +
-                ", amount=" + amount +
-                '}';
     }
 
     /**

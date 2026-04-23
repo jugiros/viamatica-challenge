@@ -1,20 +1,22 @@
 package com.viamatica.assessment.orders_management_system.domain.entity;
 
+import com.viamatica.assessment.orders_management_system.domain.exception.InvalidOrderStateTransitionException;
 import com.viamatica.assessment.orders_management_system.domain.order.CancelledStatus;
 import com.viamatica.assessment.orders_management_system.domain.order.OrderStatus;
 import com.viamatica.assessment.orders_management_system.domain.order.PendingStatus;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
+import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 /**
  * Domain entity representing an order in the system.
  * Pure POJO without any framework annotations.
  */
+@Data
 public class OrderDomain {
 
     private Long id;
@@ -56,84 +58,16 @@ public class OrderDomain {
         return "ORD-" + UUID.randomUUID().toString().substring(0, 8).toUpperCase();
     }
 
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public String getOrderNumber() {
-        return orderNumber;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public OrderStatus getStatus() {
-        return status;
-    }
-
-    public Money getTotal() {
-        return total;
-    }
-
-    public long getVersion() {
-        return version;
-    }
-
-    public LocalDateTime getOrderDate() {
-        return orderDate;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
+    /**
+     * Override getItems to return unmodifiable list
+     */
     public List<OrderItemDomain> getItems() {
         return Collections.unmodifiableList(items);
     }
 
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setOrderNumber(String orderNumber) {
-        this.orderNumber = orderNumber;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public void setStatus(OrderStatus status) {
-        this.status = status;
-    }
-
-    public void setTotal(Money total) {
-        this.total = total;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
-    public void setOrderDate(LocalDateTime orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
+    /**
+     * Override setItems to create defensive copy
+     */
     public void setItems(List<OrderItemDomain> items) {
         this.items = items != null ? new ArrayList<>(items) : new ArrayList<>();
     }
@@ -174,7 +108,8 @@ public class OrderDomain {
     public void transitionTo(OrderStatus newStatus) {
         if (!this.status.canTransitionTo(newStatus)) {
             throw new InvalidOrderStateTransitionException(
-                    "Cannot transition from " + this.status.name() + " to " + newStatus.name());
+                    this.status.name(),
+                    newStatus.name());
         }
         this.status = newStatus;
         this.version++;
@@ -215,31 +150,6 @@ public class OrderDomain {
      */
     public void touch() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderDomain that = (OrderDomain) o;
-        return Objects.equals(id, that.id) || Objects.equals(orderNumber, that.orderNumber);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, orderNumber);
-    }
-
-    @Override
-    public String toString() {
-        return "OrderDomain{" +
-                "id=" + id +
-                ", orderNumber='" + orderNumber + '\'' +
-                ", userId=" + userId +
-                ", status=" + status.name() +
-                ", total=" + total +
-                ", items=" + items.size() +
-                '}';
     }
 
     /**

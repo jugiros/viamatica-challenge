@@ -5,6 +5,7 @@ import com.viamatica.assessment.orders_management_system.domain.port.AuditPort;
 import com.viamatica.assessment.orders_management_system.domain.port.ProductRepository;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.ProductName;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -14,15 +15,11 @@ import java.math.BigDecimal;
  * Validates ProductName, Money, stock >= 0, and category exists.
  */
 @Service
+@RequiredArgsConstructor
 public class CreateProductUseCase {
 
     private final ProductRepository productRepository;
     private final AuditPort auditPort;
-
-    public CreateProductUseCase(ProductRepository productRepository, AuditPort auditPort) {
-        this.productRepository = productRepository;
-        this.auditPort = auditPort;
-    }
 
     public record Command(
             String name,

@@ -1,12 +1,13 @@
 package com.viamatica.assessment.orders_management_system.domain.entity;
 
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
-import java.util.Objects;
+import lombok.Data;
 
 /**
  * Domain entity representing an item within an order.
  * Pure POJO without any framework annotations.
  */
+@Data
 public class OrderItemDomain {
 
     private Long id;
@@ -42,56 +43,20 @@ public class OrderItemDomain {
         return unitPrice.multiply(quantity);
     }
 
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public Long getOrderId() {
-        return orderId;
-    }
-
-    public Long getProductId() {
-        return productId;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public Money getUnitPrice() {
-        return unitPrice;
-    }
-
-    public Money getSubtotal() {
-        return subtotal;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setOrderId(Long orderId) {
-        this.orderId = orderId;
-    }
-
-    public void setProductId(Long productId) {
-        this.productId = productId;
-    }
-
+    /**
+     * Override setQuantity to recalculate subtotal
+     */
     public void setQuantity(int quantity) {
         this.quantity = quantity;
         recalculateSubtotal();
     }
 
+    /**
+     * Override setUnitPrice to recalculate subtotal
+     */
     public void setUnitPrice(Money unitPrice) {
         this.unitPrice = unitPrice;
         recalculateSubtotal();
-    }
-
-    public void setSubtotal(Money subtotal) {
-        this.subtotal = subtotal;
     }
 
     /**
@@ -99,33 +64,6 @@ public class OrderItemDomain {
      */
     private void recalculateSubtotal() {
         this.subtotal = calculateSubtotal(this.quantity, this.unitPrice);
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        OrderItemDomain that = (OrderItemDomain) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(orderId, that.orderId) &&
-                Objects.equals(productId, that.productId);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, orderId, productId);
-    }
-
-    @Override
-    public String toString() {
-        return "OrderItemDomain{" +
-                "id=" + id +
-                ", orderId=" + orderId +
-                ", productId=" + productId +
-                ", quantity=" + quantity +
-                ", unitPrice=" + unitPrice +
-                ", subtotal=" + subtotal +
-                '}';
     }
 
     /**

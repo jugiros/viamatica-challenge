@@ -1,10 +1,12 @@
 package com.viamatica.assessment.orders_management_system.domain.exception;
 
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Email;
+import lombok.Getter;
 
 /**
  * Exception thrown when a requested user cannot be found.
  */
+@Getter
 public class UserNotFoundException extends DomainException {
 
     private final Long id;
@@ -22,11 +24,4 @@ public class UserNotFoundException extends DomainException {
         this.email = email;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public Email getEmail() {
-        return email;
-    }
 }

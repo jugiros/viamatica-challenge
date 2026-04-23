@@ -49,3 +49,38 @@ docker-compose up -d
    - Puerto: `3306`
    - Usuario: `root` (por defecto en XAMPP)
    - Contraseña: ` ` (vacío por defecto)
+
+   ## ⚙️ Configuración del Entorno (Local)
+
+El sistema está diseñado para ser agnóstico a la infraestructura de base de datos. Para este entorno de desarrollo, se ha priorizado el uso de **XAMPP** para garantizar la estabilidad del motor MySQL.
+
+### 1. Infraestructura de Datos (XAMPP)
+
+1. **Servicios**: Iniciar **Apache** y **MySQL** desde el XAMPP Control Panel (ejecutar como Administrador).
+2. **Base de Datos**: 
+   - Acceder a [http://localhost/phpmyadmin](http://localhost/phpmyadmin).
+   - Crear el esquema `oms_db` utilizando el cotejamiento `utf8mb4_general_ci`.
+3. **Validación de Puerto**: Asegurarse de que el puerto `3306` esté libre de procesos previos (Docker u otras instancias de MySQL).
+
+### 2. Gestión de Persistencia con Liquibase
+
+Este proyecto utiliza **Liquibase** para el control de versiones del esquema, eliminando la necesidad de scripts manuales de SQL.
+
+- **Migración Automática**: Al ejecutar el Backend, Liquibase detectará el esquema y aplicará los *changesets* definidos en `src/main/resources/db/changelog/`.
+- **Trazabilidad**: El historial de cambios se registra en la tabla técnica `DATABASECHANGELOG`.
+- **Estructura de Cambios**:
+  - `001-initial-schema.xml`: Define la base del sistema (Tablas de seguridad y auditoría).
+
+## 🏗️ Guía de Ejecución (Backend)
+
+### Requisitos Técnicos
+- **Java SDK**: 21 (Amazon Corretto recomendado).
+- **Maven**: 3.9+.
+
+### Pasos para iniciar:
+1. Clonar el repositorio.
+2. Actualizar el archivo `src/main/resources/application.yml` con tus credenciales locales de MySQL si difieren de las estándar (root/sin contraseña).
+3. Ejecutar el comando:
+   ```bash
+   mvn clean install
+   mvn spring-boot:run

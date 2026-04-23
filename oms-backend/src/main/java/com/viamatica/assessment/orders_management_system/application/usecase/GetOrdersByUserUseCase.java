@@ -4,6 +4,7 @@ import com.viamatica.assessment.orders_management_system.domain.entity.OrderDoma
 import com.viamatica.assessment.orders_management_system.domain.exception.UserNotFoundException;
 import com.viamatica.assessment.orders_management_system.domain.port.OrderRepository;
 import com.viamatica.assessment.orders_management_system.domain.port.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,17 +15,11 @@ import java.util.List;
  * Supports filtering by status, date range, and pagination.
  */
 @Service
+@RequiredArgsConstructor
 public class GetOrdersByUserUseCase {
 
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
-
-    public GetOrdersByUserUseCase(
-            OrderRepository orderRepository,
-            UserRepository userRepository) {
-        this.orderRepository = orderRepository;
-        this.userRepository = userRepository;
-    }
 
     public record Query(
             Long userId,
@@ -36,7 +31,7 @@ public class GetOrdersByUserUseCase {
     ) {}
 
     public List<OrderDomain> execute(Query query) {
-        if (!userRepository.existsById(query.userId)) {
+        if (userRepository.findById(query.userId).isEmpty()) {
             throw new UserNotFoundException(query.userId);
         }
 

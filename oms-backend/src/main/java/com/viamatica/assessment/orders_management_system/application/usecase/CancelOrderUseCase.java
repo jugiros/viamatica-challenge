@@ -9,8 +9,7 @@ import com.viamatica.assessment.orders_management_system.domain.exception.Produc
 import com.viamatica.assessment.orders_management_system.domain.port.AuditPort;
 import com.viamatica.assessment.orders_management_system.domain.port.OrderRepository;
 import com.viamatica.assessment.orders_management_system.domain.port.ProductRepository;
-import com.viamatica.assessment.orders_management_system.domain.order.CancelledStatus;
-import com.viamatica.assessment.orders_management_system.domain.order.ConfirmedStatus;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,20 +18,12 @@ import org.springframework.stereotype.Service;
  * Releases stock if order was CONFIRMADA.
  */
 @Service
+@RequiredArgsConstructor
 public class CancelOrderUseCase {
 
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final AuditPort auditPort;
-
-    public CancelOrderUseCase(
-            OrderRepository orderRepository,
-            ProductRepository productRepository,
-            AuditPort auditPort) {
-        this.orderRepository = orderRepository;
-        this.productRepository = productRepository;
-        this.auditPort = auditPort;
-    }
 
     public record Command(Long orderId, String reason) {}
 

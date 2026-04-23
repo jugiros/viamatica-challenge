@@ -2,13 +2,14 @@ package com.viamatica.assessment.orders_management_system.domain.entity;
 
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Money;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.ProductName;
+import lombok.Data;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Domain entity representing a product in the catalog.
  * Pure POJO without any framework annotations.
  */
+@Data
 public class ProductDomain {
 
     private Long id;
@@ -42,96 +43,6 @@ public class ProductDomain {
 
     public static Builder builder() {
         return new Builder();
-    }
-
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public ProductName getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public Money getPrice() {
-        return price;
-    }
-
-    public int getStock() {
-        return stock;
-    }
-
-    public Long getCategoryId() {
-        return categoryId;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public long getVersion() {
-        return version;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(ProductName name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public void setPrice(Money price) {
-        this.price = price;
-    }
-
-    public void setStock(int stock) {
-        this.stock = stock;
-    }
-
-    public void setCategoryId(Long categoryId) {
-        this.categoryId = categoryId;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public void setVersion(long version) {
-        this.version = version;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
     }
 
     /**
@@ -187,30 +98,6 @@ public class ProductDomain {
      */
     public void touch() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ProductDomain that = (ProductDomain) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
-
-    @Override
-    public String toString() {
-        return "ProductDomain{" +
-                "id=" + id +
-                ", name=" + name +
-                ", price=" + price +
-                ", stock=" + stock +
-                ", active=" + active +
-                '}';
     }
 
     /**

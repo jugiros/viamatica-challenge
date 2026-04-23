@@ -2,7 +2,7 @@ package com.viamatica.assessment.orders_management_system.config;
 
 import java.util.concurrent.Executors;
 import org.apache.coyote.ProtocolHandler;
-import org.springframework.boot.tomcat.TomcatProtocolHandlerCustomizer;
+import org.springframework.boot.web.embedded.tomcat.TomcatProtocolHandlerCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

@@ -2,13 +2,14 @@ package com.viamatica.assessment.orders_management_system.domain.entity;
 
 import com.viamatica.assessment.orders_management_system.domain.model.UserRole;
 import com.viamatica.assessment.orders_management_system.domain.valueobject.Email;
+import lombok.Data;
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 /**
  * Domain entity representing a user in the system.
  * Pure POJO without any framework annotations.
  */
+@Data
 public class UserDomain {
 
     private Long id;
@@ -40,80 +41,6 @@ public class UserDomain {
         return new Builder();
     }
 
-    // Getters
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Email getEmail() {
-        return email;
-    }
-
-    public String getPasswordHash() {
-        return passwordHash;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public LocalDateTime getDeletedAt() {
-        return deletedAt;
-    }
-
-    // Setters
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setEmail(Email email) {
-        this.email = email;
-    }
-
-    public void setPasswordHash(String passwordHash) {
-        this.passwordHash = passwordHash;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
-    public void setDeletedAt(LocalDateTime deletedAt) {
-        this.deletedAt = deletedAt;
-    }
-
     /**
      * Checks if this user is an administrator.
      * @return true if the user has ADMIN role
@@ -143,30 +70,6 @@ public class UserDomain {
      */
     public void touch() {
         this.updatedAt = LocalDateTime.now();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        UserDomain that = (UserDomain) o;
-        return Objects.equals(id, that.id) && Objects.equals(email, that.email);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, email);
-    }
-
-    @Override
-    public String toString() {
-        return "UserDomain{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email=" + email +
-                ", role=" + role +
-                ", active=" + active +
-                '}';
     }
 
     /**
