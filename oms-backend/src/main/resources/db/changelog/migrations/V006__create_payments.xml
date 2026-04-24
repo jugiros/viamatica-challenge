@@ -40,4 +40,8 @@
                 onUpdate="CASCADE"/>
     </changeSet>
 
+    <changeSet id="add-payments-unique-constraint" author="oms-dev">
+        <addUniqueConstraint tableName="payments" columnNames="order_id" constraintName="uk_payments_order"/>
+    </changeSet>
+
 </databaseChangeLog>
