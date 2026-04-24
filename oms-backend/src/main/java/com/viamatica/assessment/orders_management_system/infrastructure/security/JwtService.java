@@ -64,9 +64,10 @@ public class JwtService {
                 .compact();
     }
 
-    public String generateAccessToken(Long userId) {
+    public String generateAccessToken(Long userId, String email) {
         return Jwts.builder()
                 .subject(String.valueOf(userId))
+                .claim("email", email)
                 .issuedAt(Date.from(Instant.now()))
                 .expiration(Date.from(Instant.now().plusMillis(jwtExpiration)))
                 .signWith(getSigningKey())
@@ -75,6 +76,10 @@ public class JwtService {
 
     public String extractUsername(String token) {
         return extractClaim(token, Claims::getSubject);
+    }
+
+    public String extractEmail(String token) {
+        return extractClaim(token, claims -> claims.get("email", String.class));
     }
 
     public List<String> extractRoles(String token) {

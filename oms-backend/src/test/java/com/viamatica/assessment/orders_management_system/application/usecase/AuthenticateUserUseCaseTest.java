@@ -130,5 +130,6 @@ class AuthenticateUserUseCaseTest {
         Claims claims = authenticateUserUseCase.validateToken(response.accessToken());
         assertNotNull(claims);
         assertEquals("1", claims.getSubject());
+        assertEquals("test@example.com", claims.get("email"));
     }
 }

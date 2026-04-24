@@ -21,10 +21,10 @@ public class RefreshTokenUseCase {
         String userIdStr = jwtService.extractUsername(command.refreshToken);
         Long userId = Long.parseLong(userIdStr);
 
-        userRepository.findById(userId)
+        var user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
 
-        String accessToken = jwtService.generateAccessToken(userId);
+        String accessToken = jwtService.generateAccessToken(userId, user.getEmail().value());
 
         return new Response(accessToken);
     }

@@ -42,7 +42,7 @@ class RefreshTokenUseCaseTest {
 
         when(jwtService.extractUsername(any())).thenReturn("1");
         when(userRepository.findById(1L)).thenReturn(java.util.Optional.of(user));
-        when(jwtService.generateAccessToken(1L)).thenReturn("new-access-token");
+        when(jwtService.generateAccessToken(1L, "test@example.com")).thenReturn("new-access-token");
 
         RefreshTokenUseCase.Command command = new RefreshTokenUseCase.Command("valid-refresh-token");
         RefreshTokenUseCase.Response response = refreshTokenUseCase.execute(command);
@@ -50,7 +50,7 @@ class RefreshTokenUseCaseTest {
         assertNotNull(response.accessToken());
         assertEquals("new-access-token", response.accessToken());
         verify(userRepository).findById(1L);
-        verify(jwtService).generateAccessToken(1L);
+        verify(jwtService).generateAccessToken(1L, "test@example.com");
     }
 
     @Test

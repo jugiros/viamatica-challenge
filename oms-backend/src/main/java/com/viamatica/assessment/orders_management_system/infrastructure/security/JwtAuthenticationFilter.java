@@ -26,6 +26,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
+    // Rutas que no requieren validación de token
+    private static final String[] WHITE_LIST_URL = {
+            "/api/v1/auth/**",
+            "/api-docs/**",
+            "/swagger-config",
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-ui.html"
+    };
+
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
@@ -35,6 +52,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String userEmail;
+
+        // Skip token validation for whitelisted paths
+        if (isWhitelisted(request.getRequestURI())) {
+            filterChain.doFilter(request, response);
+            return;
+        }
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
@@ -56,7 +79,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            userEmail = jwtService.extractUsername(jwt);
+            userEmail = jwtService.extractEmail(jwt);
 
             if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(userEmail);
@@ -88,5 +111,21 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
+    }
+
+    private boolean isWhitelisted(String requestURI) {
+        for (String whiteListedURL : WHITE_LIST_URL) {
+            if (whiteListedURL.endsWith("/**")) {
+                String prefix = whiteListedURL.substring(0, whiteListedURL.length() - 3);
+                if (requestURI.startsWith(prefix)) {
+                    return true;
+                }
+            } else {
+                if (requestURI.equals(whiteListedURL) || requestURI.startsWith(whiteListedURL + "/")) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

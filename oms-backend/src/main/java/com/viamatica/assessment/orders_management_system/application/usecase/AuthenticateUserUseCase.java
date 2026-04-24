@@ -67,18 +67,19 @@ public class AuthenticateUserUseCase {
             throw new InvalidPasswordException("User account is inactive");
         }
 
-        String accessToken = generateToken(user.getId(), jwtExpiration);
-        String refreshToken = generateToken(user.getId(), refreshExpiration);
+        String accessToken = generateToken(user.getId(), user.getEmail().value(), jwtExpiration);
+        String refreshToken = generateToken(user.getId(), user.getEmail().value(), refreshExpiration);
 
         auditPort.logLogin(user.getId(), "0.0.0.0", "API");
 
         return new Response(accessToken, refreshToken, user);
     }
 
-    private String generateToken(Long userId, long expiration) {
+    private String generateToken(Long userId, String email, long expiration) {
         Instant now = Instant.now();
         return Jwts.builder()
                 .subject(String.valueOf(userId))
+                .claim("email", email)
                 .issuedAt(Date.from(now))
                 .expiration(Date.from(now.plusMillis(expiration)))
                 .id(UUID.randomUUID().toString())

@@ -133,9 +133,9 @@ public class AuthControllerTest {
     }
 
     @Test
-    void SECAU05_AccessPublicEndpoint_NoToken_ShouldReturnOk() throws Exception {
+    void SECAU05_AccessProtectedEndpoint_NoToken_ShouldReturnUnauthorized() throws Exception {
         mockMvc.perform(get("/api/v1/products"))
-                .andExpect(status().isOk());
+                .andExpect(status().isUnauthorized());
     }
 
     @Test
