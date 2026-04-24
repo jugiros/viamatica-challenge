@@ -91,7 +91,7 @@ public class OrderRepositoryImpl implements OrderRepository {
         entity.setFechaActualizacion(domain.getUpdatedAt());
 
         List<OrderItemEntity> itemEntities = domain.getItems().stream()
-                .map(this::toOrderItemEntity)
+                .map(item -> toOrderItemEntity(item, entity))
                 .collect(Collectors.toList());
         entity.setItems(itemEntities);
 
@@ -107,9 +107,10 @@ public class OrderRepositoryImpl implements OrderRepository {
                 .build();
     }
 
-    private OrderItemEntity toOrderItemEntity(OrderItemDomain domain) {
+    private OrderItemEntity toOrderItemEntity(OrderItemDomain domain, OrderEntity orderEntity) {
         OrderItemEntity entity = new OrderItemEntity();
         entity.setId(domain.getId());
+        entity.setOrder(orderEntity);
         entity.setProductId(domain.getProductId());
         entity.setQuantity(domain.getQuantity());
         entity.setUnitPrice(domain.getUnitPrice().amount());
