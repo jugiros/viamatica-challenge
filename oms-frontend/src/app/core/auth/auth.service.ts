@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { signal, computed, effect } from '@angular/core';
+import { signal, computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { UserModel, LoginRequest, RegisterRequest, AuthResponse } from '../models';
@@ -16,7 +16,7 @@ export class AuthService {
   // Signals para estado de auth
   private readonly _currentUser = signal<UserModel | null>(null);
   private readonly _isLoading = signal<boolean>(false);
-  private readonly _token = signal<string | null>(this.getTokenFromStorage());
+  private readonly _token = signal<string | null>(null); // Token solo en memoria (más seguro)
 
   // Signals de solo lectura
   readonly currentUser = this._currentUser.asReadonly();
@@ -28,18 +28,8 @@ export class AuthService {
   readonly isAdmin = computed(() => this._currentUser()?.role === 'ADMIN');
 
   constructor() {
-    // Efecto para persistir el token en localStorage
-    effect(() => {
-      const token = this._token();
-      if (token) {
-        localStorage.setItem('token', token);
-      } else {
-        localStorage.removeItem('token');
-      }
-    });
-
-    // Cargar usuario desde localStorage si existe token
-    this.loadUserFromStorage();
+    // Token NO se persiste en storage (localStorage/sessionStorage son vulnerables a XSS)
+    // Solo se mantiene en memoria usando signals
   }
 
   login(credentials: LoginRequest) {
@@ -72,18 +62,5 @@ export class AuthService {
     this._currentUser.set(null);
     this._token.set(null);
     this._isLoading.set(false);
-  }
-
-  private getTokenFromStorage(): string | null {
-    return localStorage.getItem('token');
-  }
-
-  private loadUserFromStorage() {
-    const token = this.getTokenFromStorage();
-    if (token) {
-      // Aquí podríamos decodificar el JWT para obtener el usuario
-      // Por ahora, solo establecemos el token
-      this._token.set(token);
-    }
   }
 }

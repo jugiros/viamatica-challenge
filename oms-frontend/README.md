@@ -86,16 +86,26 @@ oms-frontend/src/app/
 
 ## Características Principales
 
-- **ChangeDetectionStrategy.OnPush** en todos los componentes
-- **Signals** para gestión de estado reactivo
+- **ChangeDetectionStrategy.OnPush** en todos los componentes (crítico para performance)
+- **Signals** para gestión de estado reactivo (en lugar de Subject/BehaviorSubject)
 - **computed()** para estado derivado
 - **effect()** para side effects
-- **Nueva sintaxis Angular 17+**: `@for`, `@if`, `@switch`
+- **Nueva sintaxis Angular 17+**: `@for`, `@if`, `@switch` (con track obligatorio en @for)
 - **Functional Guards**: Guards usando `inject()` y funciones
 - **Functional Interceptors**: Interceptores usando `HttpInterceptorFn`
 - **Standalone Components**: Sin NgModule
-- **Tailwind CSS 4.x**: Todos los estilos con Tailwind
+- **Tailwind CSS 3.x**: Todos los estilos con Tailwind
 - **Pipes Standalone**: Pipes reutilizables
+
+## Seguridad
+
+- **Token JWT solo en memoria** (signals) - NO se persiste en localStorage/sessionStorage para prevenir ataques XSS
+- **Interceptores HTTP funcionales** para inyección de token JWT
+- **Guards de autenticación** para protección de rutas
+- **Permisos basados en roles** (USER, ADMIN)
+- **Validación de token en backend** con expiración y firma
+- **CORS configurado** para localhost:4200
+- **Nota**: El usuario debe re-autenticarse al recargar la página (trade-off por seguridad)
 
 ## Scripts Disponibles
 
