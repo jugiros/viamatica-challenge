@@ -4,19 +4,19 @@
 
 - Java 21 JDK
 - Maven 3.9+
-- MySQL 8.0 (XAMPP o Docker)
+- SQL Server 2022 (Docker)
 
 ## Configuración de Base de Datos
 
-### Opción 1: XAMPP
-1. Iniciar MySQL desde XAMPP Control Panel
-2. Acceder a http://localhost/phpmyadmin
-3. Crear base de datos `oms_db` con cotejamiento `utf8mb4_general_ci`
-
-### Opción 2: Docker
+### Docker (Recomendado)
 ```bash
 docker-compose up -d
 ```
+
+Esto iniciará SQL Server 2022 en el puerto 1433 con las siguientes credenciales:
+- Usuario: sa
+- Contraseña: YourStrong@Password123
+- Base de datos: oms_db (creada automáticamente por Liquibase)
 
 ## Levantar Backend
 

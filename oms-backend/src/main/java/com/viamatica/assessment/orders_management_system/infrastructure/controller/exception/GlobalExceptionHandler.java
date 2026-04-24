@@ -33,7 +33,7 @@ public class GlobalExceptionHandler {
         );
     }
 
-    @ExceptionHandler({UserNotFoundException.class, ProductNotFoundException.class, OrderNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, ProductNotFoundException.class, OrderNotFoundException.class, CategoryNotFoundException.class, PaymentNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundException(RuntimeException ex, HttpServletRequest request) {
         return new ErrorResponse(

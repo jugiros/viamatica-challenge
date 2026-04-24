@@ -9,27 +9,27 @@ import org.springframework.stereotype.Service;
 public class NotificationPortImpl implements NotificationPort {
 
     @Override
-    public void sendOrderConfirmation(Long userId, Long orderId, String orderNumber) {
-        log.info("Order Confirmation Notification - UserId: {}, OrderId: {}, OrderNumber: {}, Timestamp: {}",
-                userId, orderId, orderNumber, java.time.LocalDateTime.now());
+    public void sendOrderConfirmation(Long userId, Long orderId) {
+        log.info("Order Confirmation Notification - UserId: {}, OrderId: {}, Timestamp: {}",
+                userId, orderId, java.time.LocalDateTime.now());
     }
 
     @Override
-    public void sendPaymentNotification(Long userId, Long orderId, String orderNumber) {
-        log.info("Payment Notification - UserId: {}, OrderId: {}, OrderNumber: {}, Timestamp: {}",
-                userId, orderId, orderNumber, java.time.LocalDateTime.now());
+    public void sendPaymentNotification(Long userId, Long orderId) {
+        log.info("Payment Notification - UserId: {}, OrderId: {}, Timestamp: {}",
+                userId, orderId, java.time.LocalDateTime.now());
     }
 
     @Override
-    public void sendShippingNotification(Long userId, Long orderId, String orderNumber) {
-        log.info("Shipping Notification - UserId: {}, OrderId: {}, OrderNumber: {}, Timestamp: {}",
-                userId, orderId, orderNumber, java.time.LocalDateTime.now());
+    public void sendShippingNotification(Long userId, Long orderId) {
+        log.info("Shipping Notification - UserId: {}, OrderId: {}, Timestamp: {}",
+                userId, orderId, java.time.LocalDateTime.now());
     }
 
     @Override
-    public void sendCancellationNotification(Long userId, Long orderId, String orderNumber, String reason) {
-        log.info("Cancellation Notification - UserId: {}, OrderId: {}, OrderNumber: {}, Reason: {}, Timestamp: {}",
-                userId, orderId, orderNumber, reason, java.time.LocalDateTime.now());
+    public void sendCancellationNotification(Long userId, Long orderId, String reason) {
+        log.info("Cancellation Notification - UserId: {}, OrderId: {}, Reason: {}, Timestamp: {}",
+                userId, orderId, reason, java.time.LocalDateTime.now());
     }
 
     @Override

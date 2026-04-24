@@ -9,6 +9,8 @@ import com.viamatica.assessment.orders_management_system.infrastructure.controll
 import com.viamatica.assessment.orders_management_system.infrastructure.controller.dto.ProductResponse;
 import com.viamatica.assessment.orders_management_system.infrastructure.controller.dto.UpdateProductRequest;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -35,6 +37,9 @@ public class ProductController {
 
     @GetMapping
     @Operation(summary = "Get all products", description = "Retrieve all products with pagination (public)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Products retrieved successfully")
+    })
     public ResponseEntity<Page<ProductResponse>> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -59,6 +64,10 @@ public class ProductController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get product by ID", description = "Retrieve a specific product by ID (public)")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product retrieved successfully"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
     public ResponseEntity<ProductResponse> getById(@PathVariable Long id) {
         ProductDomain product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
@@ -69,6 +78,12 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Create product", description = "Create a new product (Admin only)")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only")
+    })
     public ResponseEntity<ProductResponse> create(@Valid @RequestBody CreateProductRequest request) {
         CreateProductUseCase.Command command = new CreateProductUseCase.Command(
                 request.name(),
@@ -84,6 +99,13 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Update product", description = "Update product information (Admin only)")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Product updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
     public ResponseEntity<ProductResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateProductRequest request) {
@@ -103,6 +125,12 @@ public class ProductController {
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Delete product", description = "Soft delete a product by ID (Admin only)")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Product deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only"),
+            @ApiResponse(responseCode = "404", description = "Product not found")
+    })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         ProductDomain product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));

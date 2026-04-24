@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="create-notifications-table" author="oms-dev" context="base">
+    <changeSet id="create-notifications-table" author="oms-dev">
         <preConditions onFail="MARK_RAN">
             <not>
                 <tableExists tableName="notifications"/>
@@ -21,21 +21,22 @@
             <column name="order_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="tipo" type="VARCHAR(50)">
+            <column name="tipo" type="NVARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="estado" type="VARCHAR(20)" defaultValue="PENDIENTE">
+            <column name="estado" type="NVARCHAR(20)" defaultValue="PENDING">
                 <constraints nullable="false"/>
             </column>
-            <column name="mensaje" type="TEXT"/>
-            <column name="fecha_envio" type="TIMESTAMP"/>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="mensaje" type="NVARCHAR(MAX)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fecha_envio" type="DATETIME2" defaultValueComputed="GETDATE()">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="add-notifications-foreign-key" author="oms-dev" context="base">
+    <changeSet id="add-notifications-foreign-key" author="oms-dev">
         <addForeignKeyConstraint
                 baseTableName="notifications"
                 baseColumnNames="user_id"
@@ -46,18 +47,18 @@
                 onUpdate="CASCADE"/>
     </changeSet>
 
-    <changeSet id="add-notifications-order-foreign-key" author="oms-dev" context="base">
+    <changeSet id="add-notifications-order-foreign-key" author="oms-dev">
         <addForeignKeyConstraint
                 baseTableName="notifications"
                 baseColumnNames="order_id"
                 referencedTableName="orders"
                 referencedColumnNames="id"
                 constraintName="fk_notif_order"
-                onDelete="CASCADE"
-                onUpdate="CASCADE"/>
+                onDelete="NO ACTION"
+                onUpdate="NO ACTION"/>
     </changeSet>
 
-    <changeSet id="add-notifications-indexes" author="oms-dev" context="base">
+    <changeSet id="add-notifications-indexes" author="oms-dev">
         <createIndex tableName="notifications" indexName="idx_notif_user">
             <column name="user_id"/>
         </createIndex>
@@ -66,7 +67,7 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="add-notifications-constraints" author="oms-dev" context="base">
+    <changeSet id="add-notifications-constraints" author="oms-dev">
         <sql>
             ALTER TABLE notifications
             ADD CONSTRAINT ck_notif_tipo
@@ -75,7 +76,7 @@
         <sql>
             ALTER TABLE notifications
             ADD CONSTRAINT ck_notif_estado
-            CHECK (estado IN ('PENDIENTE', 'ENVIADA', 'FALLIDA'))
+            CHECK (estado IN ('PENDING', 'SENT', 'FAILED'))
         </sql>
     </changeSet>
 

@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="create-order-items-table" author="oms-dev" context="base">
+    <changeSet id="create-order-items-table" author="oms-dev">
         <createTable tableName="order_items">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -28,7 +28,7 @@
         </createTable>
     </changeSet>
 
-    <changeSet id="add-order-items-order-foreign-key" author="oms-dev" context="base">
+    <changeSet id="add-order-items-order-foreign-key" author="oms-dev">
         <addForeignKeyConstraint
                 baseTableName="order_items"
                 baseColumnNames="order_id"
@@ -39,7 +39,7 @@
                 onUpdate="CASCADE"/>
     </changeSet>
 
-    <changeSet id="add-order-items-product-foreign-key" author="oms-dev" context="base">
+    <changeSet id="add-order-items-product-foreign-key" author="oms-dev">
         <addForeignKeyConstraint
                 baseTableName="order_items"
                 baseColumnNames="product_id"
@@ -50,7 +50,7 @@
                 onUpdate="CASCADE"/>
     </changeSet>
 
-    <changeSet id="add-order-items-indexes" author="oms-dev" context="base">
+    <changeSet id="add-order-items-indexes" author="oms-dev">
         <createIndex tableName="order_items" indexName="idx_order_items_order">
             <column name="order_id"/>
         </createIndex>
@@ -59,18 +59,11 @@
         </createIndex>
     </changeSet>
 
-    <changeSet id="add-order-items-computed-column" author="oms-dev" context="base">
-        <sql>
-            ALTER TABLE order_items
-            MODIFY COLUMN subtotal DECIMAL(12,2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED
-        </sql>
-    </changeSet>
-
-    <changeSet id="add-order-items-unique-constraint" author="oms-dev" context="base">
+    <changeSet id="add-order-items-unique-constraint" author="oms-dev">
         <addUniqueConstraint tableName="order_items" columnNames="order_id,product_id" constraintName="uk_order_product"/>
     </changeSet>
 
-    <changeSet id="add-order-items-constraints" author="oms-dev" context="base">
+    <changeSet id="add-order-items-constraints" author="oms-dev">
         <sql>
             ALTER TABLE order_items
             ADD CONSTRAINT ck_items_cantidad CHECK (cantidad > 0)

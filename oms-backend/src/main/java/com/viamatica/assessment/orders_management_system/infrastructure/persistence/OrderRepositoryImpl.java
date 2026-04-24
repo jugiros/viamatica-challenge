@@ -39,12 +39,6 @@ public class OrderRepositoryImpl implements OrderRepository {
 
     @Override
     @Transactional(readOnly = true)
-    public Optional<OrderDomain> findByOrderNumber(String orderNumber) {
-        return jpaRepository.findByOrderNumber(orderNumber).map(this::toDomain);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
     public List<OrderDomain> findByUserId(Long userId) {
         return jpaRepository.findByUserId(userId).stream()
                 .map(this::toDomain)
@@ -78,25 +72,23 @@ public class OrderRepositoryImpl implements OrderRepository {
 
         return OrderDomain.builder()
                 .id(entity.getId())
-                .orderNumber(entity.getOrderNumber())
                 .userId(entity.getUserId())
                 .total(Money.of(entity.getTotal()))
                 .status(convertStatusEntityToStatus(entity.getStatus()))
                 .items(items)
-                .createdAt(entity.getCreatedAt())
-                .updatedAt(entity.getUpdatedAt())
+                .createdAt(entity.getFechaOrden())
+                .updatedAt(entity.getFechaActualizacion())
                 .build();
     }
 
     private OrderEntity toEntity(OrderDomain domain) {
         OrderEntity entity = new OrderEntity();
         entity.setId(domain.getId());
-        entity.setOrderNumber(domain.getOrderNumber());
         entity.setUserId(domain.getUserId());
         entity.setTotal(domain.getTotal().amount());
         entity.setStatus(convertStatusToStatusEntity(domain.getStatus()));
-        entity.setCreatedAt(domain.getCreatedAt());
-        entity.setUpdatedAt(domain.getUpdatedAt());
+        entity.setFechaOrden(domain.getCreatedAt());
+        entity.setFechaActualizacion(domain.getUpdatedAt());
 
         List<OrderItemEntity> itemEntities = domain.getItems().stream()
                 .map(this::toOrderItemEntity)

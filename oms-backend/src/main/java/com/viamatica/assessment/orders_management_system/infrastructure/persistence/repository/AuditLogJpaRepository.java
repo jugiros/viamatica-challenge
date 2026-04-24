@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface AuditLogJpaRepository extends JpaRepository<AuditLogEntity, Long> {
 
-    @Query("SELECT a FROM AuditLogEntity a WHERE a.userId = :userId AND a.createdAt BETWEEN :dateFrom AND :dateTo ORDER BY a.createdAt DESC")
+    @Query("SELECT a FROM AuditLogEntity a WHERE a.userId = :userId AND a.fechaEvento BETWEEN :dateFrom AND :dateTo ORDER BY a.fechaEvento DESC")
     Page<AuditLogEntity> findByUserIdAndDateRange(
             @Param("userId") Long userId,
             @Param("dateFrom") LocalDateTime dateFrom,
@@ -22,7 +22,7 @@ public interface AuditLogJpaRepository extends JpaRepository<AuditLogEntity, Lon
             Pageable pageable
     );
 
-    @Query("SELECT a FROM AuditLogEntity a WHERE a.tableName = :tableName AND a.createdAt BETWEEN :dateFrom AND :dateTo ORDER BY a.createdAt DESC")
+    @Query("SELECT a FROM AuditLogEntity a WHERE a.tablaAfectada = :tableName AND a.fechaEvento BETWEEN :dateFrom AND :dateTo ORDER BY a.fechaEvento DESC")
     Page<AuditLogEntity> findByTableNameAndDateRange(
             @Param("tableName") String tableName,
             @Param("dateFrom") LocalDateTime dateFrom,
@@ -30,7 +30,7 @@ public interface AuditLogJpaRepository extends JpaRepository<AuditLogEntity, Lon
             Pageable pageable
     );
 
-    @Query("SELECT a FROM AuditLogEntity a WHERE a.userId = :userId AND a.tableName = :tableName AND a.createdAt BETWEEN :dateFrom AND :dateTo ORDER BY a.createdAt DESC")
+    @Query("SELECT a FROM AuditLogEntity a WHERE a.userId = :userId AND a.tablaAfectada = :tableName AND a.fechaEvento BETWEEN :dateFrom AND :dateTo ORDER BY a.fechaEvento DESC")
     Page<AuditLogEntity> findByUserIdAndTableNameAndDateRange(
             @Param("userId") Long userId,
             @Param("tableName") String tableName,
@@ -38,6 +38,4 @@ public interface AuditLogJpaRepository extends JpaRepository<AuditLogEntity, Lon
             @Param("dateTo") LocalDateTime dateTo,
             Pageable pageable
     );
-
-    List<AuditLogEntity> findByEntityIdOrderByCreatedAtDesc(Long entityId);
 }

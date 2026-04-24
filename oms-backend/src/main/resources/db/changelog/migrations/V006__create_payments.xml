@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="create-payments-table" author="oms-dev" context="base">
+    <changeSet id="create-payments-table" author="oms-dev">
         <createTable tableName="payments">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
@@ -13,23 +13,23 @@
             <column name="order_id" type="BIGINT">
                 <constraints nullable="false"/>
             </column>
-            <column name="metodo_pago" type="VARCHAR(50)" defaultValue="CREDIT_CARD">
+            <column name="metodo_pago" type="NVARCHAR(50)" defaultValue="CREDIT_CARD">
                 <constraints nullable="false"/>
             </column>
-            <column name="estado_pago" type="VARCHAR(20)" defaultValue="PENDING">
+            <column name="estado_pago" type="NVARCHAR(20)" defaultValue="PENDING">
                 <constraints nullable="false"/>
             </column>
             <column name="monto" type="DECIMAL(12,2)">
                 <constraints nullable="false"/>
             </column>
-            <column name="referencia_externa" type="VARCHAR(255)"/>
-            <column name="fecha_pago" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="referencia_externa" type="NVARCHAR(255)"/>
+            <column name="fecha_pago" type="DATETIME2" defaultValueComputed="GETDATE()">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="add-payments-foreign-key" author="oms-dev" context="base">
+    <changeSet id="add-payments-foreign-key" author="oms-dev">
         <addForeignKeyConstraint
                 baseTableName="payments"
                 baseColumnNames="order_id"

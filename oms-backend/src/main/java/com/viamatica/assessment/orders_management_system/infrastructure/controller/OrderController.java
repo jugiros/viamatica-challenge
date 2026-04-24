@@ -13,6 +13,8 @@ import com.viamatica.assessment.orders_management_system.infrastructure.controll
 import com.viamatica.assessment.orders_management_system.infrastructure.controller.dto.OrderResponse;
 import com.viamatica.assessment.orders_management_system.infrastructure.security.CurrentUser;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,6 +38,11 @@ public class OrderController {
     @PostMapping
     @Operation(summary = "Create order", description = "Create a new order with a list of products and quantities")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     public ResponseEntity<OrderResponse> create(
             @RequestBody CreateOrderRequest request,
             @CurrentUser Long userId) {
@@ -51,6 +58,10 @@ public class OrderController {
     @GetMapping
     @Operation(summary = "Get all orders for current user", description = "Retrieve a list of orders for the authenticated user")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Orders retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized")
+    })
     public ResponseEntity<List<OrderResponse>> getAll(@CurrentUser Long userId) {
         List<OrderDomain> orders = orderRepository.findByUserId(userId);
         return ResponseEntity.ok(orders.stream().map(this::toOrderResponse).collect(Collectors.toList()));
@@ -59,6 +70,12 @@ public class OrderController {
     @GetMapping("/{id}")
     @Operation(summary = "Get order by ID", description = "Retrieve a specific order by its ID")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Not your order"),
+            @ApiResponse(responseCode = "404", description = "Order not found")
+    })
     public ResponseEntity<OrderResponse> getById(
             @PathVariable Long id,
             @CurrentUser Long currentUserId,
@@ -74,6 +91,12 @@ public class OrderController {
     @PutMapping("/{id}/confirm")
     @Operation(summary = "Confirm order", description = "Confirm a pending order")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order confirmed successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid state transition"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Order not found")
+    })
     public ResponseEntity<OrderResponse> confirm(@PathVariable Long id) {
         ConfirmOrderUseCase.Command command = new ConfirmOrderUseCase.Command(id);
         OrderDomain order = confirmOrderUseCase.execute(command);
@@ -83,6 +106,12 @@ public class OrderController {
     @PutMapping("/{id}/cancel")
     @Operation(summary = "Cancel order", description = "Cancel an order with a reason")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order cancelled successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid state transition"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "Order not found")
+    })
     public ResponseEntity<OrderResponse> cancel(@PathVariable Long id, @RequestBody CancelOrderRequest request) {
         CancelOrderUseCase.Command command = new CancelOrderUseCase.Command(id, request.reason());
         OrderDomain order = cancelOrderUseCase.execute(command);
@@ -92,6 +121,11 @@ public class OrderController {
     @GetMapping("/reports")
     @Operation(summary = "Get order reports", description = "Retrieve order reports (Admin only)")
     @SecurityRequirement(name = "bearerAuth")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Reports retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only")
+    })
     public ResponseEntity<String> getReports() {
         return ResponseEntity.ok("Reports endpoint - to be implemented");
     }
@@ -112,7 +146,6 @@ public class OrderController {
 
         return new OrderResponse(
                 order.getId(),
-                order.getOrderNumber(),
                 order.getUserId(),
                 order.getStatus().name(),
                 order.getTotal().amount(),

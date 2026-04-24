@@ -89,7 +89,7 @@ public class CreateOrderUseCase {
                 "INSERT",
                 savedOrder.getId(),
                 null,
-                "{\"id\":" + savedOrder.getId() + ",\"orderNumber\":\"" + savedOrder.getOrderNumber() + "\"}"
+                "{\"id\":" + savedOrder.getId() + "}"
         );
 
         return savedOrder;

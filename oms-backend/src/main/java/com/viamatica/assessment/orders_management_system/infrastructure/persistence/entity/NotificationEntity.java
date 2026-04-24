@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "notifications", indexes = {
     @Index(name = "idx_notification_user_id", columnList = "user_id"),
-    @Index(name = "idx_notification_status", columnList = "status"),
-    @Index(name = "idx_notification_created_at", columnList = "created_at")
+    @Index(name = "idx_notification_status", columnList = "estado"),
+    @Index(name = "idx_notification_date", columnList = "fecha_envio")
 })
 @Data
 @NoArgsConstructor
@@ -28,25 +28,22 @@ public class NotificationEntity {
     private Long orderId;
 
     @Column(nullable = false, length = 50)
-    private String type;
-
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String message;
+    private String tipo;
 
     @Column(length = 20)
-    private String status;
+    private String estado;
 
-    @Column(name = "sent_at")
-    private LocalDateTime sentAt;
+    @Column(nullable = false, columnDefinition = "TEXT")
+    private String mensaje;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "fecha_envio", nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime fechaEnvio;
 
     @PrePersist
     protected void onCreate() {
-        if (status == null) {
-            status = "PENDING";
+        if (estado == null) {
+            estado = "PENDING";
         }
     }
 }

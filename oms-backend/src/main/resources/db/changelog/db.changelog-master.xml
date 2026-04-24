@@ -14,7 +14,6 @@
     <include file="classpath:db/changelog/migrations/V007__create_audit_log.xml"/>
     <include file="classpath:db/changelog/migrations/V008__create_notifications.xml"/>
     <include file="classpath:db/changelog/migrations/V009__create_indexes_and_constraints.xml"/>
-    <include file="classpath:db/changelog/migrations/V011__rename_audit_log_table.xml"/>
     <include file="classpath:db/changelog/seeds/V010__seed_initial_data.xml"/>
 
 </databaseChangeLog>

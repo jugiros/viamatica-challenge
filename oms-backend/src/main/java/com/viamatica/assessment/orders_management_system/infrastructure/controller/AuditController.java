@@ -2,6 +2,8 @@ package com.viamatica.assessment.orders_management_system.infrastructure.control
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,11 @@ public class AuditController {
 
     @GetMapping
     @Operation(summary = "Get audit logs", description = "Retrieve audit logs with optional filters")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Audit logs retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only")
+    })
     public String getAuditLogs(
             @Parameter(description = "Filter by user ID") @RequestParam(required = false) Long userId,
             @Parameter(description = "Filter by table name") @RequestParam(required = false) String table,

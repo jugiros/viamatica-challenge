@@ -10,8 +10,6 @@ public interface OrderRepository {
 
     Optional<OrderDomain> findById(Long id);
 
-    Optional<OrderDomain> findByOrderNumber(String orderNumber);
-
     List<OrderDomain> findByUserId(Long userId);
 
     List<OrderDomain> findAll();

@@ -152,7 +152,7 @@ class PaymentServiceTest {
         verify(paymentRepository).save(any(PaymentDomain.class));
         verify(orderRepository).save(any(OrderDomain.class));
         verify(auditPort).logEntityChange(any(), eq("payments"), eq("INSERT"), any(), any(), any());
-        verify(notificationPort).sendPaymentNotification(eq(1L), eq(1L), any());
+        verify(notificationPort).sendPaymentNotification(eq(1L), eq(1L));
     }
 
     @Test

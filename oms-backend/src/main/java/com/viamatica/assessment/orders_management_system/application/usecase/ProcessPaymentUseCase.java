@@ -81,8 +81,7 @@ public class ProcessPaymentUseCase {
 
         notificationPort.sendPaymentNotification(
                 order.getUserId(),
-                order.getId(),
-                order.getOrderNumber()
+                order.getId()
         );
 
         return savedPayment;

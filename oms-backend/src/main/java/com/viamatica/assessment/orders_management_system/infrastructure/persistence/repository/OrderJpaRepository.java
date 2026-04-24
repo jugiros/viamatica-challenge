@@ -21,11 +21,9 @@ public interface OrderJpaRepository extends JpaRepository<OrderEntity, Long> {
 
     Page<OrderEntity> findByUserId(Long userId, Pageable pageable);
 
-    Optional<OrderEntity> findByOrderNumber(String orderNumber);
-
     Optional<OrderEntity> findByIdAndUserId(Long id, Long userId);
 
-    @Query("SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.status = :status AND o.createdAt BETWEEN :dateFrom AND :dateTo")
+    @Query("SELECT o FROM OrderEntity o WHERE o.userId = :userId AND o.status = :status AND o.fechaOrden BETWEEN :dateFrom AND :dateTo")
     Page<OrderEntity> findByUserIdAndStatusAndDateRange(
             @Param("userId") Long userId,
             @Param("status") String status,

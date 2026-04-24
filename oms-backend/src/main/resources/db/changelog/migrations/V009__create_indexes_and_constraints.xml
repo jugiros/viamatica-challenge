@@ -5,13 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="set-database-engine-and-charset" author="oms-dev" context="base">
-        <sql>
-            ALTER DATABASE oms_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci
-        </sql>
-    </changeSet>
-
-    <changeSet id="add-composite-indexes" author="oms-dev" context="base">
+    <changeSet id="add-composite-indexes" author="oms-dev">
         <createIndex tableName="orders" indexName="idx_orders_user_estado">
             <column name="user_id"/>
             <column name="estado"/>
@@ -23,10 +17,6 @@
         <createIndex tableName="products" indexName="idx_products_category_activo">
             <column name="category_id"/>
             <column name="activo"/>
-        </createIndex>
-        <createIndex tableName="audit_log" indexName="idx_audit_tabla_entidad">
-            <column name="tabla_afectada"/>
-            <column name="entidad_id"/>
         </createIndex>
     </changeSet>
 

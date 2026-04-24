@@ -5,16 +5,16 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="create-categories-table" author="oms-dev" context="base">
+    <changeSet id="create-categories-table" author="oms-dev">
         <createTable tableName="categories">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="nombre" type="VARCHAR(100)">
+            <column name="nombre" type="NVARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="descripcion" type="VARCHAR(500)"/>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="descripcion" type="NVARCHAR(500)"/>
+            <column name="created_at" type="DATETIME2" defaultValueComputed="GETDATE()">
                 <constraints nullable="false"/>
             </column>
         </createTable>

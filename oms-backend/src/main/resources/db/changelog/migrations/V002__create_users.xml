@@ -5,36 +5,36 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="create-users-table" author="oms-dev" context="base">
+    <changeSet id="create-users-table" author="oms-dev">
         <createTable tableName="users">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
-            <column name="nombre" type="VARCHAR(150)">
+            <column name="nombre" type="NVARCHAR(150)">
                 <constraints nullable="false"/>
             </column>
-            <column name="email" type="VARCHAR(255)">
+            <column name="email" type="NVARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="password_hash" type="VARCHAR(255)">
+            <column name="password_hash" type="NVARCHAR(255)">
                 <constraints nullable="false"/>
             </column>
-            <column name="rol" type="VARCHAR(20)" defaultValue="USER">
+            <column name="rol" type="NVARCHAR(20)" defaultValue="USER">
                 <constraints nullable="false"/>
             </column>
-            <column name="activo" type="TINYINT(1)" defaultValueNumeric="1">
+            <column name="activo" type="BIT" defaultValueNumeric="1">
                 <constraints nullable="false"/>
             </column>
-            <column name="created_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="created_at" type="DATETIME2" defaultValueComputed="GETDATE()">
                 <constraints nullable="false"/>
             </column>
-            <column name="updated_at" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP">
+            <column name="updated_at" type="DATETIME2" defaultValueComputed="GETDATE()">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="add-users-unique-constraint" author="oms-dev" context="base">
+    <changeSet id="add-users-unique-constraint" author="oms-dev">
         <addUniqueConstraint tableName="users" columnNames="email" constraintName="uk_users_email"/>
     </changeSet>
 

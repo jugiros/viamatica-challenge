@@ -7,6 +7,8 @@ import com.viamatica.assessment.orders_management_system.domain.port.UserReposit
 import com.viamatica.assessment.orders_management_system.infrastructure.controller.dto.UpdateUserRequest;
 import com.viamatica.assessment.orders_management_system.infrastructure.controller.dto.UserResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -34,6 +36,11 @@ public class UserController {
 
     @GetMapping
     @Operation(summary = "Get all users", description = "Retrieve all users with pagination")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Users retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only")
+    })
     public ResponseEntity<Page<UserResponse>> getAll(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -58,6 +65,12 @@ public class UserController {
 
     @GetMapping("/{id}")
     @Operation(summary = "Get user by ID", description = "Retrieve a specific user by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User retrieved successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     public ResponseEntity<UserResponse> getById(@PathVariable Long id) {
         UserDomain user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
@@ -66,6 +79,13 @@ public class UserController {
 
     @PutMapping("/{id}")
     @Operation(summary = "Update user", description = "Update user information")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "User updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     public ResponseEntity<UserResponse> update(
             @PathVariable Long id,
             @Valid @RequestBody UpdateUserRequest request) {
@@ -83,6 +103,12 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     @Operation(summary = "Delete user", description = "Soft delete a user by ID")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "User deleted successfully"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden - Admin only"),
+            @ApiResponse(responseCode = "404", description = "User not found")
+    })
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         UserDomain user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));

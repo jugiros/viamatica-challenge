@@ -5,37 +5,34 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.24.xsd">
 
-    <changeSet id="create-audit-log-table" author="oms-dev" context="base">
+    <changeSet id="create-audit-log-table" author="oms-dev">
         <preConditions onFail="MARK_RAN">
             <not>
-                <tableExists tableName="audit_log"/>
+                <tableExists tableName="audit_logs"/>
             </not>
         </preConditions>
-        <createTable tableName="audit_log">
+        <createTable tableName="audit_logs">
             <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints primaryKey="true"/>
             </column>
             <column name="user_id" type="BIGINT"/>
-            <column name="operacion" type="VARCHAR(50)">
+            <column name="operacion" type="NVARCHAR(50)">
                 <constraints nullable="false"/>
             </column>
-            <column name="tabla_afectada" type="VARCHAR(100)">
+            <column name="tabla_afectada" type="NVARCHAR(100)">
                 <constraints nullable="false"/>
             </column>
-            <column name="entidad_id" type="BIGINT"/>
-            <column name="datos_anteriores" type="JSON"/>
-            <column name="datos_nuevos" type="JSON"/>
-            <column name="ip_address" type="VARCHAR(45)"/>
-            <column name="user_agent" type="VARCHAR(500)"/>
-            <column name="fecha_evento" type="TIMESTAMP" defaultValueComputed="CURRENT_TIMESTAMP">
+            <column name="datos_anteriores" type="NVARCHAR(MAX)"/>
+            <column name="datos_nuevos" type="NVARCHAR(MAX)"/>
+            <column name="fecha_evento" type="DATETIME2" defaultValueComputed="GETDATE()">
                 <constraints nullable="false"/>
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="add-audit-log-foreign-key" author="oms-dev" context="base">
+    <changeSet id="add-audit-log-foreign-key" author="oms-dev">
         <addForeignKeyConstraint
-                baseTableName="audit_log"
+                baseTableName="audit_logs"
                 baseColumnNames="user_id"
                 referencedTableName="users"
                 referencedColumnNames="id"
@@ -44,17 +41,17 @@
                 onUpdate="CASCADE"/>
     </changeSet>
 
-    <changeSet id="add-audit-log-indexes" author="oms-dev" context="base">
-        <createIndex tableName="audit_log" indexName="idx_audit_user">
+    <changeSet id="add-audit-log-indexes" author="oms-dev">
+        <createIndex tableName="audit_logs" indexName="idx_audit_user">
             <column name="user_id"/>
         </createIndex>
-        <createIndex tableName="audit_log" indexName="idx_audit_tabla">
+        <createIndex tableName="audit_logs" indexName="idx_audit_tabla">
             <column name="tabla_afectada"/>
         </createIndex>
-        <createIndex tableName="audit_log" indexName="idx_audit_fecha">
+        <createIndex tableName="audit_logs" indexName="idx_audit_fecha">
             <column name="fecha_evento"/>
         </createIndex>
-        <createIndex tableName="audit_log" indexName="idx_audit_operacion">
+        <createIndex tableName="audit_logs" indexName="idx_audit_operacion">
             <column name="operacion"/>
         </createIndex>
     </changeSet>

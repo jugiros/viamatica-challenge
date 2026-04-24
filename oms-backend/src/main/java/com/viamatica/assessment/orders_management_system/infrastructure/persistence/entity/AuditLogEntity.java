@@ -10,8 +10,8 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "audit_logs", indexes = {
     @Index(name = "idx_audit_user_id", columnList = "user_id"),
-    @Index(name = "idx_audit_table", columnList = "table_name"),
-    @Index(name = "idx_audit_date", columnList = "created_at")
+    @Index(name = "idx_audit_table", columnList = "tabla_afectada"),
+    @Index(name = "idx_audit_date", columnList = "fecha_evento")
 })
 @Data
 @NoArgsConstructor
@@ -24,28 +24,19 @@ public class AuditLogEntity {
     @Column(name = "user_id")
     private Long userId;
 
-    @Column(name = "table_name", nullable = false, length = 100)
-    private String tableName;
+    @Column(name = "tabla_afectada", nullable = false, length = 100)
+    private String tablaAfectada;
 
-    @Column(name = "operation", nullable = false, length = 50)
-    private String operation;
+    @Column(name = "operacion", nullable = false, length = 50)
+    private String operacion;
 
-    @Column(name = "entity_id")
-    private Long entityId;
+    @Column(name = "datos_anteriores", columnDefinition = "TEXT")
+    private String datosAnteriores;
 
-    @Column(name = "previous_values", columnDefinition = "TEXT")
-    private String previousValues;
+    @Column(name = "datos_nuevos", columnDefinition = "TEXT")
+    private String datosNuevos;
 
-    @Column(name = "new_values", columnDefinition = "TEXT")
-    private String newValues;
-
-    @Column(name = "ip_address", length = 100)
-    private String ipAddress;
-
-    @Column(name = "user_agent", columnDefinition = "TEXT")
-    private String userAgent;
-
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "fecha_evento", nullable = false, updatable = false)
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime fechaEvento;
 }

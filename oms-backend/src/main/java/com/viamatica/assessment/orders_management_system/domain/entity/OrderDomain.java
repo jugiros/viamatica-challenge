@@ -11,14 +11,12 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
 public class OrderDomain {
 
     private Long id;
-    private String orderNumber;
     private Long userId;
     private OrderStatus status;
     private Money total;
@@ -29,7 +27,6 @@ public class OrderDomain {
 
     public static class OrderDomainBuilder {
         private OrderStatus status = new PendingStatus();
-        private String orderNumber = UUID.randomUUID().toString();
         private LocalDateTime createdAt = LocalDateTime.now();
         private List<OrderItemDomain> items = Collections.emptyList();
     }
