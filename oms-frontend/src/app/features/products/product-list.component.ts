@@ -29,7 +29,7 @@ export class ProductListComponent implements OnInit {
     
     this.productService.getProducts().subscribe({
       next: (products) => {
-        this.products.set(products);
+        this.products.set(products || []);
         this.isLoading.set(false);
       },
       error: (error) => {
