@@ -1,0 +1,5 @@
+@import '../../core/styles/theme';
+
+.user-list {
+  @extend .feature-component;
+}

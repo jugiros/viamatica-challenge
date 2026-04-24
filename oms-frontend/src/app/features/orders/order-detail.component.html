@@ -1,0 +1,95 @@
+<div class="order-detail">
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+  
+  @if (isLoading()) {
+    <div class="loading">Cargando orden...</div>
+  } @else if (order()) {
+    <div class="order-header">
+      <button class="btn btn-secondary" (click)="goBack()">Volver</button>
+      <h2>Orden #{{ order()!.id }}</h2>
+    </div>
+    
+    <div class="order-info">
+      <div class="info-section">
+        <h3>Información General</h3>
+        <div class="info-row">
+          <span class="label">Estado:</span>
+          <span class="badge" [style.background-color]="getStatusColor(order()!.status)">{{ order()!.status }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Fecha de Creación:</span>
+          <span>{{ order()!.createdAt | date:'medium' }}</span>
+        </div>
+        <div class="info-row">
+          <span class="label">Total:</span>
+          <span class="total">{{ order()!.total | currency }}</span>
+        </div>
+      </div>
+      
+      <div class="info-section">
+        <h3>Ítems de la Orden</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Producto</th>
+              <th>Cantidad</th>
+              <th>Precio Unitario</th>
+              <th>Subtotal</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (item of order()!.items; track item.productId) {
+              <tr>
+                <td>{{ item.productName }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price | currency }}</td>
+                <td>{{ item.subtotal | currency }}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+      
+      @if (payment()) {
+        <div class="info-section">
+          <h3>Información de Pago</h3>
+          <div class="info-row">
+            <span class="label">ID Pago:</span>
+            <span>{{ payment()!.id }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Método:</span>
+            <span>{{ payment()!.method }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Estado:</span>
+            <span>{{ payment()!.status }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Monto:</span>
+            <span>{{ payment()!.amount | currency }}</span>
+          </div>
+          <div class="info-row">
+            <span class="label">Fecha:</span>
+            <span>{{ payment()!.paymentDate | date:'medium' }}</span>
+          </div>
+        </div>
+      }
+      
+      <div class="actions">
+        @if (order()!.status === 'PENDIENTE') {
+          <button class="btn btn-warning" (click)="confirmOrder()">Confirmar Orden</button>
+          <button class="btn btn-danger" (click)="cancelOrder()">Cancelar Orden</button>
+        }
+        @if (order()!.status === 'CONFIRMADA') {
+          <button class="btn btn-success" (click)="processPayment()">Procesar Pago</button>
+          <button class="btn btn-danger" (click)="cancelOrder()">Cancelar Orden</button>
+        }
+      </div>
+    </div>
+  }
+</div>

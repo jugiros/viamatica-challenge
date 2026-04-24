@@ -1,0 +1,80 @@
+// Theme Variables - Single Responsibility: Define all design tokens in one place
+// Following SOLID principles for maintainability and consistency
+
+// Colors
+$color-primary: #007bff;
+$color-primary-dark: #0069d9;
+$color-secondary: #6c757d;
+$color-secondary-dark: #5a6268;
+$color-success: #28a745;
+$color-success-dark: #218838;
+$color-danger: #dc3545;
+$color-danger-dark: #c82333;
+$color-warning: #ffc107;
+$color-warning-dark: #e0a800;
+$color-info: #17a2b8;
+$color-info-dark: #138496;
+$color-light: #f8f9fa;
+$color-dark: #343a40;
+$color-white: #ffffff;
+$color-gray-100: #f8f9fa;
+$color-gray-200: #e9ecef;
+$color-gray-300: #dee2e6;
+$color-gray-400: #ced4da;
+$color-gray-500: #adb5bd;
+$color-gray-600: #6c757d;
+$color-gray-700: #495057;
+$color-gray-800: #343a40;
+$color-gray-900: #212529;
+
+// Alert Colors
+$alert-success-bg: #d4edda;
+$alert-success-color: #155724;
+$alert-success-border: #c3e6cb;
+$alert-danger-bg: #f8d7da;
+$alert-danger-color: #721c24;
+$alert-danger-border: #f5c6cb;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 10px;
+$spacing-lg: 12px;
+$spacing-xl: 15px;
+$spacing-2xl: 20px;
+$spacing-3xl: 30px;
+$spacing-4xl: 40px;
+
+// Typography
+$font-size-xs: 12px;
+$font-size-sm: 14px;
+$font-size-base: 16px;
+$font-size-lg: 18px;
+$font-size-xl: 24px;
+$font-weight-normal: 400;
+$font-weight-bold: 500;
+$font-weight-bolder: 700;
+
+// Border Radius
+$border-radius-sm: 4px;
+$border-radius-md: 8px;
+$border-radius-lg: 12px;
+
+// Shadows
+$shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+
+// Transitions
+$transition-fast: 0.2s ease;
+$transition-base: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+// Z-index
+$z-index-dropdown: 1000;
+$z-index-sticky: 1020;
+$z-index-fixed: 1030;
+$z-index-modal-backdrop: 1040;
+$z-index-modal: 1050;
+$z-index-popover: 1060;
+$z-index-tooltip: 1070;

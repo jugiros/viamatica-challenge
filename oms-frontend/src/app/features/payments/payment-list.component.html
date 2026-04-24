@@ -1,0 +1,50 @@
+<div class="payment-list">
+  <h2>Pagos</h2>
+  
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+  
+  @if (isLoading()) {
+    <div class="loading">Cargando pagos...</div>
+  } @else {
+    <div class="payment-input">
+      <label for="orderId">ID de Orden:</label>
+      <input type="number" id="orderId" [(ngModel)]="orderId" name="orderId" placeholder="Ingrese ID de orden">
+      <button class="btn btn-primary" (click)="getPaymentByOrderId(orderId()!)">Buscar</button>
+    </div>
+    
+    @if (payments().length > 0) {
+      <table class="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>ID Orden</th>
+            <th>Método</th>
+            <th>Estado</th>
+            <th>Monto</th>
+            <th>Referencia</th>
+            <th>Fecha</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (payment of payments(); track payment.id) {
+            <tr>
+              <td>{{ payment.id }}</td>
+              <td>{{ payment.orderId }}</td>
+              <td>{{ payment.method }}</td>
+              <td>{{ payment.status }}</td>
+              <td>{{ payment.amount | currency }}</td>
+              <td>{{ payment.externalReference || '-' }}</td>
+              <td>{{ payment.paymentDate | date:'medium' }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="no-payments">No hay pagos para mostrar. Busque por ID de orden.</div>
+    }
+  }
+</div>

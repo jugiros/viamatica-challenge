@@ -1,0 +1,52 @@
+@import '../../core/styles/theme';
+
+.audit-list {
+  @extend .feature-component;
+
+  .filters {
+    @extend .card;
+
+    form {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: $spacing-xl;
+    }
+
+    .form-group {
+      label {
+        display: block;
+        margin-bottom: $spacing-sm;
+        font-weight: $font-weight-bold;
+      }
+
+      input {
+        width: 100%;
+        padding: $spacing-md;
+        border: 1px solid $color-gray-400;
+        border-radius: $border-radius-sm;
+        font-size: $font-size-sm;
+      }
+    }
+
+    .form-actions {
+      grid-column: 1 / -1;
+      display: flex;
+      gap: $spacing-md;
+      margin-top: $spacing-md;
+    }
+  }
+
+  .audit-content {
+    @extend .card;
+
+    pre {
+      background-color: $color-dark;
+      color: $color-light;
+      padding: $spacing-lg;
+      border-radius: $border-radius-sm;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+  }
+}

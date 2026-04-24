@@ -1,0 +1,116 @@
+// Mixins - Reusable style compositions following DRY principle
+// Single Responsibility: Provide reusable style patterns
+
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin card {
+  background-color: $color-light;
+  padding: $spacing-3xl;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-sm;
+}
+
+@mixin button-base {
+  padding: 6px 12px;
+  border-radius: $border-radius-sm;
+  border: none;
+  cursor: pointer;
+  font-size: $font-size-sm;
+  transition: background-color $transition-fast;
+}
+
+@mixin button-variant($bg-color, $text-color: white, $hover-color: null) {
+  background-color: $bg-color;
+  color: $text-color;
+
+  &:hover:not(:disabled) {
+    @if $hover-color {
+      background-color: $hover-color;
+    } @else {
+      filter: brightness(0.9);
+    }
+  }
+
+  &:disabled {
+    background-color: $color-secondary;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+@mixin input-base {
+  width: 100%;
+  padding: $spacing-lg;
+  border: 1px solid $color-gray-400;
+  border-radius: $border-radius-sm;
+  font-size: $font-size-sm;
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+    box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+  }
+
+  &:disabled {
+    background-color: $color-gray-200;
+    cursor: not-allowed;
+  }
+}
+
+@mixin table-base {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+    background-color: $color-light;
+
+    th {
+      padding: $spacing-lg;
+      text-align: left;
+      border-bottom: 2px solid $color-gray-300;
+    }
+  }
+
+  tbody {
+    tr {
+      &:hover {
+        background-color: $color-gray-100;
+      }
+
+      td {
+        padding: $spacing-lg;
+        border-bottom: 1px solid $color-gray-300;
+      }
+    }
+  }
+}
+
+@mixin alert-base {
+  padding: $spacing-md;
+  margin-bottom: $spacing-2xl;
+  border-radius: $border-radius-sm;
+}
+
+@mixin badge-base {
+  display: inline-block;
+  padding: $spacing-sm $spacing-md;
+  border-radius: $border-radius-sm;
+  color: white;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bolder;
+}

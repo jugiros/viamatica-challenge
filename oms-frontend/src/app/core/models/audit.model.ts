@@ -1,10 +1,9 @@
 export interface AuditLogModel {
   id: number;
   userId: number;
-  userName: string;
-  action: string;
-  entity: string;
-  entityId: number;
-  timestamp: string;
-  details?: string;
+  tablaAfectada: string;
+  operacion: string;
+  datosAnteriores: string;
+  datosNuevos: string;
+  fechaEvento: string;
 }

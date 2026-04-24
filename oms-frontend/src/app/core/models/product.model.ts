@@ -4,6 +4,7 @@ export interface ProductModel {
   description: string;
   price: number;
   stock: number;
+  categoryId: number;
   active: boolean;
   createdAt: string;
   updatedAt: string;
@@ -14,6 +15,7 @@ export interface CreateProductRequest {
   description: string;
   price: number;
   stock: number;
+  categoryId: number;
 }
 
 export interface UpdateProductRequest {
@@ -21,5 +23,6 @@ export interface UpdateProductRequest {
   description?: string;
   price?: number;
   stock?: number;
+  categoryId?: number;
   active?: boolean;
 }

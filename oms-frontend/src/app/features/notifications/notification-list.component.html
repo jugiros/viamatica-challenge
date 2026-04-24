@@ -1,0 +1,47 @@
+<div class="notification-list">
+  <div class="header">
+    <h2>Notificaciones</h2>
+    <button class="btn btn-sm" (click)="markAllAsRead()">Marcar todas como leídas</button>
+  </div>
+  
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+  
+  @if (isLoading()) {
+    <div class="loading">Cargando notificaciones...</div>
+  } @else {
+    @if (notifications().length === 0) {
+      <div class="no-notifications">No hay notificaciones</div>
+    } @else {
+      <div class="notifications-container">
+        @for (notification of notifications(); track notification.id) {
+          <div class="notification-item" [class.read]="notification.read" [style.border-left-color]="getTypeColor(notification.type)">
+            <div class="notification-icon">
+              {{ getNotificationIcon(notification.type) }}
+            </div>
+            <div class="notification-content">
+              <div class="notification-message">{{ notification.message }}</div>
+              <div class="notification-meta">
+                <span class="notification-type">{{ notification.type }}</span>
+                <span class="notification-date">{{ notification.sentDate | date:'medium' }}</span>
+              </div>
+            </div>
+            <div class="notification-actions">
+              @if (!notification.read) {
+                <button class="btn btn-icon" (click)="markAsRead(notification.id)" title="Marcar como leída">
+                  ✓
+                </button>
+              }
+              <button class="btn btn-icon btn-danger" (click)="deleteNotification(notification.id)" title="Eliminar">
+                ×
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  }
+</div>

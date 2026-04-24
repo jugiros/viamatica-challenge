@@ -1,0 +1,64 @@
+// Tables Component Styles - Interface Segregation: Specific table styles
+// Single Responsibility: Define all table variants
+
+.table {
+  @include table-base;
+
+  // Dark header variant
+  &.table-dark-header {
+    thead {
+      background-color: $color-dark;
+
+      th {
+        color: white;
+      }
+    }
+  }
+
+  // Striped rows
+  &.table-striped {
+    tbody {
+      tr:nth-child(even) {
+        background-color: $color-gray-100;
+      }
+    }
+  }
+
+  // Bordered
+  &.table-bordered {
+    th,
+    td {
+      border: 1px solid $color-gray-300;
+    }
+  }
+
+  // Hover effect
+  &.table-hover {
+    tbody {
+      tr:hover {
+        background-color: $color-gray-200;
+      }
+    }
+  }
+
+  // Compact
+  &.table-sm {
+    thead th,
+    tbody td {
+      padding: $spacing-sm $spacing-md;
+    }
+  }
+
+  // Text alignment utilities
+  .text-center {
+    text-align: center;
+  }
+
+  .text-right {
+    text-align: right;
+  }
+
+  .text-left {
+    text-align: left;
+  }
+}

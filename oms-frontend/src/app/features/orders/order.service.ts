@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BaseHttpService } from '../../core/services/base-http.service';
 import { OrderModel, CreateOrderRequest, UpdateOrderRequest } from '../../core/models';
@@ -8,7 +8,7 @@ import { OrderModel, CreateOrderRequest, UpdateOrderRequest } from '../../core/m
 })
 export class OrderService extends BaseHttpService {
   getMyOrders(): Observable<OrderModel[]> {
-    return this.get<OrderModel[]>('/orders/my-orders');
+    return this.get<OrderModel[]>('/orders');
   }
 
   getOrderById(id: number): Observable<OrderModel> {
@@ -23,7 +23,15 @@ export class OrderService extends BaseHttpService {
     return this.put<OrderModel>(`/orders/${id}`, request);
   }
 
-  cancelOrder(id: number): Observable<OrderModel> {
-    return this.put<OrderModel>(`/orders/${id}`, { status: 'CANCELADA' });
+  cancelOrder(id: number, reason: string): Observable<OrderModel> {
+    return this.put<OrderModel>(`/orders/${id}/cancel`, { reason });
+  }
+
+  confirmOrder(id: number): Observable<OrderModel> {
+    return this.put<OrderModel>(`/orders/${id}/confirm`, {});
+  }
+
+  getReports(): Observable<string> {
+    return this.get<string>('/orders/reports');
   }
 }

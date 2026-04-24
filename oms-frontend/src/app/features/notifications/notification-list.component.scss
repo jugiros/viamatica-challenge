@@ -1,0 +1,66 @@
+@import '../../core/styles/theme';
+
+.notification-list {
+  @extend .feature-component;
+
+  .header {
+    @extend .header;
+  }
+
+  .notifications-container {
+    display: flex;
+    flex-direction: column;
+    gap: $spacing-xl;
+  }
+
+  .notification-item {
+    display: flex;
+    align-items: flex-start;
+    gap: $spacing-xl;
+    padding: $spacing-lg;
+    background-color: $color-light;
+    border-radius: $border-radius-md;
+    border-left: 4px solid $color-primary;
+    transition: all $transition-base;
+
+    &:hover {
+      background-color: $color-gray-200;
+    }
+
+    &.read {
+      opacity: 0.6;
+      background-color: $color-gray-200;
+    }
+
+    .notification-icon {
+      font-size: $font-size-xl;
+      flex-shrink: 0;
+    }
+
+    .notification-content {
+      flex: 1;
+
+      .notification-message {
+        font-weight: $font-weight-bold;
+        margin-bottom: $spacing-sm;
+        color: $color-gray-800;
+      }
+
+      .notification-meta {
+        display: flex;
+        gap: $spacing-md;
+        font-size: $font-size-xs;
+        color: $color-gray-600;
+
+        .notification-type {
+          font-weight: $font-weight-bolder;
+        }
+      }
+    }
+
+    .notification-actions {
+      display: flex;
+      gap: $spacing-sm;
+    }
+  }
+}

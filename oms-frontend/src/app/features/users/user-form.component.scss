@@ -1,0 +1,16 @@
+@import '../../core/styles/theme';
+
+.user-form {
+  @extend .feature-component;
+  max-width: 600px;
+  margin: 0 auto;
+
+  h2 {
+    margin-bottom: $spacing-2xl;
+    text-align: center;
+  }
+
+  form {
+    @extend .card;
+  }
+}

@@ -1,0 +1,36 @@
+<div class="category-form">
+  <h2>Crear Categoría</h2>
+  
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+  
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+  
+  @if (isLoading()) {
+    <div class="loading">Guardando categoría...</div>
+  } @else {
+    <form (ngSubmit)="saveCategory()">
+      <div class="form-group">
+        <label for="name">Nombre:</label>
+        <input type="text" id="name" [(ngModel)]="categoryRequest().name" name="name" placeholder="Nombre de la categoría" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Descripción:</label>
+        <textarea id="description" [(ngModel)]="categoryRequest().description" name="description" rows="4" placeholder="Descripción de la categoría"></textarea>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary" [disabled]="isLoading()">Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  }
+</div>

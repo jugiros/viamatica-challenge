@@ -1,0 +1,42 @@
+<div class="category-list">
+  <h2>Categorías</h2>
+  
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+  
+  @if (isLoading()) {
+    <div class="loading">Cargando categorías...</div>
+  } @else {
+    <table class="table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Fecha de Creación</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (category of categories(); track category.id) {
+          <tr>
+            <td>{{ category.id }}</td>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description }}</td>
+            <td>{{ category.createdAt | date:'medium' }}</td>
+            <td>
+              <button class="btn btn-danger btn-sm" (click)="deleteCategory(category.id)">Eliminar</button>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="5" class="text-center">No hay categorías registradas</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

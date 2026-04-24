@@ -1,0 +1,54 @@
+// Alerts Component Styles - Interface Segregation: Specific alert styles
+// Single Responsibility: Define all alert variants
+
+.alert {
+  @include alert-base;
+
+  // Success Alert
+  &.alert-success {
+    background-color: $alert-success-bg;
+    color: $alert-success-color;
+    border: 1px solid $alert-success-border;
+  }
+
+  // Danger Alert
+  &.alert-danger {
+    background-color: $alert-danger-bg;
+    color: $alert-danger-color;
+    border: 1px solid $alert-danger-border;
+  }
+
+  // Warning Alert
+  &.alert-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeaa7;
+  }
+
+  // Info Alert
+  &.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+  }
+
+  // Dismissible Alert
+  &.alert-dismissible {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .close {
+      background: none;
+      border: none;
+      font-size: $font-size-lg;
+      cursor: pointer;
+      color: inherit;
+      opacity: 0.7;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}
