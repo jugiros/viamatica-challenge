@@ -1,11 +1,11 @@
 # OMS Frontend
 
-Frontend del sistema de gestión de órdenes (OMS) construido con Angular 21, Tailwind CSS 4 y las últimas APIs de Angular.
+Frontend del sistema de gestión de órdenes (OMS) construido con Angular 21, Tailwind CSS 3 y las últimas APIs de Angular.
 
 ## Tecnologías
 
 - **Angular 21.2.7** - Framework principal
-- **Tailwind CSS 4.x** - Framework de estilos
+- **Tailwind CSS 3.x** - Framework de estilos
 - **Angular Signals** - Gestión de estado reactivo
 - **ChangeDetectionStrategy.OnPush** - Estrategia de detección de cambios global
 - **Standalone Components** - Componentes independientes sin NgModule
