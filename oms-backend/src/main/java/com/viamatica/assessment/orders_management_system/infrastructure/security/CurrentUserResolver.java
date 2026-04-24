@@ -1,6 +1,7 @@
 package com.viamatica.assessment.orders_management_system.infrastructure.security;
 
 import org.springframework.core.MethodParameter;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -25,10 +26,18 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
             NativeWebRequest webRequest,
             WebDataBinderFactory binderFactory
     ) {
-        UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (userDetails instanceof UserDetailsServiceImpl.CustomUserDetails customUserDetails) {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new AccessDeniedException("User is not authenticated");
+        }
+        
+        Object principal = authentication.getPrincipal();
+        
+        if (principal instanceof UserDetailsServiceImpl.CustomUserDetails customUserDetails) {
             return customUserDetails.id();
         }
-        return null;
+        
+        throw new AccessDeniedException("Unable to extract user ID from authentication context");
     }
 }

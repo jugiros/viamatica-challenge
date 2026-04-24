@@ -132,11 +132,11 @@ public class OrderRepositoryImpl implements OrderRepository {
             return null;
         }
         return switch (status.name()) {
-            case "PENDING" -> OrderStatusEntity.PENDIENTE;
-            case "CONFIRMED" -> OrderStatusEntity.CONFIRMADA;
-            case "PAID" -> OrderStatusEntity.PAGADA;
-            case "SHIPPED" -> OrderStatusEntity.ENVIADA;
-            case "CANCELLED" -> OrderStatusEntity.CANCELADA;
+            case "PENDIENTE" -> OrderStatusEntity.PENDIENTE;
+            case "CONFIRMADA" -> OrderStatusEntity.CONFIRMADA;
+            case "PAGADA" -> OrderStatusEntity.PAGADA;
+            case "ENVIADA" -> OrderStatusEntity.ENVIADA;
+            case "CANCELADA" -> OrderStatusEntity.CANCELADA;
             default -> throw new IllegalArgumentException("Unknown status: " + status.name());
         };
     }
