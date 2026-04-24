@@ -1,32 +1,83 @@
 <div class="container mx-auto px-4 py-8">
-  <h1 class="text-3xl font-bold mb-6">Productos</h1>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold">Productos</h1>
+    <button 
+      routerLink="/products/new"
+      class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+    >
+      + Nuevo Producto
+    </button>
+  </div>
   
   @if (isLoading()) {
-    <div class="flex justify-center items-center h-64">
-      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    <div class="loading-skeleton">
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
     </div>
   }
   
   @if (errorMessage()) {
-    <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+    <div class="alert alert-danger">
       {{ errorMessage() }}
     </div>
   }
   
-  @if (products().length === 0 && !isLoading()) {
-    <div class="text-center py-8 text-gray-500">
-      No hay productos disponibles
+  @if (items().length === 0 && !isLoading()) {
+    <div class="empty-state">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+      </svg>
+      <h3 class="text-lg font-semibold mb-2">No hay productos disponibles</h3>
+      <p class="text-gray-500 mb-4">Comienza creando tu primer producto</p>
+      <button 
+        routerLink="/products/new"
+        class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        + Nuevo Producto
+      </button>
     </div>
   }
   
-  @for (product of products(); track product.id) {
-    <div class="bg-white shadow-md rounded-lg p-6 mb-4 hover:shadow-lg transition-shadow">
-      <h2 class="text-xl font-semibold mb-2">{{ product.name }}</h2>
-      <p class="text-gray-600 mb-4">{{ product.description }}</p>
-      <div class="flex justify-between items-center">
-        <span class="text-2xl font-bold text-blue-600">{{ product.price | currencyLocale }}</span>
-        <span class="text-sm text-gray-500">Stock: {{ product.stock }}</span>
-      </div>
-    </div>
+  @if (items().length > 0) {
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Descripción</th>
+          <th>Precio</th>
+          <th>Stock</th>
+          <th>Categoría</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (product of items(); track product.id) {
+          <tr>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.price | currencyLocale }}</td>
+            <td>{{ product.stock }}</td>
+            <td>{{ product.categoryId }}</td>
+            <td class="text-center">
+              <button 
+                routerLink="/products/{{ product.id }}/edit"
+                class="btn btn-sm btn-primary"
+              >
+                Editar
+              </button>
+              <button 
+                (click)="deleteProduct(product)"
+                class="btn btn-sm btn-danger"
+              >
+                Eliminar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
   }
 </div>
+
+<app-confirm-dialog />

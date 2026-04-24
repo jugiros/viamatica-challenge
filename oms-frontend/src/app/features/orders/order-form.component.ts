@@ -1,9 +1,11 @@
 import { Component, inject, signal, computed, effect, ChangeDetectionStrategy } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { OrderService } from './order.service';
 import { ProductService } from '../products/product.service';
 import { ProductModel, CreateOrderRequest } from '../../core/models';
 import { CurrencyLocalePipe } from '../../shared/pipes/currency-locale.pipe';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-order-form',
@@ -16,6 +18,8 @@ import { CurrencyLocalePipe } from '../../shared/pipes/currency-locale.pipe';
 export class OrderFormComponent {
   private readonly orderService = inject(OrderService);
   private readonly productService = inject(ProductService);
+  private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
   
   availableProducts = signal<ProductModel[]>([]);
   orderItems = signal<{ productId: number; quantity: number }[]>([]);
@@ -34,19 +38,23 @@ export class OrderFormComponent {
   constructor() {
     this.loadProducts();
     
-    // Effect para logging/side effects
+    // Effect for logging/side effects
     effect(() => {
-      console.log('Order items changed:', this.orderItems());
-      console.log('Total:', this.total());
+      // Order items and total changed
     });
   }
   
   private loadProducts() {
     this.productService.getProducts().subscribe({
       next: (products) => {
-        this.availableProducts.set(products.filter(p => p.active && p.stock > 0));
+        if (Array.isArray(products)) {
+          this.availableProducts.set(products.filter(p => p.active && p.stock > 0));
+        } else {
+          this.availableProducts.set([]);
+        }
       },
       error: (error) => {
+        this.toastService.showError('Error al cargar productos');
         this.errorMessage.set('Error al cargar productos');
       }
     });
@@ -105,6 +113,7 @@ export class OrderFormComponent {
   
   submitOrder() {
     if (this.orderItems().length === 0) {
+      this.toastService.showError('La orden no tiene productos');
       this.errorMessage.set('La orden no tiene productos');
       return;
     }
@@ -119,11 +128,13 @@ export class OrderFormComponent {
     
     this.orderService.createOrder(request).subscribe({
       next: (order) => {
-        this.successMessage.set('Orden creada exitosamente');
+        this.toastService.showSuccess('Orden creada exitosamente');
         this.orderItems.set([]);
         this.isLoading.set(false);
+        this.router.navigate(['/orders']);
       },
       error: (error) => {
+        this.toastService.showError('Error al crear orden');
         this.errorMessage.set('Error al crear orden');
         this.isLoading.set(false);
       }

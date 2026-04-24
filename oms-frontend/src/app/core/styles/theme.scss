@@ -1,9 +1,3 @@
-// Main Theme File - Following SOLID Principles
-// Single Responsibility: Central point for importing all theme modules
-// Open/Closed: Open for extension by adding new modules, closed for modification
-// Interface Segregation: Each module has a specific, focused responsibility
-// Dependency Inversion: Components depend on this abstraction (theme) rather than concrete implementations
-
 @import 'variables';
 @import 'mixins';
 @import 'typography';
@@ -14,7 +8,6 @@
 @import 'alerts';
 @import 'utilities';
 
-// Base component wrapper class for all feature components
 .feature-component {
   padding: $spacing-2xl;
 }

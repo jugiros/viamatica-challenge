@@ -1,6 +1,3 @@
-// Typography Component Styles - Interface Segregation: Specific typography styles
-// Single Responsibility: Define all typography utilities
-
 h1, h2, h3, h4, h5, h6 {
   margin: 0 0 $spacing-2xl 0;
   font-weight: $font-weight-bolder;

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { BaseHttpService } from '../../core/services/base-http.service';
 import { OrderModel, CreateOrderRequest, UpdateOrderRequest } from '../../core/models';
 
@@ -8,7 +8,17 @@ import { OrderModel, CreateOrderRequest, UpdateOrderRequest } from '../../core/m
 })
 export class OrderService extends BaseHttpService {
   getMyOrders(): Observable<OrderModel[]> {
-    return this.get<OrderModel[]>('/orders');
+    return this.get<any>('/orders?page=0&size=100').pipe(
+      map(response => {
+        if (response && response.content && Array.isArray(response.content)) {
+          return response.content;
+        }
+        if (Array.isArray(response)) {
+          return response;
+        }
+        return [];
+      })
+    );
   }
 
   getOrderById(id: number): Observable<OrderModel> {

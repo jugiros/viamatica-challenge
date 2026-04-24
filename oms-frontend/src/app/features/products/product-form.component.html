@@ -1,0 +1,58 @@
+<div class="product-form">
+  <h2>@if (productId()) { Editar Producto } @else { Nuevo Producto }</h2>
+  
+  @if (successMessage()) {
+    <div class="alert alert-success">
+      {{ successMessage() }}
+    </div>
+  }
+  
+  @if (errorMessage()) {
+    <div class="alert alert-danger">
+      {{ errorMessage() }}
+    </div>
+  }
+  
+  @if (isLoading()) {
+    <div class="loading">Guardando producto...</div>
+  } @else {
+    <form (ngSubmit)="saveProduct()">
+      <div class="form-group">
+        <label for="name">Nombre:*</label>
+        <input type="text" id="name" [(ngModel)]="productRequest().name" name="name" placeholder="Nombre del producto" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="description">Descripción:</label>
+        <textarea id="description" [(ngModel)]="productRequest().description" name="description" rows="4" placeholder="Descripción del producto"></textarea>
+      </div>
+      
+      <div class="form-group">
+        <label for="price">Precio:*</label>
+        <input type="number" id="price" [(ngModel)]="productRequest().price" name="price" step="0.01" min="0" placeholder="0.00" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="stock">Stock:*</label>
+        <input type="number" id="stock" [(ngModel)]="productRequest().stock" name="stock" min="0" placeholder="0" required>
+      </div>
+      
+      <div class="form-group">
+        <label for="categoryId">Categoría:*</label>
+        <select id="categoryId" [(ngModel)]="productRequest().categoryId" name="categoryId" required>
+          <option value="">Seleccione una categoría</option>
+          @for (category of categories(); track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+      
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary btn-block" [disabled]="isLoading()">
+          @if (productId()) { Actualizar } @else { Crear }
+        </button>
+        <button type="button" class="btn btn-secondary btn-block" (click)="cancel()">Cancelar</button>
+      </div>
+    </form>
+  }
+</div>

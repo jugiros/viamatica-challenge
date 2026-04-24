@@ -1,53 +1,60 @@
-import { Component, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { UserService } from './user.service';
 import { UserModel } from '../../core/models';
+import { BaseListComponent } from '../../shared/base/base-list.component';
+import { Observable, Subject } from 'rxjs';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, ConfirmDialogComponent],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.scss'
 })
-export class UserListComponent implements OnInit {
+export class UserListComponent extends BaseListComponent<UserModel> implements OnInit {
   private readonly userService = inject(UserService);
   
-  users = signal<UserModel[]>([]);
-  isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
-  
+  @ViewChild(ConfirmDialogComponent) confirmDialog!: ConfirmDialogComponent;
+  private itemToDelete = signal<UserModel | null>(null);
+  private confirmSubject = new Subject<boolean>();
+
   ngOnInit() {
-    this.loadUsers();
-  }
-  
-  private loadUsers() {
-    this.isLoading.set(true);
-    this.errorMessage.set(null);
-    
-    this.userService.getUsers().subscribe({
-      next: (users) => {
-        this.users.set(users || []);
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        this.errorMessage.set('Error al cargar usuarios. Por favor, intenta nuevamente.');
-        this.isLoading.set(false);
-      }
-    });
+    this.loadData();
   }
 
-  deleteUser(id: number) {
-    if (confirm('¿Estás seguro de eliminar este usuario?')) {
-      this.userService.deleteUser(id).subscribe({
-        next: () => {
-          this.loadUsers();
-        },
-        error: (error) => {
-          this.errorMessage.set('Error al eliminar el usuario.');
-        }
-      });
-    }
+  loadItems(): Observable<UserModel[]> {
+    return this.userService.getUsers();
+  }
+
+  deleteItem(id: number): Observable<void> {
+    return this.userService.deleteUser(id);
+  }
+
+  getItemName(): string {
+    return 'usuario';
+  }
+
+  getItemNamePlural(): string {
+    return 'usuarios';
+  }
+
+  confirmDelete(item: UserModel): Observable<boolean> {
+    this.itemToDelete.set(item);
+    this.confirmDialog.open({
+      title: 'Confirmar Eliminación',
+      message: `¿Estás seguro de eliminar ${this.getItemName()}?`,
+      confirmText: 'Eliminar',
+      onConfirm: () => this.confirmSubject.next(true),
+      onCancel: () => this.confirmSubject.next(false)
+    });
+    return this.confirmSubject.asObservable();
+  }
+
+  deleteUser(item: UserModel) {
+    this.deleteItemWithConfirmation(item);
   }
 }

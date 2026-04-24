@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CategoryService } from './category.service';
 import { CategoryModel, CreateCategoryRequest } from '../../core/models';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-category-form',
@@ -16,6 +17,7 @@ import { CategoryModel, CreateCategoryRequest } from '../../core/models';
 export class CategoryFormComponent implements OnInit {
   private readonly categoryService = inject(CategoryService);
   private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
   
   category = signal<CategoryModel | null>(null);
   isLoading = signal(false);
@@ -43,15 +45,14 @@ export class CategoryFormComponent implements OnInit {
     
     this.categoryService.createCategory(this.categoryRequest()).subscribe({
       next: (category) => {
+        this.toastService.showSuccess('Categoría creada exitosamente.');
         this.category.set(category);
         this.successMessage.set('Categoría creada exitosamente.');
         this.isLoading.set(false);
-        
-        setTimeout(() => {
-          this.router.navigate(['/categories']);
-        }, 2000);
+        this.router.navigate(['/categories']);
       },
       error: (error) => {
+        this.toastService.showError('Error al crear la categoría. Por favor, intenta nuevamente.');
         this.errorMessage.set('Error al crear la categoría. Por favor, intenta nuevamente.');
         this.isLoading.set(false);
       }

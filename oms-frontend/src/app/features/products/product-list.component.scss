@@ -1,1 +1,13 @@
-/* ProductListComponent styles - All styles are in Tailwind CSS */
+@import '../../core/styles/theme';
+
+.product-list {
+  @extend .feature-component;
+}
+
+.loading-skeleton {
+  @include loading-skeleton(60px);
+}
+
+.empty-state {
+  @include empty-state-enhanced;
+}

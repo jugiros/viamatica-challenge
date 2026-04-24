@@ -1,10 +1,6 @@
-// Tables Component Styles - Interface Segregation: Specific table styles
-// Single Responsibility: Define all table variants
-
 .table {
   @include table-base;
 
-  // Dark header variant
   &.table-dark-header {
     thead {
       background-color: $color-dark;
@@ -15,7 +11,6 @@
     }
   }
 
-  // Striped rows
   &.table-striped {
     tbody {
       tr:nth-child(even) {
@@ -24,7 +19,6 @@
     }
   }
 
-  // Bordered
   &.table-bordered {
     th,
     td {
@@ -32,7 +26,6 @@
     }
   }
 
-  // Hover effect
   &.table-hover {
     tbody {
       tr:hover {
@@ -41,7 +34,6 @@
     }
   }
 
-  // Compact
   &.table-sm {
     thead th,
     tbody td {
@@ -49,7 +41,6 @@
     }
   }
 
-  // Text alignment utilities
   .text-center {
     text-align: center;
   }

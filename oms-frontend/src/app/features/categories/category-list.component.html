@@ -1,5 +1,13 @@
 <div class="category-list">
-  <h2>Categorías</h2>
+  <div class="header">
+    <h2>Categorías</h2>
+    <button 
+      routerLink="/categories/new"
+      class="btn btn-primary"
+    >
+      + Nueva Categoría
+    </button>
+  </div>
   
   @if (errorMessage()) {
     <div class="alert alert-danger">
@@ -8,35 +16,64 @@
   }
   
   @if (isLoading()) {
-    <div class="loading">Cargando categorías...</div>
+    <div class="loading-skeleton">
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+    </div>
   } @else {
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Descripción</th>
-          <th>Fecha de Creación</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (category of categories(); track category.id) {
+  @if (items().length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
+        </svg>
+        <h3>No hay categorías registradas</h3>
+        <p>Comienza creando tu primera categoría</p>
+        <button 
+          routerLink="/categories/new"
+          class="btn btn-primary"
+        >
+          + Nueva Categoría
+        </button>
+      </div>
+    } @else {
+      <table class="table">
+        <thead>
           <tr>
-            <td>{{ category.id }}</td>
-            <td>{{ category.name }}</td>
-            <td>{{ category.description }}</td>
-            <td>{{ category.createdAt | date:'medium' }}</td>
-            <td>
-              <button class="btn btn-danger btn-sm" (click)="deleteCategory(category.id)">Eliminar</button>
-            </td>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Descripción</th>
+            <th>Fecha de Creación</th>
+            <th class="text-center">Acciones</th>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="5" class="text-center">No hay categorías registradas</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (category of items(); track category.id) {
+            <tr>
+              <td>{{ category.id }}</td>
+              <td>{{ category.name }}</td>
+              <td>{{ category.description }}</td>
+              <td>{{ category.createdAt | date:'medium' }}</td>
+              <td class="text-center">
+                <button 
+                  routerLink="/categories/{{ category.id }}/edit"
+                  class="btn btn-sm btn-primary"
+                >
+                  Editar
+                </button>
+                <button 
+                  class="btn btn-sm btn-danger"
+                  (click)="deleteCategory(category)"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   }
 </div>
+
+<app-confirm-dialog />

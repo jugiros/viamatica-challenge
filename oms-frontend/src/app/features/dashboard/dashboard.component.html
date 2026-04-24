@@ -4,73 +4,83 @@
     <span class="text-sm text-gray-600">Bienvenido al Sistema de Gestión de Órdenes</span>
   </div>
 
-  <!-- Stats Cards -->
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    @for (stat of stats(); track stat.label) {
-      <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-gray-600 text-sm">{{ stat.label }}</p>
-            <p class="text-2xl font-bold text-gray-800 mt-2">{{ stat.value }}</p>
-          </div>
-          <div class="{{ stat.color }} text-white rounded-full p-3 text-2xl">
-            {{ stat.icon }}
-          </div>
-        </div>
-      </div>
-    }
-  </div>
-
-  <!-- Quick Actions -->
-  <div class="bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Acciones Rápidas</h2>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <a 
-        routerLink="/products"
-        class="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
-      >
-        <span class="text-2xl">📦</span>
-        <span class="font-medium text-gray-800">Ver Productos</span>
-      </a>
-      <a 
-        routerLink="/orders/new"
-        class="flex items-center space-x-3 p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
-      >
-        <span class="text-2xl">🛒</span>
-        <span class="font-medium text-gray-800">Crear Nueva Orden</span>
-      </a>
-      <a 
-        routerLink="/profile"
-        class="flex items-center space-x-3 p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
-      >
-        <span class="text-2xl">👤</span>
-        <span class="font-medium text-gray-800">Mi Perfil</span>
-      </a>
+  @if (isLoading()) {
+    <div class="bg-white rounded-lg shadow-md p-6 text-center">
+      <p class="text-gray-600">Cargando datos del dashboard...</p>
     </div>
-  </div>
-
-  <!-- Recent Activities -->
-  <div class="bg-white rounded-lg shadow-md p-6">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Actividad Reciente</h2>
-    <div class="space-y-3">
-      @for (activity of recentActivities(); track activity.action) {
-        <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-          <span class="text-xl">{{ activity.icon }}</span>
-          <div class="flex-1">
-            <p class="text-gray-800 font-medium">{{ activity.action }}</p>
-            <p class="text-gray-500 text-sm">{{ activity.time }}</p>
+  } @else if (errorMessage()) {
+    <div class="bg-red-50 border border-red-200 rounded-lg shadow-md p-6">
+      <p class="text-red-800 font-medium">{{ errorMessage() }}</p>
+    </div>
+  } @else {
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      @for (stat of stats(); track stat.label) {
+        <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-600 text-sm">{{ stat.label }}</p>
+              <p class="text-2xl font-bold text-gray-800 mt-2">{{ stat.value }}</p>
+            </div>
+            <div class="{{ stat.color }} text-white rounded-full p-3 text-2xl">
+              {{ stat.icon }}
+            </div>
           </div>
         </div>
       }
     </div>
-  </div>
 
-  <!-- Welcome Message -->
-  <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-md p-6 text-white">
-    <h2 class="text-2xl font-bold mb-2">🎉 Bienvenido al OMS</h2>
-    <p class="opacity-90">
-      Este es el Sistema de Gestión de Órdenes. Comienza registrando productos o creando una nueva orden.
-      El sistema está listo para ayudarte a gestionar tus operaciones de manera eficiente.
-    </p>
-  </div>
+    <!-- Quick Actions -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Acciones Rápidas</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a 
+          routerLink="/products"
+          class="flex items-center space-x-3 p-4 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors"
+        >
+          <span class="text-2xl">📦</span>
+          <span class="font-medium text-gray-800">Ver Productos</span>
+        </a>
+        <a 
+          routerLink="/orders/new"
+          class="flex items-center space-x-3 p-4 bg-green-50 rounded-lg hover:bg-green-100 transition-colors"
+        >
+          <span class="text-2xl">🛒</span>
+          <span class="font-medium text-gray-800">Crear Nueva Orden</span>
+        </a>
+        <a 
+          routerLink="/profile"
+          class="flex items-center space-x-3 p-4 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors"
+        >
+          <span class="text-2xl">👤</span>
+          <span class="font-medium text-gray-800">Mi Perfil</span>
+        </a>
+      </div>
+    </div>
+
+    <!-- Recent Activities -->
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-4">Actividad Reciente</h2>
+      <div class="space-y-3">
+        @for (activity of recentActivities(); track activity.action) {
+          <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
+            <span class="text-xl">{{ activity.icon }}</span>
+            <div class="flex-1">
+              <p class="text-gray-800 font-medium">{{ activity.action }}</p>
+              <p class="text-gray-500 text-sm">{{ activity.time }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <!-- Welcome Message -->
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-md p-6 text-white">
+      <h2 class="text-2xl font-bold mb-2">🎉 Bienvenido al OMS</h2>
+      <p class="opacity-90">
+        Este es el Sistema de Gestión de Órdenes. Comienza registrando productos o creando una nueva orden.
+        El sistema está listo para ayudarte a gestionar tus operaciones de manera eficiente.
+      </p>
+    </div>
+  }
 </div>

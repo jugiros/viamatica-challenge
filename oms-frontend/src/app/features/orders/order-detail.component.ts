@@ -4,13 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { OrderService } from './order.service';
 import { PaymentService } from '../payments/payment.service';
 import { OrderModel, PaymentModel } from '../../core/models';
-import { CurrencyLocalePipe } from '../../shared/pipes/currency-locale.pipe';
 
 @Component({
   selector: 'app-order-detail',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CurrencyLocalePipe],
+  imports: [CommonModule],
   templateUrl: './order-detail.component.html',
   styleUrl: './order-detail.component.scss'
 })
@@ -55,8 +54,15 @@ export class OrderDetailComponent implements OnInit {
         this.payment.set(payment);
       },
       error: (error) => {
-        // Payment might not exist yet
-        this.payment.set(null);
+        // Payment might not exist yet - this is expected for new orders
+        // 404 is expected for orders without payment, handle silently
+        if (error.status === 404) {
+          this.payment.set(null);
+        } else {
+          // Log other errors but don't show them to user
+          console.error('Error loading payment:', error);
+          this.payment.set(null);
+        }
       }
     });
   }

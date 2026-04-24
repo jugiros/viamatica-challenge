@@ -1,6 +1,3 @@
-// Forms Component Styles - Interface Segregation: Specific form styles
-// Single Responsibility: Define all form element styles
-
 .form-group {
   margin-bottom: $spacing-2xl;
 
@@ -87,7 +84,6 @@
   }
 }
 
-// Input validation states
 input:invalid,
 select:invalid,
 textarea:invalid {

@@ -1,5 +1,13 @@
 <div class="payment-list">
-  <h2>Pagos</h2>
+  <div class="header">
+    <h2>Pagos</h2>
+    <button 
+      routerLink="/payments/new"
+      class="btn btn-primary"
+    >
+      + Nuevo Pago
+    </button>
+  </div>
   
   @if (errorMessage()) {
     <div class="alert alert-danger">
@@ -8,7 +16,11 @@
   }
   
   @if (isLoading()) {
-    <div class="loading">Cargando pagos...</div>
+    <div class="loading-skeleton">
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+    </div>
   } @else {
     <div class="payment-input">
       <label for="orderId">ID de Orden:</label>
@@ -16,7 +28,15 @@
       <button class="btn btn-primary" (click)="getPaymentByOrderId(orderId()!)">Buscar</button>
     </div>
     
-    @if (payments().length > 0) {
+    @if (payments().length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+        </svg>
+        <h3>No hay pagos para mostrar</h3>
+        <p>Busque por ID de orden para ver los pagos</p>
+      </div>
+    } @else {
       <table class="table">
         <thead>
           <tr>
@@ -43,8 +63,6 @@
           }
         </tbody>
       </table>
-    } @else {
-      <div class="no-payments">No hay pagos para mostrar. Busque por ID de orden.</div>
     }
   }
 </div>

@@ -1,21 +1,24 @@
-// Utilities Component Styles - Interface Segregation: Specific utility styles
-// Single Responsibility: Define all utility classes
-
-// Loading
 .loading {
   text-align: center;
   padding: $spacing-2xl;
   color: $color-gray-600;
 }
 
-// Empty state
 .empty-state {
   text-align: center;
   padding: $spacing-4xl;
   color: $color-gray-600;
 }
 
-// Badge
+@keyframes shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
 .badge {
   @include badge-base;
 
@@ -44,7 +47,6 @@
   }
 }
 
-// Spacing utilities
 .m-0 { margin: 0; }
 .m-1 { margin: $spacing-sm; }
 .m-2 { margin: $spacing-md; }
@@ -73,24 +75,20 @@
 .p-4 { padding: $spacing-2xl; }
 .p-5 { padding: $spacing-3xl; }
 
-// Display utilities
 .d-none { display: none; }
 .d-block { display: block; }
 .d-inline { display: inline; }
 .d-inline-block { display: inline-block; }
 .d-flex { display: flex; }
 
-// Width utilities
 .w-100 { width: 100%; }
 .w-auto { width: auto; }
 
-// Position utilities
 .position-relative { position: relative; }
 .position-absolute { position: absolute; }
 .position-fixed { position: fixed; }
 .position-sticky { position: sticky; }
 
-// Overflow utilities
 .overflow-auto { overflow: auto; }
 .overflow-hidden { overflow: hidden; }
 .overflow-scroll { overflow: scroll; }

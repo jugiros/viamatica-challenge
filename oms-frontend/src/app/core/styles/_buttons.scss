@@ -1,52 +1,40 @@
-// Buttons Component Styles - Interface Segregation: Specific button styles
-// Single Responsibility: Define all button variants
-
 .btn {
   @include button-base;
 
-  // Primary Button
   &.btn-primary {
     @include button-variant($color-primary, white, $color-primary-dark);
   }
 
-  // Secondary Button
   &.btn-secondary {
     @include button-variant($color-secondary, white, $color-secondary-dark);
   }
 
-  // Success Button
   &.btn-success {
     @include button-variant($color-success, white, $color-success-dark);
   }
 
-  // Danger Button
   &.btn-danger {
     @include button-variant($color-danger, white, $color-danger-dark);
   }
 
-  // Warning Button
   &.btn-warning {
     @include button-variant($color-warning, $color-gray-900, $color-warning-dark);
   }
 
-  // Info Button
   &.btn-info {
     @include button-variant($color-info, white, $color-info-dark);
   }
 
-  // Small Button
   &.btn-sm {
     font-size: $font-size-xs;
     padding: $spacing-sm $spacing-md;
   }
 
-  // Large Button
   &.btn-lg {
     padding: $spacing-lg $spacing-3xl;
     font-size: $font-size-base;
   }
 
-  // Icon Button
   &.btn-icon {
     width: 28px;
     height: 28px;
@@ -59,13 +47,11 @@
     }
   }
 
-  // Full Width Button (for forms)
   &.btn-block {
     width: 100%;
     flex: 1;
   }
 
-  // Bold Button
   &.btn-bold {
     font-weight: $font-weight-bolder;
   }

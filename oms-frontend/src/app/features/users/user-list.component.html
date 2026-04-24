@@ -1,5 +1,13 @@
 <div class="user-list">
-  <h2>Usuarios</h2>
+  <div class="header">
+    <h2>Usuarios</h2>
+    <button 
+      routerLink="/users/new"
+      class="btn btn-primary"
+    >
+      + Nuevo Usuario
+    </button>
+  </div>
   
   @if (errorMessage()) {
     <div class="alert alert-danger">
@@ -8,39 +16,68 @@
   }
   
   @if (isLoading()) {
-    <div class="loading">Cargando usuarios...</div>
+    <div class="loading-skeleton">
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+    </div>
   } @else {
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Nombre</th>
-          <th>Email</th>
-          <th>Rol</th>
-          <th>Activo</th>
-          <th>Fecha de Creación</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (user of users(); track user.id) {
+  @if (items().length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+        </svg>
+        <h3>No hay usuarios registrados</h3>
+        <p>Comienza creando tu primer usuario</p>
+        <button 
+          routerLink="/users/new"
+          class="btn btn-primary"
+        >
+          + Nuevo Usuario
+        </button>
+      </div>
+    } @else {
+      <table class="table">
+        <thead>
           <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.role }}</td>
-            <td>{{ user.active ? 'Sí' : 'No' }}</td>
-            <td>{{ user.createdAt | date:'medium' }}</td>
-            <td>
-              <button class="btn btn-danger btn-sm" (click)="deleteUser(user.id)">Eliminar</button>
-            </td>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th>Rol</th>
+            <th>Activo</th>
+            <th>Fecha de Creación</th>
+            <th class="text-center">Acciones</th>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="7" class="text-center">No hay usuarios registrados</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (user of items(); track user.id) {
+            <tr>
+              <td>{{ user.id }}</td>
+              <td>{{ user.name }}</td>
+              <td>{{ user.email }}</td>
+              <td>{{ user.role }}</td>
+              <td>{{ user.active ? 'Sí' : 'No' }}</td>
+              <td>{{ user.createdAt | date:'medium' }}</td>
+              <td class="text-center">
+                <button 
+                  routerLink="/users/{{ user.id }}/edit"
+                  class="btn btn-sm btn-primary"
+                >
+                  Editar
+                </button>
+                <button 
+                  class="btn btn-sm btn-danger"
+                  (click)="deleteUser(user)"
+                >
+                  Eliminar
+                </button>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   }
 </div>
+
+<app-confirm-dialog />

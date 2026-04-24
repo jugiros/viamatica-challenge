@@ -2,4 +2,16 @@
 
 .category-list {
   @extend .feature-component;
+
+  .header {
+    @include header;
+  }
+}
+
+.loading-skeleton {
+  @include loading-skeleton(60px);
+}
+
+.empty-state {
+  @include empty-state-enhanced;
 }

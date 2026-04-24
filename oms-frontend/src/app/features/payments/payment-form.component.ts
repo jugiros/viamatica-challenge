@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PaymentService } from './payment.service';
 import { ProcessPaymentRequest, PaymentModel } from '../../core/models';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-payment-form',
@@ -17,6 +18,7 @@ export class PaymentFormComponent implements OnInit {
   private readonly paymentService = inject(PaymentService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly toastService = inject(ToastService);
   
   orderId = signal<number | null>(null);
   payment = signal<PaymentModel | null>(null);
@@ -51,15 +53,14 @@ export class PaymentFormComponent implements OnInit {
     
     this.paymentService.processPayment(this.paymentRequest()).subscribe({
       next: (payment) => {
+        this.toastService.showSuccess('Pago procesado exitosamente.');
         this.payment.set(payment);
         this.successMessage.set('Pago procesado exitosamente.');
         this.isLoading.set(false);
-        
-        setTimeout(() => {
-          this.router.navigate(['/orders']);
-        }, 2000);
+        this.router.navigate(['/orders']);
       },
       error: (error) => {
+        this.toastService.showError('Error al procesar el pago. Por favor, intenta nuevamente.');
         this.errorMessage.set('Error al procesar el pago. Por favor, intenta nuevamente.');
         this.isLoading.set(false);
       }

@@ -1,16 +1,24 @@
-import { Component, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NotificationService } from './notification.service';
 import { NotificationModel } from '../../core/models';
+import { ToastService } from '../../shared/services/toast.service';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-notification-list',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, ConfirmDialogComponent],
   templateUrl: './notification-list.component.html',
   styleUrl: './notification-list.component.scss'
 })
 export class NotificationListComponent implements OnInit {
+  private readonly notificationService = inject(NotificationService);
+  private readonly toastService = inject(ToastService);
+  
+  @ViewChild(ConfirmDialogComponent) confirmDialog!: ConfirmDialogComponent;
+  
   notifications = signal<NotificationModel[]>([]);
   isLoading = signal(false);
   errorMessage = signal<string | null>(null);
@@ -23,51 +31,73 @@ export class NotificationListComponent implements OnInit {
     this.isLoading.set(true);
     this.errorMessage.set(null);
     
-    // Mock data for notifications
-    this.notifications.set([
-      {
-        id: 1,
-        userId: 1,
-        orderId: 1,
-        type: 'PAYMENT_RECEIVED',
-        status: 'SENT',
-        message: 'Pago recibido para orden #1',
-        read: false,
-        sentDate: new Date().toISOString()
+    // Temporarily disabled due to missing backend endpoint
+    this.notificationService.getNotifications().subscribe({
+      next: (notifications) => {
+        this.notifications.set(notifications || []);
+        this.isLoading.set(false);
       },
-      {
-        id: 2,
-        userId: 1,
-        orderId: 2,
-        type: 'ORDER_CONFIRMED',
-        status: 'SENT',
-        message: 'Orden #2 ha sido confirmada',
-        read: true,
-        sentDate: new Date(Date.now() - 86400000).toISOString()
+      error: (error) => {
+        this.toastService.showWarning('El servicio de notificaciones no está disponible actualmente.');
+        this.errorMessage.set('El servicio de notificaciones no está disponible actualmente.');
+        this.isLoading.set(false);
+        this.notifications.set([]);
       }
-    ]);
-    
-    this.isLoading.set(false);
+    });
   }
 
   markAsRead(notificationId: number) {
-    this.notifications.update(notifications =>
-      notifications.map(n =>
-        n.id === notificationId ? { ...n, read: true } : n
-      )
-    );
+    this.notificationService.markAsRead(notificationId).subscribe({
+      next: () => {
+        this.notifications.update(notifications =>
+          notifications.map(n =>
+            n.id === notificationId ? { ...n, read: true } : n
+          )
+        );
+        this.toastService.showSuccess('Notificación marcada como leída.');
+      },
+      error: (error) => {
+        this.toastService.showError('Error al marcar notificación como leída.');
+        this.errorMessage.set('Error al marcar notificación como leída.');
+      }
+    });
   }
 
   markAllAsRead() {
-    this.notifications.update(notifications =>
-      notifications.map(n => ({ ...n, read: true }))
-    );
+    this.notificationService.markAllAsRead().subscribe({
+      next: () => {
+        this.notifications.update(notifications =>
+          notifications.map(n => ({ ...n, read: true }))
+        );
+        this.toastService.showSuccess('Todas las notificaciones marcadas como leídas.');
+      },
+      error: (error) => {
+        this.toastService.showError('Error al marcar todas las notificaciones como leídas.');
+        this.errorMessage.set('Error al marcar todas las notificaciones como leídas.');
+      }
+    });
   }
 
   deleteNotification(notificationId: number) {
-    this.notifications.update(notifications =>
-      notifications.filter(n => n.id !== notificationId)
-    );
+    this.confirmDialog.open({
+      title: 'Confirmar Eliminación',
+      message: '¿Estás seguro de eliminar esta notificación?',
+      confirmText: 'Eliminar',
+      onConfirm: () => {
+        this.notificationService.deleteNotification(notificationId).subscribe({
+          next: () => {
+            this.notifications.update(notifications =>
+              notifications.filter(n => n.id !== notificationId)
+            );
+            this.toastService.showSuccess('Notificación eliminada.');
+          },
+          error: (error) => {
+            this.toastService.showError('Error al eliminar notificación.');
+            this.errorMessage.set('Error al eliminar notificación.');
+          }
+        });
+      }
+    });
   }
 
   getNotificationIcon(type: string): string {

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from './user.service';
 import { UserModel } from '../../core/models';
+import { ToastService } from '../../shared/services/toast.service';
 
 @Component({
   selector: 'app-user-form',
@@ -17,6 +18,7 @@ export class UserFormComponent implements OnInit {
   private readonly userService = inject(UserService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly toastService = inject(ToastService);
   
   user = signal<UserModel | null>(null);
   isLoading = signal(false);
@@ -73,15 +75,14 @@ export class UserFormComponent implements OnInit {
     if (id) {
       this.userService.updateUser(id, this.userRequest()).subscribe({
         next: (user) => {
+          this.toastService.showSuccess('Usuario actualizado exitosamente.');
           this.user.set(user);
           this.successMessage.set('Usuario actualizado exitosamente.');
           this.isLoading.set(false);
-          
-          setTimeout(() => {
-            this.router.navigate(['/users']);
-          }, 2000);
+          this.router.navigate(['/users']);
         },
         error: (error) => {
+          this.toastService.showError('Error al actualizar el usuario.');
           this.errorMessage.set('Error al actualizar el usuario.');
           this.isLoading.set(false);
         }

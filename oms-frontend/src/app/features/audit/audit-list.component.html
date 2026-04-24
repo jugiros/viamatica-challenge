@@ -1,5 +1,7 @@
 <div class="audit-list">
-  <h2>Logs de Auditoría</h2>
+  <div class="header">
+    <h2>Logs de Auditoría</h2>
+  </div>
   
   @if (errorMessage()) {
     <div class="alert alert-danger">
@@ -42,10 +44,24 @@
   </div>
   
   @if (isLoading()) {
-    <div class="loading">Cargando logs de auditoría...</div>
-  } @else {
-    <div class="audit-content">
-      <pre>{{ auditLogs() }}</pre>
+    <div class="loading-skeleton">
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
     </div>
+  } @else {
+    @if (!auditLogs() || auditLogs().length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <h3>No hay logs de auditoría</h3>
+        <p>Aplique filtros para buscar registros de auditoría</p>
+      </div>
+    } @else {
+      <div class="audit-content">
+        <pre>{{ auditLogs() }}</pre>
+      </div>
+    }
   }
 </div>

@@ -3,6 +3,10 @@
 .payment-list {
   @extend .feature-component;
 
+  .header {
+    @include header;
+  }
+
   .payment-input {
     display: flex;
     gap: $spacing-md;
@@ -20,8 +24,12 @@
       font-size: $font-size-sm;
     }
   }
+}
 
-  .no-payments {
-    @extend .empty-state;
-  }
+.loading-skeleton {
+  @include loading-skeleton(60px);
+}
+
+.empty-state {
+  @include empty-state-enhanced;
 }

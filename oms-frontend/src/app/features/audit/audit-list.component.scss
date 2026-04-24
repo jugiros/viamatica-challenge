@@ -3,8 +3,12 @@
 .audit-list {
   @extend .feature-component;
 
+  .header {
+    @include header;
+  }
+
   .filters {
-    @extend .card;
+    @include card;
 
     form {
       display: grid;
@@ -36,8 +40,12 @@
     }
   }
 
+  .loading-skeleton {
+    @include loading-skeleton(60px);
+  }
+
   .audit-content {
-    @extend .card;
+    @include card;
 
     pre {
       background-color: $color-dark;
@@ -48,5 +56,9 @@
       white-space: pre-wrap;
       word-wrap: break-word;
     }
+  }
+
+  .empty-state {
+    @include empty-state-enhanced;
   }
 }

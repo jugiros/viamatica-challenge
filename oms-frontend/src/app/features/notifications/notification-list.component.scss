@@ -4,7 +4,7 @@
   @extend .feature-component;
 
   .header {
-    @extend .header;
+    @include header;
   }
 
   .notifications-container {
@@ -62,5 +62,13 @@
       display: flex;
       gap: $spacing-sm;
     }
+  }
+
+  .loading-skeleton {
+    @include loading-skeleton(80px);
+  }
+
+  .empty-state {
+    @include empty-state-enhanced;
   }
 }

@@ -1,53 +1,60 @@
-import { Component, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { CategoryService } from './category.service';
 import { CategoryModel } from '../../core/models';
+import { BaseListComponent } from '../../shared/base/base-list.component';
+import { Observable, Subject } from 'rxjs';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-category-list',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink, ConfirmDialogComponent],
   templateUrl: './category-list.component.html',
   styleUrl: './category-list.component.scss'
 })
-export class CategoryListComponent implements OnInit {
+export class CategoryListComponent extends BaseListComponent<CategoryModel> implements OnInit {
   private readonly categoryService = inject(CategoryService);
   
-  categories = signal<CategoryModel[]>([]);
-  isLoading = signal(false);
-  errorMessage = signal<string | null>(null);
-  
+  @ViewChild(ConfirmDialogComponent) confirmDialog!: ConfirmDialogComponent;
+  private itemToDelete = signal<CategoryModel | null>(null);
+  private confirmSubject = new Subject<boolean>();
+
   ngOnInit() {
-    this.loadCategories();
-  }
-  
-  private loadCategories() {
-    this.isLoading.set(true);
-    this.errorMessage.set(null);
-    
-    this.categoryService.getCategories().subscribe({
-      next: (categories) => {
-        this.categories.set(categories || []);
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        this.errorMessage.set('Error al cargar categorías. Por favor, intenta nuevamente.');
-        this.isLoading.set(false);
-      }
-    });
+    this.loadData();
   }
 
-  deleteCategory(id: number) {
-    if (confirm('¿Estás seguro de eliminar esta categoría?')) {
-      this.categoryService.deleteCategory(id).subscribe({
-        next: () => {
-          this.loadCategories();
-        },
-        error: (error) => {
-          this.errorMessage.set('Error al eliminar la categoría.');
-        }
-      });
-    }
+  loadItems(): Observable<CategoryModel[]> {
+    return this.categoryService.getCategories();
+  }
+
+  deleteItem(id: number): Observable<void> {
+    return this.categoryService.deleteCategory(id);
+  }
+
+  getItemName(): string {
+    return 'categoría';
+  }
+
+  getItemNamePlural(): string {
+    return 'categorías';
+  }
+
+  confirmDelete(item: CategoryModel): Observable<boolean> {
+    this.itemToDelete.set(item);
+    this.confirmDialog.open({
+      title: 'Confirmar Eliminación',
+      message: `¿Estás seguro de eliminar ${this.getItemName()}?`,
+      confirmText: 'Eliminar',
+      onConfirm: () => this.confirmSubject.next(true),
+      onCancel: () => this.confirmSubject.next(false)
+    });
+    return this.confirmSubject.asObservable();
+  }
+
+  deleteCategory(item: CategoryModel) {
+    this.deleteItemWithConfirmation(item);
   }
 }

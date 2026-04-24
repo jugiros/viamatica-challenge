@@ -1,5 +1,5 @@
 import { Injectable, inject } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { BaseHttpService } from '../../core/services/base-http.service';
 import { ProductModel, CreateProductRequest, UpdateProductRequest } from '../../core/models';
 
@@ -8,7 +8,17 @@ import { ProductModel, CreateProductRequest, UpdateProductRequest } from '../../
 })
 export class ProductService extends BaseHttpService {
   getProducts(): Observable<ProductModel[]> {
-    return this.get<ProductModel[]>('/products');
+    return this.get<any>('/products?page=0&size=100').pipe(
+      map(response => {
+        if (response && response.content && Array.isArray(response.content)) {
+          return response.content;
+        }
+        if (Array.isArray(response)) {
+          return response;
+        }
+        return [];
+      })
+    );
   }
 
   getProductById(id: number): Observable<ProductModel> {

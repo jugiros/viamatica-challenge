@@ -1,0 +1,26 @@
+@if (isOpen()) {
+  <div class="confirm-dialog-overlay">
+    <div class="confirm-dialog">
+      <div class="confirm-dialog-header">
+        <h3>{{ title() }}</h3>
+      </div>
+      <div class="confirm-dialog-body">
+        <p>{{ message() }}</p>
+      </div>
+      <div class="confirm-dialog-footer">
+        <button
+          class="btn btn-secondary"
+          (click)="handleCancel()"
+        >
+          Cancelar
+        </button>
+        <button
+          class="btn btn-danger"
+          (click)="handleConfirm()"
+        >
+          {{ confirmText() }}
+        </button>
+      </div>
+    </div>
+  </div>
+}

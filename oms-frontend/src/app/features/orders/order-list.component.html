@@ -1,5 +1,13 @@
 <div class="order-list">
-  <h2>Mis Órdenes</h2>
+  <div class="header">
+    <h2>Mis Órdenes</h2>
+    <button 
+      routerLink="/orders/new"
+      class="btn btn-primary"
+    >
+      + Nueva Orden
+    </button>
+  </div>
   
   @if (errorMessage()) {
     <div class="alert alert-danger">
@@ -8,45 +16,78 @@
   }
   
   @if (isLoading()) {
-    <div class="loading">Cargando órdenes...</div>
+    <div class="loading-skeleton">
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+      <div class="skeleton-item"></div>
+    </div>
   } @else {
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Estado</th>
-          <th>Total</th>
-          <th>Fecha</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody>
-        @for (order of orders(); track order.id) {
+    @if (orders().length === 0) {
+      <div class="empty-state">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+        </svg>
+        <h3>No hay órdenes registradas</h3>
+        <p>Comienza creando tu primera orden</p>
+        <button 
+          routerLink="/orders/new"
+          class="btn btn-primary"
+        >
+          + Nueva Orden
+        </button>
+      </div>
+    } @else {
+      <table class="table">
+        <thead>
           <tr>
-            <td>{{ order.id }}</td>
-            <td>
-              <span class="badge" [style.background-color]="getStatusColor(order.status)">
-                {{ order.status }}
-              </span>
-            </td>
-            <td>{{ order.total | currency }}</td>
-            <td>{{ order.createdAt | date:'medium' }}</td>
-            <td>
-              <button class="btn btn-primary btn-sm" (click)="viewOrderDetail(order.id)">Ver</button>
-              @if (order.status === 'PENDIENTE') {
-                <button class="btn btn-warning btn-sm" (click)="confirmOrder(order.id)">Confirmar</button>
-              }
-              @if (order.status === 'PENDIENTE' || order.status === 'CONFIRMADA') {
-                <button class="btn btn-danger btn-sm" (click)="cancelOrder(order.id)">Cancelar</button>
-              }
-            </td>
+            <th>ID</th>
+            <th>Estado</th>
+            <th>Total</th>
+            <th>Fecha</th>
+            <th class="text-center">Acciones</th>
           </tr>
-        } @empty {
-          <tr>
-            <td colspan="5" class="text-center">No hay órdenes registradas</td>
-          </tr>
-        }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          @for (order of orders(); track order.id) {
+            <tr>
+              <td>{{ order.id }}</td>
+              <td>
+                <span class="badge" [style.background-color]="getStatusColor(order.status)">
+                  {{ order.status }}
+                </span>
+              </td>
+              <td>{{ order.total | currency }}</td>
+              <td>{{ order.createdAt | date:'medium' }}</td>
+              <td class="text-center">
+                <button 
+                  routerLink="/orders/{{ order.id }}"
+                  class="btn btn-sm btn-primary"
+                >
+                  Ver
+                </button>
+                @if (order.status === 'PENDIENTE') {
+                  <button 
+                    class="btn btn-sm btn-warning"
+                    (click)="confirmOrder(order.id)"
+                  >
+                    Confirmar
+                  </button>
+                }
+                @if (order.status === 'PENDIENTE' || order.status === 'CONFIRMADA') {
+                  <button 
+                    class="btn btn-sm btn-danger"
+                    (click)="cancelOrder(order.id)"
+                  >
+                    Cancelar
+                  </button>
+                }
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
   }
 </div>
+
+<app-confirm-dialog />

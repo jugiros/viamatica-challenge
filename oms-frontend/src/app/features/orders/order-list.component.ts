@@ -1,21 +1,23 @@
-import { Component, inject, signal, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, signal, OnInit, ChangeDetectionStrategy, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { OrderService } from './order.service';
 import { OrderModel } from '../../core/models';
-import { CurrencyLocalePipe } from '../../shared/pipes/currency-locale.pipe';
+import { ConfirmDialogComponent } from '../../shared/components/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'app-order-list',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, CurrencyLocalePipe],
+  imports: [CommonModule, RouterLink, ConfirmDialogComponent],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.scss'
 })
 export class OrderListComponent implements OnInit {
   private readonly orderService = inject(OrderService);
   private readonly router = inject(Router);
+  
+  @ViewChild(ConfirmDialogComponent) confirmDialog!: ConfirmDialogComponent;
   
   orders = signal<OrderModel[]>([]);
   isLoading = signal(false);
@@ -46,16 +48,21 @@ export class OrderListComponent implements OnInit {
   }
 
   cancelOrder(orderId: number) {
-    if (confirm('¿Estás seguro de cancelar esta orden?')) {
-      this.orderService.cancelOrder(orderId, 'Cancelado por usuario').subscribe({
-        next: () => {
-          this.loadOrders();
-        },
-        error: (error) => {
-          this.errorMessage.set('Error al cancelar la orden.');
-        }
-      });
-    }
+    this.confirmDialog.open({
+      title: 'Confirmar Cancelación',
+      message: '¿Estás seguro de cancelar esta orden?',
+      confirmText: 'Cancelar Orden',
+      onConfirm: () => {
+        this.orderService.cancelOrder(orderId, 'Cancelado por usuario').subscribe({
+          next: () => {
+            this.loadOrders();
+          },
+          error: (error) => {
+            this.errorMessage.set('Error al cancelar la orden.');
+          }
+        });
+      }
+    });
   }
 
   confirmOrder(orderId: number) {

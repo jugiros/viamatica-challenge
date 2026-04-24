@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { BaseHttpService } from '../../core/services/base-http.service';
 import { CategoryModel, CreateCategoryRequest, UpdateCategoryRequest } from '../../core/models';
 
@@ -8,7 +8,17 @@ import { CategoryModel, CreateCategoryRequest, UpdateCategoryRequest } from '../
 })
 export class CategoryService extends BaseHttpService {
   getCategories(): Observable<CategoryModel[]> {
-    return this.get<CategoryModel[]>('/categories');
+    return this.get<any>('/categories?page=0&size=100').pipe(
+      map(response => {
+        if (response && response.content && Array.isArray(response.content)) {
+          return response.content;
+        }
+        if (Array.isArray(response)) {
+          return response;
+        }
+        return [];
+      })
+    );
   }
 
   getCategoryById(id: number): Observable<CategoryModel> {

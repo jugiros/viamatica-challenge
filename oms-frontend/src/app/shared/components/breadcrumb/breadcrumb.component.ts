@@ -1,6 +1,8 @@
-import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { Router, ActivatedRoute, RouterLink } from '@angular/router';
+import { Component, inject, ChangeDetectionStrategy, OnInit, DestroyRef } from '@angular/core';
+import { Router, ActivatedRoute, RouterLink, NavigationEnd } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-breadcrumb',
@@ -10,11 +12,30 @@ import { CommonModule } from '@angular/common';
   templateUrl: './breadcrumb.component.html',
   styleUrl: './breadcrumb.component.scss'
 })
-export class BreadcrumbComponent {
+export class BreadcrumbComponent implements OnInit {
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly destroyRef = inject(DestroyRef);
 
-  breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+  breadcrumbs: any[] = [];
+
+  ngOnInit() {
+    this.updateBreadcrumbs();
+    
+    // Suscribirse a cambios de ruta para actualizar breadcrumbs dinámicamente
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => {
+        this.updateBreadcrumbs();
+      });
+  }
+
+  private updateBreadcrumbs() {
+    this.breadcrumbs = this.createBreadcrumbs(this.activatedRoute.root);
+  }
 
   private createBreadcrumbs(route: ActivatedRoute, url = '', breadcrumbs: any[] = []): any[] {
     const children = route.children;
@@ -24,7 +45,11 @@ export class BreadcrumbComponent {
     }
 
     for (const child of children) {
-      const routeURL = child.snapshot.url.map(segment => segment.path).join('/');
+      if (!child.snapshot) {
+        continue;
+      }
+      
+      const routeURL = child.snapshot.url?.map(segment => segment.path).join('/') || '';
       if (routeURL !== '') {
         url += `/${routeURL}`;
       }
